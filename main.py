@@ -1,5 +1,7 @@
 from fastapi import FastAPI
 from routers import blog_post, blog_get
+from db.database import engine
+from db import models
 
 app = FastAPI(
     title="FastAPI Blog API",
@@ -14,3 +16,6 @@ app.include_router(blog_get.router, prefix="/blog", tags=["Blog - Get"])
 @app.get("/", tags=["Root"])
 def root():
     return {"message": "Welcome to the FastAPI Blog API!"}
+
+
+models.Base.metadata.create_all(engine)
