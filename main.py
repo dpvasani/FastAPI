@@ -1,9 +1,13 @@
 from fastapi import FastAPI
-from routers import blog_post, blog_get, user
+from routers import blog_post, blog_get, user, file as file_router
 from db.database import engine
 from db import models
 from fastapi import Request
 from fastapi.responses import JSONResponse, HTMLResponse, PlainTextResponse, FileResponse
+from fastapi import UploadFile, File, HTTPException, Depends
+import os
+from fastapi.staticfiles import StaticFiles
+from auth.oauth import get_current_user
 
 app = FastAPI(
     title="FastAPI Blog API",
@@ -40,26 +44,12 @@ def get_html():
 def get_text():
     return "This is plain text ✉️"
 
-@app.get("/download")
-def download_file():
-    # Using a sample PDF from Blogs directory
-    return FileResponse("Blogs/1. GET Methods.pdf", media_type='application/pdf', filename="Sample.pdf")
-
-# 🧾 3. Headers
-@app.get("/headers/")
-def read_headers(request: Request):
-    headers = request.headers
-    user_agent = headers.get("user-agent")
-    return {"user_agent": user_agent}
-
-@app.get("/custom-header")
-def custom_header():
-    content = {"message": "Hello with headers!"}
-    headers = {"X-Powered-By": "FastAPI ⚡"}
-    return JSONResponse(content=content, headers=headers)
+# 5. Serve static files (e.g., images, frontend)
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 # Include routers with prefix and tags
 app.include_router(user.router)
+app.include_router(file_router.router)
 app.include_router(blog_post.router, prefix="/blog", tags=["Blog - Post"])
 app.include_router(blog_get.router, prefix="/blog", tags=["Blog - Get"])
 
