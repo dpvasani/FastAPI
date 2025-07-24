@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from routers import blog_post, blog_get
+from routers import blog_post, blog_get, user
 from db.database import engine
 from db import models
 
@@ -10,6 +10,7 @@ app = FastAPI(
 )
 
 # Include routers with prefix and tags
+app.include_router(user.router)
 app.include_router(blog_post.router, prefix="/blog", tags=["Blog - Post"])
 app.include_router(blog_get.router, prefix="/blog", tags=["Blog - Get"])
 
