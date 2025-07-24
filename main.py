@@ -5,6 +5,12 @@ from db import models
 from fastapi import Request
 from fastapi.responses import JSONResponse, HTMLResponse, PlainTextResponse, FileResponse
 
+app = FastAPI(
+    title="FastAPI Blog API",
+    description="A sample blog backend using FastAPI Routers",
+    version="1.0.0"
+)
+
 # 👾 Define a custom exception
 class StoryException(Exception):
     def __init__(self, name: str):
@@ -52,12 +58,6 @@ def custom_header():
     headers = {"X-Powered-By": "FastAPI ⚡"}
     return JSONResponse(content=content, headers=headers)
 
-app = FastAPI(
-    title="FastAPI Blog API",
-    description="A sample blog backend using FastAPI Routers",
-    version="1.0.0"
-)
-
 # Include routers with prefix and tags
 app.include_router(user.router)
 app.include_router(blog_post.router, prefix="/blog", tags=["Blog - Post"])
@@ -66,6 +66,5 @@ app.include_router(blog_get.router, prefix="/blog", tags=["Blog - Get"])
 @app.get("/", tags=["Root"])
 def root():
     return {"message": "Welcome to the FastAPI Blog API!"}
-
 
 models.Base.metadata.create_all(engine)
