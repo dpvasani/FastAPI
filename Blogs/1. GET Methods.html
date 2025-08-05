@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>1. GET Methods.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h1 id="%F0%9F%9A%80-complete-fastapi-setup--get-methods-guide">🚀 Complete FastAPI Setup &amp; GET Methods Guide</h1>
+<h2 id="%F0%9F%8E%AF-overview">🎯 Overview</h2>
+<p>This comprehensive guide covers everything from setting up a FastAPI project to implementing sophisticated GET methods with path parameters, query parameters, and validation. Whether you're a beginner or looking to enhance your FastAPI skills, this guide provides detailed explanations, code examples, and best practices.</p>
+<h2 id="%F0%9F%9B%A0%EF%B8%8F-part-1-environment-setup--project-structure">🛠️ <strong>Part 1: Environment Setup &amp; Project Structure</strong></h2>
+<h3 id="%F0%9F%A7%AA-1-virtual-environment-setup-cross-platform">🧪 <strong>1. Virtual Environment Setup (Cross-Platform)</strong></h3>
+<pre class="hljs"><code><div><span class="hljs-comment"># 📦 Install virtualenv (if not already installed)</span>
+pip install virtualenv
+
+<span class="hljs-comment"># 🏗️ Create virtual environment</span>
+virtualenv venv
+
+<span class="hljs-comment"># ⚡ Activate virtual environment</span>
+<span class="hljs-comment"># Windows 🪟</span>
+venv\Scripts\activate
+
+<span class="hljs-comment"># macOS/Linux 🐧🍎</span>
+<span class="hljs-built_in">source</span> venv/bin/activate
+
+<span class="hljs-comment"># ✅ Verify activation (should show (venv) in prompt)</span>
+<span class="hljs-built_in">which</span> python  <span class="hljs-comment"># Should point to venv/bin/python</span>
+</div></code></pre>
+<p><strong>💡 Pro Tips:</strong></p>
+<ul>
+<li>Always use virtual environments to avoid dependency conflicts</li>
+<li>Use descriptive names for project-specific environments</li>
+<li>Consider using <code>python -m venv venv</code> as an alternative to virtualenv</li>
+</ul>
+<h3 id="%F0%9F%93%A6-2-install-core-dependencies">📦 <strong>2. Install Core Dependencies</strong></h3>
+<pre class="hljs"><code><div><span class="hljs-comment"># 🚀 Install FastAPI and Uvicorn</span>
+pip install fastapi uvicorn
+
+<span class="hljs-comment"># 🔧 Additional useful packages</span>
+pip install python-multipart  <span class="hljs-comment"># For file uploads</span>
+pip install python-dotenv     <span class="hljs-comment"># For environment variables</span>
+pip install pydantic[email]    <span class="hljs-comment"># Enhanced Pydantic validation</span>
+
+<span class="hljs-comment"># 💾 Save dependencies for team collaboration</span>
+pip freeze &gt; requirements.txt
+</div></code></pre>
+<h3 id="%F0%9F%93%81-3-professional-project-structure">📁 <strong>3. Professional Project Structure</strong></h3>
+<pre class="hljs"><code><div>fastapi_project/
+│
+├── 📄 main.py                 # Main application entry point
+├── 📄 requirements.txt        # Project dependencies
+├── 📁 app/                    # Application package
+│   ├── 📄 __init__.py
+│   ├── 📁 routers/           # Route modules
+│   │   ├── 📄 __init__.py
+│   │   ├── 📄 items.py
+│   │   └── 📄 users.py
+│   ├── 📁 models/            # Pydantic models
+│   │   ├── 📄 __init__.py
+│   │   └── 📄 item.py
+│   ├── 📁 core/              # Core functionality
+│   │   ├── 📄 __init__.py
+│   │   └── 📄 config.py
+│   └── 📁 utils/             # Utility functions
+│       ├── 📄 __init__.py
+│       └── 📄 helpers.py
+├── 📁 tests/                 # Test modules
+│   ├── 📄 __init__.py
+│   └── 📄 test_main.py
+├── 📁 static/                # Static files
+├── 📁 templates/             # HTML templates (if needed)
+└── 📁 venv/                  # Virtual environment
+</div></code></pre>
+<h2 id="%F0%9F%8E%AF-part-2-core-fastapi-implementation">🎯 <strong>Part 2: Core FastAPI Implementation</strong></h2>
+<h3 id="%F0%9F%94%A7-4-main-application-with-advanced-configuration">🔧 <strong>4. Main Application with Advanced Configuration</strong></h3>
+<pre class="hljs"><code><div><span class="hljs-comment"># main.py</span>
+<span class="hljs-keyword">from</span> fastapi <span class="hljs-keyword">import</span> FastAPI, Query, Path, HTTPException, status
+<span class="hljs-keyword">from</span> fastapi.middleware.cors <span class="hljs-keyword">import</span> CORSMiddleware
+<span class="hljs-keyword">from</span> fastapi.responses <span class="hljs-keyword">import</span> JSONResponse
+<span class="hljs-keyword">from</span> typing <span class="hljs-keyword">import</span> Optional, List
+<span class="hljs-keyword">from</span> enum <span class="hljs-keyword">import</span> Enum
+<span class="hljs-keyword">import</span> uvicorn
+
+<span class="hljs-comment"># 🎨 Create FastAPI instance with metadata</span>
+app = FastAPI(
+    title=<span class="hljs-string">"📚 Advanced FastAPI Guide"</span>,
+    description=<span class="hljs-string">"🚀 Comprehensive FastAPI implementation with best practices"</span>,
+    version=<span class="hljs-string">"1.0.0"</span>,
+    contact={
+        <span class="hljs-string">"name"</span>: <span class="hljs-string">"Your Name"</span>,
+        <span class="hljs-string">"email"</span>: <span class="hljs-string">"your.email@example.com"</span>,
+    },
+    license_info={
+        <span class="hljs-string">"name"</span>: <span class="hljs-string">"MIT"</span>,
+        <span class="hljs-string">"url"</span>: <span class="hljs-string">"https://opensource.org/licenses/MIT"</span>,
+    },
+)
+
+<span class="hljs-comment"># 🌐 Add CORS middleware for frontend integration</span>
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[<span class="hljs-string">"*"</span>],  <span class="hljs-comment"># Configure appropriately for production</span>
+    allow_credentials=<span class="hljs-literal">True</span>,
+    allow_methods=[<span class="hljs-string">"*"</span>],
+    allow_headers=[<span class="hljs-string">"*"</span>],
+)
+
+<span class="hljs-comment"># 🔧 Predefined values using Enum for type safety</span>
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ModelName</span><span class="hljs-params">(str, Enum)</span>:</span>
+    <span class="hljs-string">"""🤖 Machine Learning model names with descriptions"""</span>
+    alexnet = <span class="hljs-string">"alexnet"</span>    <span class="hljs-comment"># Image classification</span>
+    resnet = <span class="hljs-string">"resnet"</span>      <span class="hljs-comment"># Residual networks</span>
+    lenet = <span class="hljs-string">"lenet"</span>        <span class="hljs-comment"># Classic CNN architecture</span>
+    transformer = <span class="hljs-string">"transformer"</span>  <span class="hljs-comment"># Attention-based models</span>
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Category</span><span class="hljs-params">(str, Enum)</span>:</span>
+    <span class="hljs-string">"""📦 Product categories for filtering"""</span>
+    electronics = <span class="hljs-string">"electronics"</span>
+    clothing = <span class="hljs-string">"clothing"</span>
+    books = <span class="hljs-string">"books"</span>
+    home_garden = <span class="hljs-string">"home_garden"</span>
+    sports = <span class="hljs-string">"sports"</span>
+
+<span class="hljs-comment"># 🏠 Root endpoint with API information</span>
+<span class="hljs-meta">@app.get("/", tags=["🏠 Home"])</span>
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">root</span><span class="hljs-params">()</span>:</span>
+    <span class="hljs-string">"""
+    🎯 API Welcome endpoint
+    
+    Returns:
+        dict: Welcome message and API information
+    """</span>
+    <span class="hljs-keyword">return</span> {
+        <span class="hljs-string">"message"</span>: <span class="hljs-string">"🚀 Welcome to Advanced FastAPI Guide!"</span>,
+        <span class="hljs-string">"version"</span>: <span class="hljs-string">"1.0.0"</span>,
+        <span class="hljs-string">"docs_url"</span>: <span class="hljs-string">"/docs"</span>,
+        <span class="hljs-string">"redoc_url"</span>: <span class="hljs-string">"/redoc"</span>,
+        <span class="hljs-string">"features"</span>: [
+            <span class="hljs-string">"📍 Path Parameters with validation"</span>,
+            <span class="hljs-string">"🔍 Query Parameters with constraints"</span>, 
+            <span class="hljs-string">"🎯 Predefined values with Enums"</span>,
+            <span class="hljs-string">"📊 Automatic API documentation"</span>,
+            <span class="hljs-string">"🛡️ Built-in data validation"</span>
+        ]
+    }
+
+<span class="hljs-comment"># 🆔 Basic path parameter with type validation</span>
+<span class="hljs-meta">@app.get("/items/{item_id}", tags=["📦 Items"])</span>
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">read_item</span><span class="hljs-params">(
+    item_id: int = Path<span class="hljs-params">(
+        ..., 
+        title=<span class="hljs-string">"Item ID"</span>,
+        description=<span class="hljs-string">"🆔 Unique identifier for the item"</span>,
+        ge=<span class="hljs-number">1</span>,  <span class="hljs-comment"># Greater than or equal to 1</span>
+        le=<span class="hljs-number">1000</span>  <span class="hljs-comment"># Less than or equal to 1000</span>
+    )</span>
+)</span>:</span>
+    <span class="hljs-string">"""
+    📦 Retrieve item by ID with validation
+    
+    Args:
+        item_id (int): Item identifier (1-1000)
+        
+    Returns:
+        dict: Item information with metadata
+        
+    Raises:
+        HTTPException: If item_id is out of range (handled by Pydantic)
+    """</span>
+    
+    <span class="hljs-comment"># 🎲 Simulate item data (replace with database query)</span>
+    mock_item = {
+        <span class="hljs-string">"item_id"</span>: item_id,
+        <span class="hljs-string">"name"</span>: <span class="hljs-string">f"📱 Item <span class="hljs-subst">{item_id}</span>"</span>,
+        <span class="hljs-string">"description"</span>: <span class="hljs-string">f"🔍 This is item number <span class="hljs-subst">{item_id}</span>"</span>,
+        <span class="hljs-string">"price"</span>: item_id * <span class="hljs-number">10.99</span>,
+        <span class="hljs-string">"in_stock"</span>: item_id % <span class="hljs-number">2</span> == <span class="hljs-number">0</span>,  <span class="hljs-comment"># Even IDs are in stock</span>
+        <span class="hljs-string">"created_at"</span>: <span class="hljs-string">"2024-01-01T00:00:00Z"</span>
+    }
+    
+    <span class="hljs-keyword">return</span> {
+        <span class="hljs-string">"status"</span>: <span class="hljs-string">"✅ success"</span>,
+        <span class="hljs-string">"data"</span>: mock_item,
+        <span class="hljs-string">"meta"</span>: {
+            <span class="hljs-string">"request_id"</span>: <span class="hljs-string">f"req_<span class="hljs-subst">{item_id}</span>"</span>,
+            <span class="hljs-string">"api_version"</span>: <span class="hljs-string">"1.0.0"</span>
+        }
+    }
+
+<span class="hljs-comment"># 🤖 Path parameter with predefined values (Enum)</span>
+<span class="hljs-meta">@app.get("/models/{model_name}", tags=["🤖 AI Models"])</span>
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_model</span><span class="hljs-params">(model_name: ModelName)</span>:</span>
+    <span class="hljs-string">"""
+    🤖 Get information about AI/ML models
+    
+    Args:
+        model_name (ModelName): Predefined model name from enum
+        
+    Returns:
+        dict: Model information and characteristics
+    """</span>
+    
+    <span class="hljs-comment"># 📊 Model metadata database</span>
+    model_info = {
+        ModelName.alexnet: {
+            <span class="hljs-string">"description"</span>: <span class="hljs-string">"🖼️ Deep convolutional neural network for image classification"</span>,
+            <span class="hljs-string">"year"</span>: <span class="hljs-number">2012</span>,
+            <span class="hljs-string">"parameters"</span>: <span class="hljs-string">"60M"</span>,
+            <span class="hljs-string">"accuracy"</span>: <span class="hljs-string">"84.7%"</span>,
+            <span class="hljs-string">"use_cases"</span>: [<span class="hljs-string">"Image Recognition"</span>, <span class="hljs-string">"Computer Vision"</span>]
+        },
+        ModelName.resnet: {
+            <span class="hljs-string">"description"</span>: <span class="hljs-string">"🔗 Residual networks with skip connections"</span>,
+            <span class="hljs-string">"year"</span>: <span class="hljs-number">2015</span>,
+            <span class="hljs-string">"parameters"</span>: <span class="hljs-string">"25.6M"</span>,
+            <span class="hljs-string">"accuracy"</span>: <span class="hljs-string">"92.9%"</span>,
+            <span class="hljs-string">"use_cases"</span>: [<span class="hljs-string">"Image Classification"</span>, <span class="hljs-string">"Object Detection"</span>]
+        },
+        ModelName.lenet: {
+            <span class="hljs-string">"description"</span>: <span class="hljs-string">"🏛️ Classic CNN architecture for digit recognition"</span>,
+            <span class="hljs-string">"year"</span>: <span class="hljs-number">1989</span>,
+            <span class="hljs-string">"parameters"</span>: <span class="hljs-string">"431K"</span>,
+            <span class="hljs-string">"accuracy"</span>: <span class="hljs-string">"98.8%"</span>,
+            <span class="hljs-string">"use_cases"</span>: [<span class="hljs-string">"Digit Recognition"</span>, <span class="hljs-string">"Simple Classification"</span>]
+        },
+        ModelName.transformer: {
+            <span class="hljs-string">"description"</span>: <span class="hljs-string">"🎯 Attention-based model for sequence tasks"</span>,
+            <span class="hljs-string">"year"</span>: <span class="hljs-number">2017</span>,
+            <span class="hljs-string">"parameters"</span>: <span class="hljs-string">"110M"</span>,
+            <span class="hljs-string">"accuracy"</span>: <span class="hljs-string">"95.2%"</span>,
+            <span class="hljs-string">"use_cases"</span>: [<span class="hljs-string">"NLP"</span>, <span class="hljs-string">"Machine Translation"</span>, <span class="hljs-string">"Text Generation"</span>]
+        }
+    }
+    
+    <span class="hljs-keyword">return</span> {
+        <span class="hljs-string">"model_name"</span>: model_name,
+        <span class="hljs-string">"info"</span>: model_info[model_name],
+        <span class="hljs-string">"status"</span>: <span class="hljs-string">"✅ Model information retrieved successfully"</span>
+    }
+
+<span class="hljs-comment"># 🔍 Advanced query parameters with validation</span>
+<span class="hljs-meta">@app.get("/products/", tags=["🛍️ Products"])</span>
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_products</span><span class="hljs-params">(
+    <span class="hljs-comment"># 📄 Pagination parameters</span>
+    skip: int = Query<span class="hljs-params">(
+        <span class="hljs-number">0</span>, 
+        ge=<span class="hljs-number">0</span>, 
+        title=<span class="hljs-string">"Skip Items"</span>,
+        description=<span class="hljs-string">"📊 Number of items to skip for pagination"</span>
+    )</span>,
+    limit: int = Query<span class="hljs-params">(
+        <span class="hljs-number">10</span>, 
+        ge=<span class="hljs-number">1</span>, 
+        le=<span class="hljs-number">100</span>, 
+        title=<span class="hljs-string">"Limit Results"</span>,
+        description=<span class="hljs-string">"🔢 Maximum number of items to return (1-100)"</span>
+    )</span>,
+    
+    <span class="hljs-comment"># 🔍 Search and filter parameters</span>
+    search: Optional[str] = Query<span class="hljs-params">(
+        None,
+        min_length=<span class="hljs-number">2</span>,
+        max_length=<span class="hljs-number">50</span>,
+        title=<span class="hljs-string">"Search Query"</span>,
+        description=<span class="hljs-string">"🔍 Search term for product names or descriptions"</span>
+    )</span>,
+    
+    category: Optional[Category] = Query<span class="hljs-params">(
+        None,
+        title=<span class="hljs-string">"Product Category"</span>,
+        description=<span class="hljs-string">"📦 Filter products by category"</span>
+    )</span>,
+    
+    <span class="hljs-comment"># 💰 Price filtering</span>
+    min_price: Optional[float] = Query<span class="hljs-params">(
+        None,
+        ge=<span class="hljs-number">0</span>,
+        title=<span class="hljs-string">"Minimum Price"</span>,
+        description=<span class="hljs-string">"💰 Minimum price filter"</span>
+    )</span>,
+    max_price: Optional[float] = Query<span class="hljs-params">(
+        None,
+        ge=<span class="hljs-number">0</span>,
+        title=<span class="hljs-string">"Maximum Price"</span>, 
+        description=<span class="hljs-string">"💰 Maximum price filter"</span>
+    )</span>,
+    
+    <span class="hljs-comment"># 📦 Stock filtering</span>
+    in_stock_only: bool = Query<span class="hljs-params">(
+        False,
+        title=<span class="hljs-string">"In Stock Only"</span>,
+        description=<span class="hljs-string">"📦 Show only products that are in stock"</span>
+    )</span>,
+    
+    <span class="hljs-comment"># 📊 Sorting</span>
+    sort_by: Optional[str] = Query<span class="hljs-params">(
+        <span class="hljs-string">"name"</span>,
+        regex=<span class="hljs-string">"^(name|price|created_at)$"</span>,
+        title=<span class="hljs-string">"Sort Field"</span>,
+        description=<span class="hljs-string">"📊 Sort products by field (name, price, created_at)"</span>
+    )</span>,
+    
+    sort_order: Optional[str] = Query<span class="hljs-params">(
+        <span class="hljs-string">"asc"</span>,
+        regex=<span class="hljs-string">"^(asc|desc)$"</span>, 
+        title=<span class="hljs-string">"Sort Order"</span>,
+        description=<span class="hljs-string">"📈 Sort order: asc (ascending) or desc (descending)"</span>
+    )</span>
+)</span>:</span>
+    <span class="hljs-string">"""
+    🛍️ Advanced product search with filtering, pagination, and sorting
+    
+    This endpoint demonstrates comprehensive query parameter usage including:
+    - 📄 Pagination (skip, limit)
+    - 🔍 Text search
+    - 📦 Category filtering  
+    - 💰 Price range filtering
+    - 📦 Stock availability filtering
+    - 📊 Flexible sorting options
+    
+    Returns:
+        dict: Filtered and paginated product results with metadata
+    """</span>
+    
+    <span class="hljs-comment"># 🎲 Mock product database (replace with real database queries)</span>
+    mock_products = [
+        {<span class="hljs-string">"id"</span>: <span class="hljs-number">1</span>, <span class="hljs-string">"name"</span>: <span class="hljs-string">"📱 iPhone 15"</span>, <span class="hljs-string">"category"</span>: <span class="hljs-string">"electronics"</span>, <span class="hljs-string">"price"</span>: <span class="hljs-number">999.99</span>, <span class="hljs-string">"in_stock"</span>: <span class="hljs-literal">True</span>},
+        {<span class="hljs-string">"id"</span>: <span class="hljs-number">2</span>, <span class="hljs-string">"name"</span>: <span class="hljs-string">"👕 Cotton T-Shirt"</span>, <span class="hljs-string">"category"</span>: <span class="hljs-string">"clothing"</span>, <span class="hljs-string">"price"</span>: <span class="hljs-number">29.99</span>, <span class="hljs-string">"in_stock"</span>: <span class="hljs-literal">True</span>},
+        {<span class="hljs-string">"id"</span>: <span class="hljs-number">3</span>, <span class="hljs-string">"name"</span>: <span class="hljs-string">"📚 Python Programming"</span>, <span class="hljs-string">"category"</span>: <span class="hljs-string">"books"</span>, <span class="hljs-string">"price"</span>: <span class="hljs-number">49.99</span>, <span class="hljs-string">"in_stock"</span>: <span class="hljs-literal">False</span>},
+        {<span class="hljs-string">"id"</span>: <span class="hljs-number">4</span>, <span class="hljs-string">"name"</span>: <span class="hljs-string">"🏠 Garden Hose"</span>, <span class="hljs-string">"category"</span>: <span class="hljs-string">"home_garden"</span>, <span class="hljs-string">"price"</span>: <span class="hljs-number">39.99</span>, <span class="hljs-string">"in_stock"</span>: <span class="hljs-literal">True</span>},
+        {<span class="hljs-string">"id"</span>: <span class="hljs-number">5</span>, <span class="hljs-string">"name"</span>: <span class="hljs-string">"⚽ Soccer Ball"</span>, <span class="hljs-string">"category"</span>: <span class="hljs-string">"sports"</span>, <span class="hljs-string">"price"</span>: <span class="hljs-number">24.99</span>, <span class="hljs-string">"in_stock"</span>: <span class="hljs-literal">True</span>},
+    ]
+    
+    <span class="hljs-comment"># 🔍 Apply filters (in real app, this would be database queries)</span>
+    filtered_products = mock_products
+    
+    <span class="hljs-comment"># Category filter</span>
+    <span class="hljs-keyword">if</span> category:
+        filtered_products = [p <span class="hljs-keyword">for</span> p <span class="hljs-keyword">in</span> filtered_products <span class="hljs-keyword">if</span> p[<span class="hljs-string">"category"</span>] == category]
+    
+    <span class="hljs-comment"># Price filters</span>
+    <span class="hljs-keyword">if</span> min_price <span class="hljs-keyword">is</span> <span class="hljs-keyword">not</span> <span class="hljs-literal">None</span>:
+        filtered_products = [p <span class="hljs-keyword">for</span> p <span class="hljs-keyword">in</span> filtered_products <span class="hljs-keyword">if</span> p[<span class="hljs-string">"price"</span>] &gt;= min_price]
+    <span class="hljs-keyword">if</span> max_price <span class="hljs-keyword">is</span> <span class="hljs-keyword">not</span> <span class="hljs-literal">None</span>:
+        filtered_products = [p <span class="hljs-keyword">for</span> p <span class="hljs-keyword">in</span> filtered_products <span class="hljs-keyword">if</span> p[<span class="hljs-string">"price"</span>]  <span class="hljs-number">0</span>
+            },
+            <span class="hljs-string">"filters_applied"</span>: {
+                <span class="hljs-string">"search"</span>: search,
+                <span class="hljs-string">"category"</span>: category,
+                <span class="hljs-string">"min_price"</span>: min_price,
+                <span class="hljs-string">"max_price"</span>: max_price,
+                <span class="hljs-string">"in_stock_only"</span>: in_stock_only,
+                <span class="hljs-string">"sort_by"</span>: sort_by,
+                <span class="hljs-string">"sort_order"</span>: sort_order
+            }
+        },
+        <span class="hljs-string">"meta"</span>: {
+            <span class="hljs-string">"api_version"</span>: <span class="hljs-string">"1.0.0"</span>,
+            <span class="hljs-string">"response_time"</span>: <span class="hljs-string">"45ms"</span>
+        }
+    }
+
+<span class="hljs-comment"># 🆔 Multiple path parameters with validation</span>
+<span class="hljs-meta">@app.get("/users/{user_id}/orders/{order_id}", tags=["👤 Users"])</span>
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_user_order</span><span class="hljs-params">(
+    user_id: int = Path<span class="hljs-params">(..., ge=<span class="hljs-number">1</span>, title=<span class="hljs-string">"User ID"</span>, description=<span class="hljs-string">"🆔 User identifier"</span>)</span>,
+    order_id: int = Path<span class="hljs-params">(..., ge=<span class="hljs-number">1</span>, title=<span class="hljs-string">"Order ID"</span>, description=<span class="hljs-string">"🛒 Order identifier"</span>)</span>,
+    include_items: bool = Query<span class="hljs-params">(False, title=<span class="hljs-string">"Include Items"</span>, description=<span class="hljs-string">"📦 Include order items in response"</span>)</span>
+)</span>:</span>
+    <span class="hljs-string">"""
+    👤 Get specific order for a user
+    
+    Args:
+        user_id (int): User identifier
+        order_id (int): Order identifier  
+        include_items (bool): Whether to include order items
+        
+    Returns:
+        dict: Order details with optional items
+    """</span>
+    
+    <span class="hljs-comment"># 🎲 Mock order data</span>
+    order_data = {
+        <span class="hljs-string">"order_id"</span>: order_id,
+        <span class="hljs-string">"user_id"</span>: user_id,
+        <span class="hljs-string">"status"</span>: <span class="hljs-string">"✅ completed"</span>,
+        <span class="hljs-string">"total"</span>: <span class="hljs-number">159.97</span>,
+        <span class="hljs-string">"created_at"</span>: <span class="hljs-string">"2024-01-15T10:30:00Z"</span>
+    }
+    
+    <span class="hljs-keyword">if</span> include_items:
+        order_data[<span class="hljs-string">"items"</span>] = [
+            {<span class="hljs-string">"product_id"</span>: <span class="hljs-number">1</span>, <span class="hljs-string">"name"</span>: <span class="hljs-string">"📱 iPhone Case"</span>, <span class="hljs-string">"quantity"</span>: <span class="hljs-number">2</span>, <span class="hljs-string">"price"</span>: <span class="hljs-number">24.99</span>},
+            {<span class="hljs-string">"product_id"</span>: <span class="hljs-number">2</span>, <span class="hljs-string">"name"</span>: <span class="hljs-string">"🔌 USB Cable"</span>, <span class="hljs-string">"quantity"</span>: <span class="hljs-number">1</span>, <span class="hljs-string">"price"</span>: <span class="hljs-number">19.99</span>},
+            {<span class="hljs-string">"product_id"</span>: <span class="hljs-number">3</span>, <span class="hljs-string">"name"</span>: <span class="hljs-string">"🎧 Wireless Headphones"</span>, <span class="hljs-string">"quantity"</span>: <span class="hljs-number">1</span>, <span class="hljs-string">"price"</span>: <span class="hljs-number">89.99</span>}
+        ]
+    
+    <span class="hljs-keyword">return</span> {
+        <span class="hljs-string">"status"</span>: <span class="hljs-string">"✅ success"</span>,
+        <span class="hljs-string">"data"</span>: order_data
+    }
+
+<span class="hljs-comment"># 🚀 Server startup event</span>
+<span class="hljs-meta">@app.on_event("startup")</span>
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">startup_event</span><span class="hljs-params">()</span>:</span>
+    <span class="hljs-string">"""🚀 Application startup tasks"""</span>
+    print(<span class="hljs-string">"🚀 FastAPI application starting up..."</span>)
+    print(<span class="hljs-string">"📚 API Documentation: http://localhost:8000/docs"</span>)
+    print(<span class="hljs-string">"📋 ReDoc Documentation: http://localhost:8000/redoc"</span>)
+
+<span class="hljs-comment"># 🛑 Server shutdown event  </span>
+<span class="hljs-meta">@app.on_event("shutdown")</span>
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">shutdown_event</span><span class="hljs-params">()</span>:</span>
+    <span class="hljs-string">"""🛑 Application shutdown tasks"""</span>
+    print(<span class="hljs-string">"🛑 FastAPI application shutting down..."</span>)
+
+<span class="hljs-comment"># 🚀 Run the application</span>
+<span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">"__main__"</span>:
+    uvicorn.run(
+        <span class="hljs-string">"main:app"</span>,
+        host=<span class="hljs-string">"0.0.0.0"</span>,
+        port=<span class="hljs-number">8000</span>,
+        reload=<span class="hljs-literal">True</span>,  <span class="hljs-comment"># Enable auto-reload during development</span>
+        log_level=<span class="hljs-string">"info"</span>
+    )
+</div></code></pre>
+<h2 id="%E2%96%B6%EF%B8%8F-5-running-the-server">▶️ <strong>5. Running the Server</strong></h2>
+<pre class="hljs"><code><div><span class="hljs-comment"># 🚀 Start development server with auto-reload</span>
+uvicorn main:app --reload
+
+<span class="hljs-comment"># 🌐 Start server on specific host and port</span>
+uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+
+<span class="hljs-comment"># 🔧 Start with custom configuration</span>
+uvicorn main:app --reload --<span class="hljs-built_in">log</span>-level debug --access-log
+
+<span class="hljs-comment"># 📊 Production server (without reload)</span>
+uvicorn main:app --host 0.0.0.0 --port 8000 --workers 4
+</div></code></pre>
+<p><strong>🔗 Access Points:</strong></p>
+<ul>
+<li>🏠 <strong>Main App</strong>: http://127.0.0.1:8000</li>
+<li>📚 <strong>Swagger UI</strong>: http://127.0.0.1:8000/docs</li>
+<li>📋 <strong>ReDoc</strong>: http://127.0.0.1:8000/redoc</li>
+<li>📊 <strong>OpenAPI Schema</strong>: http://127.0.0.1:8000/openapi.json</li>
+</ul>
+<h2 id="%F0%9F%94%84-6-request-flow-diagrams">🔄 <strong>6. Request Flow Diagrams</strong></h2>
+<h3 id="%F0%9F%93%8D-path-parameter-flow">📍 <strong>Path Parameter Flow</strong></h3>
+<pre><code class="language-mermaid"><div class="mermaid">flowchart TD
+    A[👤 Client Request: /items/42] --> B[🌐 FastAPI Router]
+    B --> C[🔍 Extract Path Parameter]
+    C --> D[📋 Pydantic Validation]
+    D -->|✅ Valid| E[🔄 Execute Handler Function]
+    D -->|❌ Invalid| F[⚠️ Return 422 Error]
+    E --> G[📊 Generate Response]
+    G --> H[📤 Return JSON Response]
+    
+    style A fill:#e1f5fe
+    style B fill:#fff3e0
+    style C fill:#f3e5f5
+    style D fill:#e8f5e8
+    style E fill:#e8f5e8
+    style G fill:#e8f5e8
+    style H fill:#e1f5fe
+    style F fill:#ffebee
+</div></code></pre>
+<h3 id="%F0%9F%94%8D-query-parameter-flow">🔍 <strong>Query Parameter Flow</strong></h3>
+<pre><code class="language-mermaid"><div class="mermaid">flowchart TD
+    A[👤 Client Request: /products?skip=0&limit=10&category=electronics] --> B[🌐 FastAPI Router]
+    B --> C[🔍 Parse Query Parameters]
+    C --> D[📋 Validate Each Parameter]
+    D -->|✅ All Valid| E[🔄 Execute Handler Function]
+    D -->|❌ Any Invalid| F[⚠️ Return 422 Error]
+    E --> G[🗃️ Apply Filters & Pagination]
+    G --> H[📊 Generate Response]
+    H --> I[📤 Return JSON Response]
+    
+    style A fill:#e1f5fe
+    style B fill:#fff3e0
+    style C fill:#f3e5f5
+    style D fill:#e8f5e8
+    style E fill:#e8f5e8
+    style G fill:#e8f5e8
+    style H fill:#e8f5e8
+    style I fill:#e1f5fe
+    style F fill:#ffebee
+</div></code></pre>
+<h3 id="%F0%9F%8E%AF-enum-validation-flow">🎯 <strong>Enum Validation Flow</strong></h3>
+<pre><code class="language-mermaid"><div class="mermaid">flowchart TD
+    A[👤 Client Request: /models/alexnet] --> B[🌐 FastAPI Router]
+    B --> C[🔍 Extract Model Name]
+    C --> D[🎯 Check Against Enum Values]
+    D -->|✅ Valid Enum| E[🔄 Execute Handler Function]
+    D -->|❌ Invalid Enum| F[⚠️ Return 422 Error with Valid Options]
+    E --> G[📊 Retrieve Model Info]
+    G --> H[📤 Return Model Details]
+    
+    style A fill:#e1f5fe
+    style B fill:#fff3e0
+    style C fill:#f3e5f5
+    style D fill:#e8f5e8
+    style E fill:#e8f5e8
+    style G fill:#e8f5e8
+    style H fill:#e1f5fe
+    style F fill:#ffebee
+</div></code></pre>
+<h2 id="%F0%9F%A7%AA-7-testing-your-api">🧪 <strong>7. Testing Your API</strong></h2>
+<h3 id="%F0%9F%94%A7-manual-testing-examples">🔧 <strong>Manual Testing Examples</strong></h3>
+<pre class="hljs"><code><div><span class="hljs-comment"># 🆔 Test basic path parameter</span>
+curl <span class="hljs-string">"http://localhost:8000/items/42"</span>
+
+<span class="hljs-comment"># 🤖 Test enum path parameter</span>
+curl <span class="hljs-string">"http://localhost:8000/models/alexnet"</span>
+
+<span class="hljs-comment"># 🔍 Test query parameters</span>
+curl <span class="hljs-string">"http://localhost:8000/products/?skip=0&amp;limit=5&amp;category=electronics&amp;in_stock_only=true"</span>
+
+<span class="hljs-comment"># 🛒 Test multiple path parameters</span>
+curl <span class="hljs-string">"http://localhost:8000/users/123/orders/456?include_items=true"</span>
+</div></code></pre>
+<h3 id="%F0%9F%A7%AA-automated-testing-with-pytest">🧪 <strong>Automated Testing with pytest</strong></h3>
+<pre class="hljs"><code><div><span class="hljs-comment"># tests/test_main.py</span>
+<span class="hljs-keyword">import</span> pytest
+<span class="hljs-keyword">from</span> fastapi.testclient <span class="hljs-keyword">import</span> TestClient
+<span class="hljs-keyword">from</span> main <span class="hljs-keyword">import</span> app
+
+client = TestClient(app)
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">test_read_root</span><span class="hljs-params">()</span>:</span>
+    <span class="hljs-string">"""🏠 Test root endpoint"""</span>
+    response = client.get(<span class="hljs-string">"/"</span>)
+    <span class="hljs-keyword">assert</span> response.status_code == <span class="hljs-number">200</span>
+    data = response.json()
+    <span class="hljs-keyword">assert</span> <span class="hljs-string">"🚀 Welcome to Advanced FastAPI Guide!"</span> <span class="hljs-keyword">in</span> data[<span class="hljs-string">"message"</span>]
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">test_read_item_valid</span><span class="hljs-params">()</span>:</span>
+    <span class="hljs-string">"""📦 Test valid item ID"""</span>
+    response = client.get(<span class="hljs-string">"/items/42"</span>)
+    <span class="hljs-keyword">assert</span> response.status_code == <span class="hljs-number">200</span>
+    data = response.json()
+    <span class="hljs-keyword">assert</span> data[<span class="hljs-string">"data"</span>][<span class="hljs-string">"item_id"</span>] == <span class="hljs-number">42</span>
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">test_read_item_invalid</span><span class="hljs-params">()</span>:</span>
+    <span class="hljs-string">"""⚠️ Test invalid item ID"""</span>
+    response = client.get(<span class="hljs-string">"/items/-1"</span>)
+    <span class="hljs-keyword">assert</span> response.status_code == <span class="hljs-number">422</span>
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">test_get_model_valid</span><span class="hljs-params">()</span>:</span>
+    <span class="hljs-string">"""🤖 Test valid model name"""</span>
+    response = client.get(<span class="hljs-string">"/models/alexnet"</span>)
+    <span class="hljs-keyword">assert</span> response.status_code == <span class="hljs-number">200</span>
+    data = response.json()
+    <span class="hljs-keyword">assert</span> data[<span class="hljs-string">"model_name"</span>] == <span class="hljs-string">"alexnet"</span>
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">test_get_model_invalid</span><span class="hljs-params">()</span>:</span>
+    <span class="hljs-string">"""⚠️ Test invalid model name"""</span>
+    response = client.get(<span class="hljs-string">"/models/invalid_model"</span>)
+    <span class="hljs-keyword">assert</span> response.status_code == <span class="hljs-number">422</span>
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">test_get_products_with_filters</span><span class="hljs-params">()</span>:</span>
+    <span class="hljs-string">"""🔍 Test product filtering"""</span>
+    response = client.get(<span class="hljs-string">"/products/?category=electronics&amp;min_price=100&amp;in_stock_only=true"</span>)
+    <span class="hljs-keyword">assert</span> response.status_code == <span class="hljs-number">200</span>
+    data = response.json()
+    <span class="hljs-keyword">assert</span> <span class="hljs-string">"products"</span> <span class="hljs-keyword">in</span> data[<span class="hljs-string">"data"</span>]
+    <span class="hljs-keyword">assert</span> <span class="hljs-string">"pagination"</span> <span class="hljs-keyword">in</span> data[<span class="hljs-string">"data"</span>]
+
+<span class="hljs-comment"># 🚀 Run tests with: pytest tests/test_main.py -v</span>
+</div></code></pre>
+<h2 id="%F0%9F%93%8A-8-complete-feature-comparison">📊 <strong>8. Complete Feature Comparison</strong></h2>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Path Parameters</th>
+<th>Enum Parameters</th>
+<th>Query Parameters</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>📍 Location</strong></td>
+<td>URL path (<code>/items/{id}</code>)</td>
+<td>URL path (<code>/models/{name}</code>)</td>
+<td>URL query (<code>?skip=0&amp;limit=10</code>)</td>
+</tr>
+<tr>
+<td><strong>✅ Required</strong></td>
+<td>Always required</td>
+<td>Always required</td>
+<td>Optional by default</td>
+</tr>
+<tr>
+<td><strong>🔧 Validation</strong></td>
+<td>Type hints + Path()</td>
+<td>Enum class validation</td>
+<td>Type hints + Query()</td>
+</tr>
+<tr>
+<td><strong>📚 Documentation</strong></td>
+<td>Auto-generated in OpenAPI</td>
+<td>Dropdown with valid options</td>
+<td>Form fields with constraints</td>
+</tr>
+<tr>
+<td><strong>🎯 Use Cases</strong></td>
+<td>Resource identifiers</td>
+<td>Predefined choices</td>
+<td>Filtering, pagination, search</td>
+</tr>
+<tr>
+<td><strong>🛡️ Security</strong></td>
+<td>Path traversal protection</td>
+<td>Limited to enum values</td>
+<td>Input sanitization</td>
+</tr>
+<tr>
+<td><strong>⚡ Performance</strong></td>
+<td>Fast (URL parsing)</td>
+<td>Fast (enum lookup)</td>
+<td>Moderate (query parsing)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="%F0%9F%92%A1-9-best-practices--pro-tips">💡 <strong>9. Best Practices &amp; Pro Tips</strong></h2>
+<h3 id="%F0%9F%9B%A1%EF%B8%8F-security-considerations">🛡️ <strong>Security Considerations</strong></h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> fastapi <span class="hljs-keyword">import</span> HTTPException, status
+<span class="hljs-keyword">import</span> re
+
+<span class="hljs-meta">@app.get("/secure-items/{item_id}")</span>
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">secure_read_item</span><span class="hljs-params">(
+    item_id: int = Path<span class="hljs-params">(..., ge=<span class="hljs-number">1</span>, le=<span class="hljs-number">999999</span>)</span>,
+    api_key: str = Query<span class="hljs-params">(..., min_length=<span class="hljs-number">32</span>, max_length=<span class="hljs-number">32</span>)</span>
+)</span>:</span>
+    <span class="hljs-string">"""🛡️ Secure endpoint with validation"""</span>
+    
+    <span class="hljs-comment"># 🔑 Validate API key format</span>
+    <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> re.match(<span class="hljs-string">r'^[a-zA-Z0-9]{32}$'</span>, api_key):
+        <span class="hljs-keyword">raise</span> HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail=<span class="hljs-string">"Invalid API key format"</span>
+        )
+    
+    <span class="hljs-comment"># 🔍 Additional security checks</span>
+    <span class="hljs-keyword">if</span> item_id <span class="hljs-keyword">in</span> [<span class="hljs-number">666</span>, <span class="hljs-number">999</span>]:  <span class="hljs-comment"># Blocked IDs</span>
+        <span class="hljs-keyword">raise</span> HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail=<span class="hljs-string">"Access to this item is restricted"</span>
+        )
+    
+    <span class="hljs-keyword">return</span> {<span class="hljs-string">"item_id"</span>: item_id, <span class="hljs-string">"status"</span>: <span class="hljs-string">"✅ secure access granted"</span>}
+</div></code></pre>
+<h3 id="%E2%9A%A1-performance-optimization">⚡ <strong>Performance Optimization</strong></h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> functools <span class="hljs-keyword">import</span> lru_cache
+<span class="hljs-keyword">from</span> typing <span class="hljs-keyword">import</span> Dict, Any
+
+<span class="hljs-meta">@lru_cache(maxsize=100)</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_cached_model_info</span><span class="hljs-params">(model_name: str)</span> -&gt; Dict[str, Any]:</span>
+    <span class="hljs-string">"""💾 Cache model information for better performance"""</span>
+    <span class="hljs-comment"># Expensive database/API call simulation</span>
+    <span class="hljs-keyword">return</span> {<span class="hljs-string">"model"</span>: model_name, <span class="hljs-string">"cached"</span>: <span class="hljs-literal">True</span>}
+
+<span class="hljs-meta">@app.get("/cached-models/{model_name}")</span>
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_cached_model</span><span class="hljs-params">(model_name: ModelName)</span>:</span>
+    <span class="hljs-string">"""⚡ Fast endpoint with caching"""</span>
+    <span class="hljs-keyword">return</span> get_cached_model_info(model_name.value)
+</div></code></pre>
+<h3 id="%F0%9F%93%8A-response-standardization">📊 <strong>Response Standardization</strong></h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> typing <span class="hljs-keyword">import</span> Generic, TypeVar, Optional
+<span class="hljs-keyword">from</span> pydantic <span class="hljs-keyword">import</span> BaseModel
+
+T = TypeVar(<span class="hljs-string">'T'</span>)
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">APIResponse</span><span class="hljs-params">(BaseModel, Generic[T])</span>:</span>
+    <span class="hljs-string">"""📋 Standardized API response format"""</span>
+    status: str
+    message: Optional[str] = <span class="hljs-literal">None</span>
+    data: Optional[T] = <span class="hljs-literal">None</span>
+    meta: Optional[Dict[str, Any]] = <span class="hljs-literal">None</span>
+
+<span class="hljs-meta">@app.get("/standardized-items/{item_id}", response_model=APIResponse[Dict])</span>
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">standardized_read_item</span><span class="hljs-params">(item_id: int)</span>:</span>
+    <span class="hljs-string">"""📊 Endpoint with standardized response"""</span>
+    <span class="hljs-keyword">return</span> APIResponse(
+        status=<span class="hljs-string">"success"</span>,
+        message=<span class="hljs-string">"Item retrieved successfully"</span>,
+        data={<span class="hljs-string">"item_id"</span>: item_id, <span class="hljs-string">"name"</span>: <span class="hljs-string">f"Item <span class="hljs-subst">{item_id}</span>"</span>},
+        meta={<span class="hljs-string">"api_version"</span>: <span class="hljs-string">"1.0.0"</span>, <span class="hljs-string">"timestamp"</span>: <span class="hljs-string">"2024-01-01T00:00:00Z"</span>}
+    )
+</div></code></pre>
+<h2 id="%F0%9F%8E%AF-10-summary--next-steps">🎯 <strong>10. Summary &amp; Next Steps</strong></h2>
+<h3 id="%F0%9F%A7%A0-key-takeaways">🧠 <strong>Key Takeaways</strong></h3>
+<ul>
+<li><strong>🔧 Setup</strong>: Virtual environments isolate dependencies and prevent conflicts</li>
+<li><strong>📍 Path Parameters</strong>: Required, validated, perfect for resource identifiers</li>
+<li><strong>🎯 Enums</strong>: Restrict values to predefined options with automatic validation</li>
+<li><strong>🔍 Query Parameters</strong>: Optional, great for filtering and pagination</li>
+<li><strong>📚 Documentation</strong>: FastAPI automatically generates interactive docs</li>
+<li><strong>🛡️ Validation</strong>: Pydantic handles all validation behind the scenes</li>
+</ul>
+<h3 id="%F0%9F%9A%80-whats-next">🚀 <strong>What's Next?</strong></h3>
+<ol>
+<li><strong>📝 POST/PUT Methods</strong>: Learn request body handling with Pydantic models</li>
+<li><strong>🔐 Authentication</strong>: Implement OAuth2 and JWT security</li>
+<li><strong>🗃️ Database Integration</strong>: Connect with SQLAlchemy and async databases</li>
+<li><strong>🧪 Advanced Testing</strong>: Comprehensive test suites with fixtures</li>
+<li><strong>🐳 Deployment</strong>: Docker containerization and cloud deployment</li>
+<li><strong>📊 Monitoring</strong>: Logging, metrics, and health checks</li>
+</ol>
+<h3 id="%F0%9F%93%9A-additional-resources">📚 <strong>Additional Resources</strong></h3>
+<ul>
+<li><strong>📖 Official Docs</strong>: <a href="https://fastapi.tiangolo.com/">FastAPI Documentation</a></li>
+<li><strong>🎯 Pydantic Guide</strong>: <a href="https://pydantic-docs.helpmanual.io/">Pydantic Documentation</a></li>
+<li><strong>🧪 Testing Guide</strong>: <a href="https://fastapi.tiangolo.com/tutorial/testing/">FastAPI Testing</a></li>
+<li><strong>🚀 Deployment</strong>: <a href="https://fastapi.tiangolo.com/deployment/">FastAPI Deployment</a></li>
+</ul>
+
+</body>
+</html>
