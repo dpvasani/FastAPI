@@ -1,0 +1,1366 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>11. FastAPI Project Structure.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h1 id="%F0%9F%9A%80-fastapi-project-structure-enhanced-version">🚀 FastAPI Project Structure (Enhanced Version)</h1>
+<p>Based on your Node.js backend with descriptive naming conventions, here's the enhanced FastAPI project structure:</p>
+<h2 id="%F0%9F%93%81-enhanced-project-structure">📁 Enhanced Project Structure</h2>
+<pre class="hljs"><code><div>fastapi-backend/
+├── 📄 .env.sample
+├── 📄 .gitignore
+├── 📄 requirements.txt
+├── 📄 pyproject.toml
+├── 📄 README.md
+├── 📄 main.py
+├── 📁 app/
+│   ├── 📄 __init__.py
+│   ├── 📄 main.py
+│   ├── 📄 config.py
+│   ├── 📄 constants.py
+│   ├── 📁 api/
+│   │   ├── 📄 __init__.py
+│   │   ├── 📄 dependencies.py
+│   │   └── 📁 v1/
+│   │       ├── 📄 __init__.py
+│   │       ├── 📄 api.py
+│   │       └── 📁 routes/
+│   │           ├── 📄 __init__.py
+│   │           ├── 📄 auth.route.py
+│   │           ├── 📄 user.route.py
+│   │           ├── 📄 video.route.py
+│   │           ├── 📄 comment.route.py
+│   │           ├── 📄 like.route.py
+│   │           ├── 📄 playlist.route.py
+│   │           ├── 📄 subscription.route.py
+│   │           └── 📄 tweet.route.py
+│   ├── 📁 core/
+│   │   ├── 📄 __init__.py
+│   │   ├── 📄 config.py
+│   │   ├── 📄 security.py
+│   │   └── 📄 settings.py
+│   ├── 📁 db/
+│   │   ├── 📄 __init__.py
+│   │   ├── 📄 base.py
+│   │   ├── 📄 database.py
+│   │   ├── 📄 session.py
+│   │   └── 📁 migrations/
+│   │       └── 📄 __init__.py
+│   ├── 📁 models/
+│   │   ├── 📄 __init__.py
+│   │   ├── 📄 base.model.py
+│   │   ├── 📄 user.model.py
+│   │   ├── 📄 video.model.py
+│   │   ├── 📄 comment.model.py
+│   │   ├── 📄 like.model.py
+│   │   ├── 📄 playlist.model.py
+│   │   ├── 📄 subscription.model.py
+│   │   └── 📄 tweet.model.py
+│   ├── 📁 schemas/
+│   │   ├── 📄 __init__.py
+│   │   ├── 📄 user.schema.py
+│   │   ├── 📄 video.schema.py
+│   │   ├── 📄 comment.schema.py
+│   │   ├── 📄 like.schema.py
+│   │   ├── 📄 playlist.schema.py
+│   │   ├── 📄 subscription.schema.py
+│   │   └── 📄 tweet.schema.py
+│   ├── 📁 controllers/
+│   │   ├── 📄 __init__.py
+│   │   ├── 📄 user.controller.py
+│   │   ├── 📄 video.controller.py
+│   │   ├── 📄 comment.controller.py
+│   │   ├── 📄 like.controller.py
+│   │   ├── 📄 playlist.controller.py
+│   │   ├── 📄 subscription.controller.py
+│   │   └── 📄 tweet.controller.py
+│   ├── 📁 services/
+│   │   ├── 📄 __init__.py
+│   │   ├── 📄 user.service.py
+│   │   ├── 📄 video.service.py
+│   │   ├── 📄 comment.service.py
+│   │   ├── 📄 like.service.py
+│   │   ├── 📄 playlist.service.py
+│   │   ├── 📄 subscription.service.py
+│   │   ├── 📄 tweet.service.py
+│   │   └── 📄 auth.service.py
+│   ├── 📁 middlewares/
+│   │   ├── 📄 __init__.py
+│   │   ├── 📄 cors.middleware.py
+│   │   ├── 📄 auth.middleware.py
+│   │   ├── 📄 logging.middleware.py
+│   │   └── 📄 error.middleware.py
+│   └── 📁 utils/
+│       ├── 📄 __init__.py
+│       ├── 📄 helpers.util.py
+│       ├── 📄 validators.util.py
+│       ├── 📄 exceptions.util.py
+│       ├── 📄 responses.util.py
+│       └── 📄 constants.util.py
+├── 📁 tests/
+│   ├── 📄 __init__.py
+│   ├── 📄 conftest.py
+│   ├── 📁 api/
+│   │   ├── 📄 __init__.py
+│   │   ├── 📄 test_user.route.py
+│   │   ├── 📄 test_video.route.py
+│   │   └── 📄 test_auth.route.py
+│   ├── 📁 controllers/
+│   │   ├── 📄 __init__.py
+│   │   ├── 📄 test_user.controller.py
+│   │   └── 📄 test_video.controller.py
+│   └── 📁 services/
+│       ├── 📄 __init__.py
+│       ├── 📄 test_user.service.py
+│       └── 📄 test_video.service.py
+└── 📁 static/
+    ├── 📁 css/
+    ├── 📁 js/
+    ├── 📁 images/
+    └── 📁 uploads/
+        ├── 📁 videos/
+        ├── 📁 thumbnails/
+        └── 📁 avatars/
+</div></code></pre>
+<h2 id="%F0%9F%8E%AF-enhanced-file-examples">🎯 <strong>Enhanced File Examples</strong></h2>
+<h3 id="%F0%9F%93%84-approutesuserroutepy"><strong>📄 app/routes/user.route.py</strong></h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> fastapi <span class="hljs-keyword">import</span> APIRouter, Depends, HTTPException, status
+<span class="hljs-keyword">from</span> sqlalchemy.orm <span class="hljs-keyword">import</span> Session
+<span class="hljs-keyword">from</span> app.db.session <span class="hljs-keyword">import</span> get_db
+<span class="hljs-keyword">from</span> app.controllers.user.controller <span class="hljs-keyword">import</span> UserController
+<span class="hljs-keyword">from</span> app.schemas.user.schema <span class="hljs-keyword">import</span> UserCreate, UserResponse, UserUpdate
+<span class="hljs-keyword">from</span> app.middlewares.auth.middleware <span class="hljs-keyword">import</span> get_current_user
+
+router = APIRouter(prefix=<span class="hljs-string">"/users"</span>, tags=[<span class="hljs-string">"users"</span>])
+
+<span class="hljs-meta">@router.post("/", response_model=UserResponse, status_code=status.HTTP_201_CREATED)</span>
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">create_user</span><span class="hljs-params">(user: UserCreate, db: Session = Depends<span class="hljs-params">(get_db)</span>)</span>:</span>
+    <span class="hljs-string">"""Create a new user account"""</span>
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">await</span> UserController.create_user(db, user)
+
+<span class="hljs-meta">@router.get("/me", response_model=UserResponse)</span>
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_current_user_profile</span><span class="hljs-params">(current_user = Depends<span class="hljs-params">(get_current_user)</span>)</span>:</span>
+    <span class="hljs-string">"""Get current user profile"""</span>
+    <span class="hljs-keyword">return</span> current_user
+
+<span class="hljs-meta">@router.get("/{user_id}", response_model=UserResponse)</span>
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_user_by_id</span><span class="hljs-params">(user_id: int, db: Session = Depends<span class="hljs-params">(get_db)</span>)</span>:</span>
+    <span class="hljs-string">"""Get user by ID"""</span>
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">await</span> UserController.get_user_by_id(db, user_id)
+
+<span class="hljs-meta">@router.patch("/me", response_model=UserResponse)</span>
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">update_user_profile</span><span class="hljs-params">(
+    user_update: UserUpdate,
+    current_user = Depends<span class="hljs-params">(get_current_user)</span>,
+    db: Session = Depends<span class="hljs-params">(get_db)</span>
+)</span>:</span>
+    <span class="hljs-string">"""Update current user profile"""</span>
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">await</span> UserController.update_user(db, current_user.id, user_update)
+
+<span class="hljs-meta">@router.delete("/me", status_code=status.HTTP_204_NO_CONTENT)</span>
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">delete_user_account</span><span class="hljs-params">(
+    current_user = Depends<span class="hljs-params">(get_current_user)</span>,
+    db: Session = Depends<span class="hljs-params">(get_db)</span>
+)</span>:</span>
+    <span class="hljs-string">"""Delete current user account"""</span>
+    <span class="hljs-keyword">await</span> UserController.delete_user(db, current_user.id)
+</div></code></pre>
+<h3 id="%F0%9F%93%84-appmodelsusermodelpy"><strong>📄 app/models/user.model.py</strong></h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> sqlalchemy <span class="hljs-keyword">import</span> Column, Integer, String, DateTime, Boolean, Text
+<span class="hljs-keyword">from</span> sqlalchemy.sql <span class="hljs-keyword">import</span> func
+<span class="hljs-keyword">from</span> sqlalchemy.orm <span class="hljs-keyword">import</span> relationship
+<span class="hljs-keyword">from</span> app.db.base <span class="hljs-keyword">import</span> Base
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">User</span><span class="hljs-params">(Base)</span>:</span>
+    __tablename__ = <span class="hljs-string">"users"</span>
+    
+    id = Column(Integer, primary_key=<span class="hljs-literal">True</span>, index=<span class="hljs-literal">True</span>)
+    username = Column(String(<span class="hljs-number">50</span>), unique=<span class="hljs-literal">True</span>, index=<span class="hljs-literal">True</span>, nullable=<span class="hljs-literal">False</span>)
+    email = Column(String(<span class="hljs-number">100</span>), unique=<span class="hljs-literal">True</span>, index=<span class="hljs-literal">True</span>, nullable=<span class="hljs-literal">False</span>)
+    full_name = Column(String(<span class="hljs-number">100</span>), nullable=<span class="hljs-literal">True</span>)
+    avatar = Column(String(<span class="hljs-number">255</span>), nullable=<span class="hljs-literal">True</span>)
+    cover_image = Column(String(<span class="hljs-number">255</span>), nullable=<span class="hljs-literal">True</span>)
+    watch_history = Column(Text, nullable=<span class="hljs-literal">True</span>)
+    password = Column(String(<span class="hljs-number">255</span>), nullable=<span class="hljs-literal">False</span>)
+    refresh_token = Column(Text, nullable=<span class="hljs-literal">True</span>)
+    is_active = Column(Boolean, default=<span class="hljs-literal">True</span>)
+    is_verified = Column(Boolean, default=<span class="hljs-literal">False</span>)
+    created_at = Column(DateTime(timezone=<span class="hljs-literal">True</span>), server_default=func.now())
+    updated_at = Column(DateTime(timezone=<span class="hljs-literal">True</span>), onupdate=func.now())
+    
+    <span class="hljs-comment"># Relationships</span>
+    videos = relationship(<span class="hljs-string">"Video"</span>, back_populates=<span class="hljs-string">"owner"</span>)
+    comments = relationship(<span class="hljs-string">"Comment"</span>, back_populates=<span class="hljs-string">"owner"</span>)
+    likes = relationship(<span class="hljs-string">"Like"</span>, back_populates=<span class="hljs-string">"user"</span>)
+    playlists = relationship(<span class="hljs-string">"Playlist"</span>, back_populates=<span class="hljs-string">"owner"</span>)
+    subscriptions_given = relationship(<span class="hljs-string">"Subscription"</span>, foreign_keys=<span class="hljs-string">"Subscription.subscriber_id"</span>, back_populates=<span class="hljs-string">"subscriber"</span>)
+    subscriptions_received = relationship(<span class="hljs-string">"Subscription"</span>, foreign_keys=<span class="hljs-string">"Subscription.channel_id"</span>, back_populates=<span class="hljs-string">"channel"</span>)
+    tweets = relationship(<span class="hljs-string">"Tweet"</span>, back_populates=<span class="hljs-string">"owner"</span>)
+</div></code></pre>
+<h3 id="%F0%9F%93%84-appmodelsvideomodelpy"><strong>📄 app/models/video.model.py</strong></h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> sqlalchemy <span class="hljs-keyword">import</span> Column, Integer, String, DateTime, Boolean, Text, ForeignKey
+<span class="hljs-keyword">from</span> sqlalchemy.sql <span class="hljs-keyword">import</span> func
+<span class="hljs-keyword">from</span> sqlalchemy.orm <span class="hljs-keyword">import</span> relationship
+<span class="hljs-keyword">from</span> app.db.base <span class="hljs-keyword">import</span> Base
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Video</span><span class="hljs-params">(Base)</span>:</span>
+    __tablename__ = <span class="hljs-string">"videos"</span>
+    
+    id = Column(Integer, primary_key=<span class="hljs-literal">True</span>, index=<span class="hljs-literal">True</span>)
+    video_file = Column(String(<span class="hljs-number">255</span>), nullable=<span class="hljs-literal">False</span>)
+    thumbnail = Column(String(<span class="hljs-number">255</span>), nullable=<span class="hljs-literal">False</span>)
+    title = Column(String(<span class="hljs-number">200</span>), nullable=<span class="hljs-literal">False</span>)
+    description = Column(Text, nullable=<span class="hljs-literal">True</span>)
+    duration = Column(Integer, nullable=<span class="hljs-literal">False</span>)  <span class="hljs-comment"># in seconds</span>
+    views = Column(Integer, default=<span class="hljs-number">0</span>)
+    is_published = Column(Boolean, default=<span class="hljs-literal">False</span>)
+    owner_id = Column(Integer, ForeignKey(<span class="hljs-string">"users.id"</span>), nullable=<span class="hljs-literal">False</span>)
+    created_at = Column(DateTime(timezone=<span class="hljs-literal">True</span>), server_default=func.now())
+    updated_at = Column(DateTime(timezone=<span class="hljs-literal">True</span>), onupdate=func.now())
+    
+    <span class="hljs-comment"># Relationships</span>
+    owner = relationship(<span class="hljs-string">"User"</span>, back_populates=<span class="hljs-string">"videos"</span>)
+    comments = relationship(<span class="hljs-string">"Comment"</span>, back_populates=<span class="hljs-string">"video"</span>)
+    likes = relationship(<span class="hljs-string">"Like"</span>, back_populates=<span class="hljs-string">"video"</span>)
+</div></code></pre>
+<h3 id="%F0%9F%93%84-appcontrollersusercontrollerpy"><strong>📄 app/controllers/user.controller.py</strong></h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> sqlalchemy.orm <span class="hljs-keyword">import</span> Session
+<span class="hljs-keyword">from</span> fastapi <span class="hljs-keyword">import</span> HTTPException, status
+<span class="hljs-keyword">from</span> app.models.user.model <span class="hljs-keyword">import</span> User
+<span class="hljs-keyword">from</span> app.schemas.user.schema <span class="hljs-keyword">import</span> UserCreate, UserUpdate
+<span class="hljs-keyword">from</span> app.services.user.service <span class="hljs-keyword">import</span> UserService
+<span class="hljs-keyword">from</span> app.utils.responses.util <span class="hljs-keyword">import</span> success_response, error_response
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">UserController</span>:</span>
+<span class="hljs-meta">    @staticmethod</span>
+    <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">create_user</span><span class="hljs-params">(db: Session, user: UserCreate)</span>:</span>
+        <span class="hljs-string">"""Create a new user"""</span>
+        <span class="hljs-keyword">try</span>:
+            <span class="hljs-comment"># Check if user already exists</span>
+            existing_user = <span class="hljs-keyword">await</span> UserService.get_user_by_email(db, user.email)
+            <span class="hljs-keyword">if</span> existing_user:
+                <span class="hljs-keyword">raise</span> HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail=<span class="hljs-string">"User with this email already exists"</span>
+                )
+            
+            new_user = <span class="hljs-keyword">await</span> UserService.create_user(db, user)
+            <span class="hljs-keyword">return</span> success_response(
+                data=new_user,
+                message=<span class="hljs-string">"User created successfully"</span>
+            )
+        <span class="hljs-keyword">except</span> Exception <span class="hljs-keyword">as</span> e:
+            <span class="hljs-keyword">raise</span> HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail=str(e)
+            )
+    
+<span class="hljs-meta">    @staticmethod</span>
+    <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_user_by_id</span><span class="hljs-params">(db: Session, user_id: int)</span>:</span>
+        <span class="hljs-string">"""Get user by ID"""</span>
+        user = <span class="hljs-keyword">await</span> UserService.get_user_by_id(db, user_id)
+        <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> user:
+            <span class="hljs-keyword">raise</span> HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=<span class="hljs-string">"User not found"</span>
+            )
+        <span class="hljs-keyword">return</span> success_response(data=user)
+    
+<span class="hljs-meta">    @staticmethod</span>
+    <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">update_user</span><span class="hljs-params">(db: Session, user_id: int, user_update: UserUpdate)</span>:</span>
+        <span class="hljs-string">"""Update user"""</span>
+        updated_user = <span class="hljs-keyword">await</span> UserService.update_user(db, user_id, user_update)
+        <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> updated_user:
+            <span class="hljs-keyword">raise</span> HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=<span class="hljs-string">"User not found"</span>
+            )
+        <span class="hljs-keyword">return</span> success_response(
+            data=updated_user,
+            message=<span class="hljs-string">"User updated successfully"</span>
+        )
+</div></code></pre>
+<h3 id="%F0%9F%93%84-appservicesuserservicepy"><strong>📄 app/services/user.service.py</strong></h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> sqlalchemy.orm <span class="hljs-keyword">import</span> Session
+<span class="hljs-keyword">from</span> sqlalchemy <span class="hljs-keyword">import</span> or_
+<span class="hljs-keyword">from</span> app.models.user.model <span class="hljs-keyword">import</span> User
+<span class="hljs-keyword">from</span> app.schemas.user.schema <span class="hljs-keyword">import</span> UserCreate, UserUpdate
+<span class="hljs-keyword">from</span> app.utils.helpers.util <span class="hljs-keyword">import</span> hash_password
+<span class="hljs-keyword">from</span> typing <span class="hljs-keyword">import</span> Optional
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">UserService</span>:</span>
+<span class="hljs-meta">    @staticmethod</span>
+    <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">create_user</span><span class="hljs-params">(db: Session, user: UserCreate)</span> -&gt; User:</span>
+        <span class="hljs-string">"""Create a new user"""</span>
+        hashed_password = hash_password(user.password)
+        db_user = User(
+            username=user.username,
+            email=user.email,
+            full_name=user.full_name,
+            password=hashed_password
+        )
+        db.add(db_user)
+        db.commit()
+        db.refresh(db_user)
+        <span class="hljs-keyword">return</span> db_user
+    
+<span class="hljs-meta">    @staticmethod</span>
+    <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_user_by_id</span><span class="hljs-params">(db: Session, user_id: int)</span> -&gt; Optional[User]:</span>
+        <span class="hljs-string">"""Get user by ID"""</span>
+        <span class="hljs-keyword">return</span> db.query(User).filter(User.id == user_id).first()
+    
+<span class="hljs-meta">    @staticmethod</span>
+    <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_user_by_email</span><span class="hljs-params">(db: Session, email: str)</span> -&gt; Optional[User]:</span>
+        <span class="hljs-string">"""Get user by email"""</span>
+        <span class="hljs-keyword">return</span> db.query(User).filter(User.email == email).first()
+    
+<span class="hljs-meta">    @staticmethod</span>
+    <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_user_by_username</span><span class="hljs-params">(db: Session, username: str)</span> -&gt; Optional[User]:</span>
+        <span class="hljs-string">"""Get user by username"""</span>
+        <span class="hljs-keyword">return</span> db.query(User).filter(User.username == username).first()
+    
+<span class="hljs-meta">    @staticmethod</span>
+    <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">update_user</span><span class="hljs-params">(db: Session, user_id: int, user_update: UserUpdate)</span> -&gt; Optional[User]:</span>
+        <span class="hljs-string">"""Update user"""</span>
+        db_user = db.query(User).filter(User.id == user_id).first()
+        <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> db_user:
+            <span class="hljs-keyword">return</span> <span class="hljs-literal">None</span>
+        
+        update_data = user_update.dict(exclude_unset=<span class="hljs-literal">True</span>)
+        <span class="hljs-keyword">for</span> field, value <span class="hljs-keyword">in</span> update_data.items():
+            setattr(db_user, field, value)
+        
+        db.commit()
+        db.refresh(db_user)
+        <span class="hljs-keyword">return</span> db_user
+</div></code></pre>
+<h3 id="%F0%9F%93%84-appschemasuserschemapy"><strong>📄 app/schemas/user.schema.py</strong></h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> pydantic <span class="hljs-keyword">import</span> BaseModel, EmailStr, validator
+<span class="hljs-keyword">from</span> datetime <span class="hljs-keyword">import</span> datetime
+<span class="hljs-keyword">from</span> typing <span class="hljs-keyword">import</span> Optional, List
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">UserBase</span><span class="hljs-params">(BaseModel)</span>:</span>
+    username: str
+    email: EmailStr
+    full_name: Optional[str] = <span class="hljs-literal">None</span>
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">UserCreate</span><span class="hljs-params">(UserBase)</span>:</span>
+    password: str
+    
+<span class="hljs-meta">    @validator('password')</span>
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">validate_password</span><span class="hljs-params">(cls, v)</span>:</span>
+        <span class="hljs-keyword">if</span> len(v) &lt; <span class="hljs-number">8</span>:
+            <span class="hljs-keyword">raise</span> ValueError(<span class="hljs-string">'Password must be at least 8 characters long'</span>)
+        <span class="hljs-keyword">return</span> v
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">UserUpdate</span><span class="hljs-params">(BaseModel)</span>:</span>
+    username: Optional[str] = <span class="hljs-literal">None</span>
+    email: Optional[EmailStr] = <span class="hljs-literal">None</span>
+    full_name: Optional[str] = <span class="hljs-literal">None</span>
+    avatar: Optional[str] = <span class="hljs-literal">None</span>
+    cover_image: Optional[str] = <span class="hljs-literal">None</span>
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">UserResponse</span><span class="hljs-params">(UserBase)</span>:</span>
+    id: int
+    avatar: Optional[str] = <span class="hljs-literal">None</span>
+    cover_image: Optional[str] = <span class="hljs-literal">None</span>
+    is_active: bool
+    is_verified: bool
+    created_at: datetime
+    updated_at: Optional[datetime] = <span class="hljs-literal">None</span>
+    
+    <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Config</span>:</span>
+        from_attributes = <span class="hljs-literal">True</span>
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">UserLogin</span><span class="hljs-params">(BaseModel)</span>:</span>
+    username: str  <span class="hljs-comment"># Can be username or email</span>
+    password: str
+</div></code></pre>
+<h2 id="%F0%9F%8E%A8-enhanced-naming-conventions">🎨 <strong>Enhanced Naming Conventions</strong></h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Component</th>
+<th style="text-align:left">Convention</th>
+<th style="text-align:left">Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>Routes</strong></td>
+<td style="text-align:left"><code>{resource}.route.py</code></td>
+<td style="text-align:left"><code>user.route.py</code>, <code>video.route.py</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Models</strong></td>
+<td style="text-align:left"><code>{resource}.model.py</code></td>
+<td style="text-align:left"><code>user.model.py</code>, <code>comment.model.py</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Controllers</strong></td>
+<td style="text-align:left"><code>{resource}.controller.py</code></td>
+<td style="text-align:left"><code>user.controller.py</code>, <code>playlist.controller.py</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Services</strong></td>
+<td style="text-align:left"><code>{resource}.service.py</code></td>
+<td style="text-align:left"><code>user.service.py</code>, <code>subscription.service.py</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Schemas</strong></td>
+<td style="text-align:left"><code>{resource}.schema.py</code></td>
+<td style="text-align:left"><code>user.schema.py</code>, <code>tweet.schema.py</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Middlewares</strong></td>
+<td style="text-align:left"><code>{purpose}.middleware.py</code></td>
+<td style="text-align:left"><code>auth.middleware.py</code>, <code>cors.middleware.py</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Utils</strong></td>
+<td style="text-align:left"><code>{purpose}.util.py</code></td>
+<td style="text-align:left"><code>helpers.util.py</code>, <code>validators.util.py</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Tests</strong></td>
+<td style="text-align:left"><code>test_{resource}.{type}.py</code></td>
+<td style="text-align:left"><code>test_user.route.py</code>, <code>test_video.service.py</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="%F0%9F%8C%9F-key-enhancements">🌟 <strong>Key Enhancements</strong></h2>
+<ul>
+<li><strong>🎯 Clear Purpose</strong>: Each file name immediately indicates its function</li>
+<li><strong>📱 Social Media Ready</strong>: Complete structure for YouTube/Twitter-like platform</li>
+<li><strong>🔄 Consistent</strong>: All naming follows the same <code>.{type}.py</code> pattern</li>
+<li><strong>🧪 Test Ready</strong>: Organized test structure matching main codebase</li>
+<li><strong>📁 Media Support</strong>: Static folders for uploads (videos, thumbnails, avatars)</li>
+<li><strong>🔒 Security First</strong>: Dedicated auth middleware and services</li>
+<li><strong>📊 Response Standards</strong>: Consistent response utilities</li>
+<li><strong>🚀 Scalable</strong>: Easy to add new features following the same pattern</li>
+</ul>
+<hr>
+<h1 id="%F0%9F%8F%97%EF%B8%8F-fastapi-module-functionality-structure">🏗️ FastAPI Module-Functionality Structure</h1>
+<h2 id="%F0%9F%93%96-overview">📖 Overview</h2>
+<p>The <strong>Module-Functionality</strong> approach organizes files based on feature domains rather than file types. Each module contains all the components it needs (routes, models, schemas, services) in one cohesive package.</p>
+<blockquote>
+<p>💡 <strong>Best For</strong>: Monolithic applications with multiple domains and complex business logic</p>
+</blockquote>
+<h2 id="%F0%9F%8E%AF-key-benefits">🎯 Key Benefits</h2>
+<table>
+<thead>
+<tr>
+<th>Benefit</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>🎯 <strong>Domain Focus</strong></td>
+<td>All related functionality grouped together</td>
+</tr>
+<tr>
+<td>🚀 <strong>Development Efficiency</strong></td>
+<td>Faster feature development and debugging</td>
+</tr>
+<tr>
+<td>🔍 <strong>Better Maintainability</strong></td>
+<td>Easy to locate and modify domain-specific code</td>
+</tr>
+<tr>
+<td>📦 <strong>Scalability</strong></td>
+<td>Simple to add new modules without affecting others</td>
+</tr>
+<tr>
+<td>👥 <strong>Team Collaboration</strong></td>
+<td>Teams can work on different modules independently</td>
+</tr>
+</tbody>
+</table>
+<h2 id="%F0%9F%93%81-complete-project-structure">📁 Complete Project Structure</h2>
+<pre class="hljs"><code><div>fastapi-project/
+├── 📁 alembic/                    # Database migrations
+│   ├── 📄 env.py
+│   ├── 📄 script.py.mako
+│   └── 📁 versions/
+├── 📁 src/                        # Main application source
+│   ├── 📁 auth/                   # 🔐 Authentication Module
+│   │   ├── 📄 __init__.py
+│   │   ├── 📄 router.py           # Auth endpoints &amp; routes
+│   │   ├── 📄 schemas.py          # Pydantic request/response models
+│   │   ├── 📄 models.py           # Database models (User, Token, etc.)
+│   │   ├── 📄 service.py          # Business logic (login, register, etc.)
+│   │   ├── 📄 dependencies.py     # Auth dependencies &amp; middleware
+│   │   ├── 📄 config.py           # Auth-specific configurations
+│   │   ├── 📄 constants.py        # Auth constants &amp; error codes
+│   │   ├── 📄 exceptions.py       # Auth-specific exceptions
+│   │   └── 📄 utils.py            # Helper functions (password hashing, etc.)
+│   ├── 📁 users/                  # 👤 User Management Module
+│   │   ├── 📄 __init__.py
+│   │   ├── 📄 router.py           # User CRUD endpoints
+│   │   ├── 📄 schemas.py          # User request/response schemas
+│   │   ├── 📄 models.py           # User database models
+│   │   ├── 📄 service.py          # User business logic
+│   │   ├── 📄 dependencies.py     # User-specific dependencies
+│   │   ├── 📄 constants.py        # User constants
+│   │   ├── 📄 exceptions.py       # User-specific exceptions
+│   │   └── 📄 utils.py            # User utility functions
+│   ├── 📁 posts/                  # 📝 Posts Management Module
+│   │   ├── 📄 __init__.py
+│   │   ├── 📄 router.py           # Post CRUD endpoints
+│   │   ├── 📄 schemas.py          # Post schemas
+│   │   ├── 📄 models.py           # Post database models
+│   │   ├── 📄 service.py          # Post business logic
+│   │   ├── 📄 dependencies.py     # Post dependencies
+│   │   ├── 📄 constants.py        # Post constants
+│   │   ├── 📄 exceptions.py       # Post exceptions
+│   │   └── 📄 utils.py            # Post utilities
+│   ├── 📁 aws/                    # ☁️ AWS Integration Module
+│   │   ├── 📄 __init__.py
+│   │   ├── 📄 client.py           # AWS service clients
+│   │   ├── 📄 schemas.py          # AWS request/response schemas
+│   │   ├── 📄 config.py           # AWS configurations
+│   │   ├── 📄 constants.py        # AWS constants
+│   │   ├── 📄 exceptions.py       # AWS-specific exceptions
+│   │   └── 📄 utils.py            # AWS utility functions
+│   ├── 📁 notifications/          # 🔔 Notification Module
+│   │   ├── 📄 __init__.py
+│   │   ├── 📄 router.py
+│   │   ├── 📄 schemas.py
+│   │   ├── 📄 models.py
+│   │   ├── 📄 service.py
+│   │   ├── 📄 dependencies.py
+│   │   ├── 📄 constants.py
+│   │   ├── 📄 exceptions.py
+│   │   └── 📄 utils.py
+│   ├── 📄 main.py                 # 🚀 FastAPI app initialization
+│   ├── 📄 config.py               # 🔧 Global configurations
+│   ├── 📄 database.py             # 🗄️ Database connection setup
+│   ├── 📄 models.py               # 🌐 Global database models
+│   ├── 📄 exceptions.py           # 🚨 Global exception handlers
+│   ├── 📄 pagination.py           # 📄 Global pagination utilities
+│   └── 📄 dependencies.py         # 🔗 Global dependencies
+├── 📁 tests/                      # 🧪 Test Suite
+│   ├── 📄 __init__.py
+│   ├── 📄 conftest.py
+│   ├── 📁 auth/
+│   │   ├── 📄 __init__.py
+│   │   ├── 📄 test_router.py
+│   │   ├── 📄 test_service.py
+│   │   └── 📄 test_utils.py
+│   ├── 📁 users/
+│   │   ├── 📄 __init__.py
+│   │   ├── 📄 test_router.py
+│   │   └── 📄 test_service.py
+│   ├── 📁 posts/
+│   │   ├── 📄 __init__.py
+│   │   ├── 📄 test_router.py
+│   │   └── 📄 test_service.py
+│   └── 📁 aws/
+│       ├── 📄 __init__.py
+│       └── 📄 test_client.py
+├── 📁 templates/                  # 🎨 Jinja2 templates
+│   ├── 📄 base.html
+│   ├── 📄 index.html
+│   └── 📄 login.html
+├── 📁 static/                     # 🎭 Static files
+│   ├── 📁 css/
+│   ├── 📁 js/
+│   └── 📁 images/
+├── 📁 requirements/               # 📦 Dependencies
+│   ├── 📄 base.txt                # Base requirements
+│   ├── 📄 dev.txt                 # Development requirements
+│   └── 📄 prod.txt                # Production requirements
+├── 📄 .env                        # 🔐 Environment variables
+├── 📄 .env.example                # 📝 Environment template
+├── 📄 .gitignore                  # 🚫 Git ignore rules
+├── 📄 logging.ini                 # 📊 Logging configuration
+├── 📄 alembic.ini                 # 🗄️ Alembic configuration
+├── 📄 docker-compose.yml          # 🐳 Docker configuration
+├── 📄 Dockerfile                  # 🐳 Docker image definition
+└── 📄 README.md                   # 📖 Project documentation
+</div></code></pre>
+<h2 id="%F0%9F%8F%97%EF%B8%8F-module-architecture">🏗️ Module Architecture</h2>
+<p>Each module follows a consistent internal structure:</p>
+<h3 id="%F0%9F%93%8A-module-component-breakdown">📊 <strong>Module Component Breakdown</strong></h3>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Purpose</th>
+<th>Example Content</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>router.py</code></td>
+<td>🛣️ API endpoints and route definitions</td>
+<td><code>@router.post(&quot;/login&quot;)</code></td>
+</tr>
+<tr>
+<td><code>schemas.py</code></td>
+<td>📋 Pydantic models for request/response</td>
+<td><code>class UserCreate(BaseModel)</code></td>
+</tr>
+<tr>
+<td><code>models.py</code></td>
+<td>🗄️ SQLAlchemy database models</td>
+<td><code>class User(Base)</code></td>
+</tr>
+<tr>
+<td><code>service.py</code></td>
+<td>💼 Business logic and core functionality</td>
+<td><code>def authenticate_user()</code></td>
+</tr>
+<tr>
+<td><code>dependencies.py</code></td>
+<td>🔗 FastAPI dependencies and injections</td>
+<td><code>def get_current_user()</code></td>
+</tr>
+<tr>
+<td><code>config.py</code></td>
+<td>⚙️ Module-specific configurations</td>
+<td><code>JWT_SECRET_KEY</code></td>
+</tr>
+<tr>
+<td><code>constants.py</code></td>
+<td>📝 Constants and error codes</td>
+<td><code>MIN_PASSWORD_LENGTH = 8</code></td>
+</tr>
+<tr>
+<td><code>exceptions.py</code></td>
+<td>⚠️ Custom exception classes</td>
+<td><code>class UserNotFound(HTTPException)</code></td>
+</tr>
+<tr>
+<td><code>utils.py</code></td>
+<td>🛠️ Helper and utility functions</td>
+<td><code>def hash_password()</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="%F0%9F%93%9D-implementation-examples">📝 <strong>Implementation Examples</strong></h2>
+<h3 id="%F0%9F%93%84-srcauthrouterpy"><strong>📄 src/auth/router.py</strong></h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> fastapi <span class="hljs-keyword">import</span> APIRouter, Depends, HTTPException, status
+<span class="hljs-keyword">from</span> sqlalchemy.orm <span class="hljs-keyword">import</span> Session
+<span class="hljs-keyword">from</span> src.database <span class="hljs-keyword">import</span> get_db
+<span class="hljs-keyword">from</span> src.auth <span class="hljs-keyword">import</span> service, schemas, dependencies
+
+router = APIRouter(prefix=<span class="hljs-string">"/auth"</span>, tags=[<span class="hljs-string">"authentication"</span>])
+
+<span class="hljs-meta">@router.post("/login", response_model=schemas.TokenResponse)</span>
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">login</span><span class="hljs-params">(
+    credentials: schemas.LoginRequest,
+    db: Session = Depends<span class="hljs-params">(get_db)</span>
+)</span>:</span>
+    <span class="hljs-string">"""User login endpoint"""</span>
+    user = <span class="hljs-keyword">await</span> service.authenticate_user(db, credentials.username, credentials.password)
+    <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> user:
+        <span class="hljs-keyword">raise</span> HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail=<span class="hljs-string">"Invalid credentials"</span>
+        )
+    
+    token = service.create_access_token(user.id)
+    <span class="hljs-keyword">return</span> schemas.TokenResponse(access_token=token, token_type=<span class="hljs-string">"bearer"</span>)
+
+<span class="hljs-meta">@router.post("/register", response_model=schemas.UserResponse)</span>
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">register</span><span class="hljs-params">(
+    user_data: schemas.UserCreate,
+    db: Session = Depends<span class="hljs-params">(get_db)</span>
+)</span>:</span>
+    <span class="hljs-string">"""User registration endpoint"""</span>
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">await</span> service.create_user(db, user_data)
+
+<span class="hljs-meta">@router.get("/me", response_model=schemas.UserResponse)</span>
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_current_user_info</span><span class="hljs-params">(
+    current_user = Depends<span class="hljs-params">(dependencies.get_current_user)</span>
+)</span>:</span>
+    <span class="hljs-string">"""Get current user information"""</span>
+    <span class="hljs-keyword">return</span> current_user
+</div></code></pre>
+<h3 id="%F0%9F%93%84-srcauthservicepy"><strong>📄 src/auth/service.py</strong></h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> sqlalchemy.orm <span class="hljs-keyword">import</span> Session
+<span class="hljs-keyword">from</span> passlib.context <span class="hljs-keyword">import</span> CryptContext
+<span class="hljs-keyword">from</span> jose <span class="hljs-keyword">import</span> jwt
+<span class="hljs-keyword">from</span> datetime <span class="hljs-keyword">import</span> datetime, timedelta
+<span class="hljs-keyword">from</span> src.auth <span class="hljs-keyword">import</span> models, schemas, constants, exceptions
+<span class="hljs-keyword">from</span> src.auth.config <span class="hljs-keyword">import</span> AUTH_CONFIG
+
+pwd_context = CryptContext(schemes=[<span class="hljs-string">"bcrypt"</span>], deprecated=<span class="hljs-string">"auto"</span>)
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">AuthService</span>:</span>
+<span class="hljs-meta">    @staticmethod</span>
+    <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">authenticate_user</span><span class="hljs-params">(db: Session, username: str, password: str)</span>:</span>
+        <span class="hljs-string">"""Authenticate user with username and password"""</span>
+        user = db.query(models.User).filter(
+            models.User.username == username
+        ).first()
+        
+        <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> user <span class="hljs-keyword">or</span> <span class="hljs-keyword">not</span> pwd_context.verify(password, user.hashed_password):
+            <span class="hljs-keyword">return</span> <span class="hljs-literal">None</span>
+        <span class="hljs-keyword">return</span> user
+    
+<span class="hljs-meta">    @staticmethod</span>
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">create_access_token</span><span class="hljs-params">(user_id: int)</span> -&gt; str:</span>
+        <span class="hljs-string">"""Create JWT access token"""</span>
+        expire = datetime.utcnow() + timedelta(
+            minutes=AUTH_CONFIG.ACCESS_TOKEN_EXPIRE_MINUTES
+        )
+        
+        to_encode = {
+            <span class="hljs-string">"sub"</span>: str(user_id),
+            <span class="hljs-string">"exp"</span>: expire,
+            <span class="hljs-string">"type"</span>: <span class="hljs-string">"access"</span>
+        }
+        
+        <span class="hljs-keyword">return</span> jwt.encode(
+            to_encode, 
+            AUTH_CONFIG.SECRET_KEY, 
+            algorithm=AUTH_CONFIG.ALGORITHM
+        )
+    
+<span class="hljs-meta">    @staticmethod</span>
+    <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">create_user</span><span class="hljs-params">(db: Session, user_data: schemas.UserCreate)</span>:</span>
+        <span class="hljs-string">"""Create new user account"""</span>
+        <span class="hljs-comment"># Check if user exists</span>
+        existing_user = db.query(models.User).filter(
+            models.User.email == user_data.email
+        ).first()
+        
+        <span class="hljs-keyword">if</span> existing_user:
+            <span class="hljs-keyword">raise</span> exceptions.UserAlreadyExists(<span class="hljs-string">"User with this email already exists"</span>)
+        
+        <span class="hljs-comment"># Hash password</span>
+        hashed_password = pwd_context.hash(user_data.password)
+        
+        <span class="hljs-comment"># Create user</span>
+        db_user = models.User(
+            username=user_data.username,
+            email=user_data.email,
+            hashed_password=hashed_password
+        )
+        
+        db.add(db_user)
+        db.commit()
+        db.refresh(db_user)
+        
+        <span class="hljs-keyword">return</span> db_user
+</div></code></pre>
+<h3 id="%F0%9F%93%84-srcauthschemaspy"><strong>📄 src/auth/schemas.py</strong></h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> pydantic <span class="hljs-keyword">import</span> BaseModel, EmailStr, validator
+<span class="hljs-keyword">from</span> datetime <span class="hljs-keyword">import</span> datetime
+<span class="hljs-keyword">from</span> typing <span class="hljs-keyword">import</span> Optional
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">UserBase</span><span class="hljs-params">(BaseModel)</span>:</span>
+    username: str
+    email: EmailStr
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">UserCreate</span><span class="hljs-params">(UserBase)</span>:</span>
+    password: str
+    
+<span class="hljs-meta">    @validator('password')</span>
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">validate_password</span><span class="hljs-params">(cls, v)</span>:</span>
+        <span class="hljs-keyword">if</span> len(v) &lt; <span class="hljs-number">8</span>:
+            <span class="hljs-keyword">raise</span> ValueError(<span class="hljs-string">'Password must be at least 8 characters'</span>)
+        <span class="hljs-keyword">return</span> v
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">UserResponse</span><span class="hljs-params">(UserBase)</span>:</span>
+    id: int
+    is_active: bool
+    created_at: datetime
+    
+    <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Config</span>:</span>
+        from_attributes = <span class="hljs-literal">True</span>
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">LoginRequest</span><span class="hljs-params">(BaseModel)</span>:</span>
+    username: str
+    password: str
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">TokenResponse</span><span class="hljs-params">(BaseModel)</span>:</span>
+    access_token: str
+    token_type: str = <span class="hljs-string">"bearer"</span>
+</div></code></pre>
+<h3 id="%F0%9F%93%84-srcauthconstantspy"><strong>📄 src/auth/constants.py</strong></h3>
+<pre class="hljs"><code><div><span class="hljs-comment"># Authentication Constants</span>
+MIN_PASSWORD_LENGTH = <span class="hljs-number">8</span>
+MAX_PASSWORD_LENGTH = <span class="hljs-number">128</span>
+USERNAME_MIN_LENGTH = <span class="hljs-number">3</span>
+USERNAME_MAX_LENGTH = <span class="hljs-number">50</span>
+
+<span class="hljs-comment"># Error Codes</span>
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ErrorCodes</span>:</span>
+    INVALID_CREDENTIALS = <span class="hljs-string">"AUTH_001"</span>
+    USER_NOT_FOUND = <span class="hljs-string">"AUTH_002"</span>
+    USER_ALREADY_EXISTS = <span class="hljs-string">"AUTH_003"</span>
+    INVALID_TOKEN = <span class="hljs-string">"AUTH_004"</span>
+    TOKEN_EXPIRED = <span class="hljs-string">"AUTH_005"</span>
+    INSUFFICIENT_PERMISSIONS = <span class="hljs-string">"AUTH_006"</span>
+
+<span class="hljs-comment"># Token Types</span>
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">TokenTypes</span>:</span>
+    ACCESS = <span class="hljs-string">"access"</span>
+    REFRESH = <span class="hljs-string">"refresh"</span>
+    RESET_PASSWORD = <span class="hljs-string">"reset_password"</span>
+</div></code></pre>
+<h3 id="%F0%9F%93%84-srcauthexceptionspy"><strong>📄 src/auth/exceptions.py</strong></h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> fastapi <span class="hljs-keyword">import</span> HTTPException, status
+<span class="hljs-keyword">from</span> src.auth.constants <span class="hljs-keyword">import</span> ErrorCodes
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">AuthException</span><span class="hljs-params">(HTTPException)</span>:</span>
+    <span class="hljs-string">"""Base authentication exception"""</span>
+    <span class="hljs-keyword">pass</span>
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">UserNotFound</span><span class="hljs-params">(AuthException)</span>:</span>
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__init__</span><span class="hljs-params">(self, detail: str = <span class="hljs-string">"User not found"</span>)</span>:</span>
+        super().__init__(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=detail,
+            headers={<span class="hljs-string">"error-code"</span>: ErrorCodes.USER_NOT_FOUND}
+        )
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">UserAlreadyExists</span><span class="hljs-params">(AuthException)</span>:</span>
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__init__</span><span class="hljs-params">(self, detail: str = <span class="hljs-string">"User already exists"</span>)</span>:</span>
+        super().__init__(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=detail,
+            headers={<span class="hljs-string">"error-code"</span>: ErrorCodes.USER_ALREADY_EXISTS}
+        )
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">InvalidCredentials</span><span class="hljs-params">(AuthException)</span>:</span>
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__init__</span><span class="hljs-params">(self, detail: str = <span class="hljs-string">"Invalid credentials"</span>)</span>:</span>
+        super().__init__(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail=detail,
+            headers={<span class="hljs-string">"error-code"</span>: ErrorCodes.INVALID_CREDENTIALS}
+        )
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">InvalidToken</span><span class="hljs-params">(AuthException)</span>:</span>
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__init__</span><span class="hljs-params">(self, detail: str = <span class="hljs-string">"Invalid token"</span>)</span>:</span>
+        super().__init__(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail=detail,
+            headers={<span class="hljs-string">"error-code"</span>: ErrorCodes.INVALID_TOKEN}
+        )
+</div></code></pre>
+<h2 id="%F0%9F%94%97-cross-module-imports">🔗 <strong>Cross-Module Imports</strong></h2>
+<p>When modules need to interact with each other, use explicit imports:</p>
+<pre class="hljs"><code><div><span class="hljs-comment"># ✅ Good: Explicit module imports</span>
+<span class="hljs-keyword">from</span> src.auth <span class="hljs-keyword">import</span> constants <span class="hljs-keyword">as</span> auth_constants
+<span class="hljs-keyword">from</span> src.notifications <span class="hljs-keyword">import</span> service <span class="hljs-keyword">as</span> notification_service
+<span class="hljs-keyword">from</span> src.posts.constants <span class="hljs-keyword">import</span> ErrorCode <span class="hljs-keyword">as</span> PostErrorCode
+<span class="hljs-keyword">from</span> src.users.models <span class="hljs-keyword">import</span> User
+
+<span class="hljs-comment"># ❌ Avoid: Ambiguous imports</span>
+<span class="hljs-keyword">from</span> constants <span class="hljs-keyword">import</span> ErrorCode  <span class="hljs-comment"># Which module's constants?</span>
+<span class="hljs-keyword">from</span> service <span class="hljs-keyword">import</span> send_email   <span class="hljs-comment"># Which service?</span>
+</div></code></pre>
+<h3 id="%F0%9F%93%84-example-cross-module-usage"><strong>📄 Example Cross-Module Usage</strong></h3>
+<pre class="hljs"><code><div><span class="hljs-comment"># src/posts/service.py</span>
+<span class="hljs-keyword">from</span> src.auth <span class="hljs-keyword">import</span> service <span class="hljs-keyword">as</span> auth_service
+<span class="hljs-keyword">from</span> src.notifications <span class="hljs-keyword">import</span> service <span class="hljs-keyword">as</span> notification_service
+<span class="hljs-keyword">from</span> src.users <span class="hljs-keyword">import</span> models <span class="hljs-keyword">as</span> user_models
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">PostService</span>:</span>
+<span class="hljs-meta">    @staticmethod</span>
+    <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">create_post</span><span class="hljs-params">(db: Session, post_data: schemas.PostCreate, current_user)</span>:</span>
+        <span class="hljs-comment"># Create the post</span>
+        new_post = models.Post(**post_data.dict(), author_id=current_user.id)
+        db.add(new_post)
+        db.commit()
+        
+        <span class="hljs-comment"># Send notification to followers</span>
+        followers = <span class="hljs-keyword">await</span> user_models.get_user_followers(db, current_user.id)
+        <span class="hljs-keyword">await</span> notification_service.notify_new_post(followers, new_post)
+        
+        <span class="hljs-keyword">return</span> new_post
+</div></code></pre>
+<h2 id="%F0%9F%93%8A-project-configuration">📊 <strong>Project Configuration</strong></h2>
+<h3 id="%F0%9F%93%84-srcmainpy"><strong>📄 src/main.py</strong></h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> fastapi <span class="hljs-keyword">import</span> FastAPI
+<span class="hljs-keyword">from</span> fastapi.middleware.cors <span class="hljs-keyword">import</span> CORSMiddleware
+<span class="hljs-keyword">from</span> src.auth.router <span class="hljs-keyword">import</span> router <span class="hljs-keyword">as</span> auth_router
+<span class="hljs-keyword">from</span> src.users.router <span class="hljs-keyword">import</span> router <span class="hljs-keyword">as</span> users_router
+<span class="hljs-keyword">from</span> src.posts.router <span class="hljs-keyword">import</span> router <span class="hljs-keyword">as</span> posts_router
+<span class="hljs-keyword">from</span> src.config <span class="hljs-keyword">import</span> settings
+
+app = FastAPI(
+    title=<span class="hljs-string">"Module-Based FastAPI Project"</span>,
+    description=<span class="hljs-string">"FastAPI project organized by module functionality"</span>,
+    version=<span class="hljs-string">"1.0.0"</span>
+)
+
+<span class="hljs-comment"># Middleware</span>
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=settings.ALLOWED_HOSTS,
+    allow_credentials=<span class="hljs-literal">True</span>,
+    allow_methods=[<span class="hljs-string">"*"</span>],
+    allow_headers=[<span class="hljs-string">"*"</span>],
+)
+
+<span class="hljs-comment"># Include routers</span>
+app.include_router(auth_router)
+app.include_router(users_router)
+app.include_router(posts_router)
+
+<span class="hljs-meta">@app.get("/")</span>
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">root</span><span class="hljs-params">()</span>:</span>
+    <span class="hljs-keyword">return</span> {<span class="hljs-string">"message"</span>: <span class="hljs-string">"Welcome to Module-Based FastAPI Project"</span>}
+</div></code></pre>
+<h2 id="%F0%9F%8C%9F-advantages-of-module-functionality-structure">🌟 <strong>Advantages of Module-Functionality Structure</strong></h2>
+<h3 id="%E2%9C%85-benefits"><strong>✅ Benefits:</strong></h3>
+<table>
+<thead>
+<tr>
+<th>Advantage</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>🎯 <strong>Domain Cohesion</strong></td>
+<td>All related code lives together</td>
+</tr>
+<tr>
+<td>🚀 <strong>Faster Development</strong></td>
+<td>Easy to locate and modify features</td>
+</tr>
+<tr>
+<td>👥 <strong>Team Scalability</strong></td>
+<td>Multiple developers can work on different modules</td>
+</tr>
+<tr>
+<td>🔧 <strong>Easy Testing</strong></td>
+<td>Module-specific test isolation</td>
+</tr>
+<tr>
+<td>📦 <strong>Microservice Ready</strong></td>
+<td>Easy to extract modules into separate services</td>
+</tr>
+<tr>
+<td>🔄 <strong>Code Reusability</strong></td>
+<td>Modules can be shared across projects</td>
+</tr>
+</tbody>
+</table>
+<h3 id="%E2%9A%A0%EF%B8%8F-considerations"><strong>⚠️ Considerations:</strong></h3>
+<table>
+<thead>
+<tr>
+<th>Challenge</th>
+<th>Solution</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Code Duplication</strong></td>
+<td>Use global utilities and shared modules</td>
+</tr>
+<tr>
+<td><strong>Cross-Module Dependencies</strong></td>
+<td>Use explicit imports and dependency injection</td>
+</tr>
+<tr>
+<td><strong>Module Boundaries</strong></td>
+<td>Clear domain separation and well-defined interfaces</td>
+</tr>
+</tbody>
+</table>
+<h2 id="%F0%9F%8E%AF-when-to-use-this-structure">🎯 <strong>When to Use This Structure</strong></h2>
+<h3 id="%E2%9C%85-perfect-for"><strong>✅ Perfect For:</strong></h3>
+<ul>
+<li>🏢 <strong>Large Applications</strong> with multiple business domains</li>
+<li>👥 <strong>Team Development</strong> with domain-specific teams</li>
+<li>🔄 <strong>Microservice Migration</strong> planning</li>
+<li>📈 <strong>Scalable Applications</strong> that will grow significantly</li>
+</ul>
+<h3 id="%E2%9D%8C-might-be-overkill-for"><strong>❌ Might Be Overkill For:</strong></h3>
+<ul>
+<li>🔸 Simple APIs with few endpoints</li>
+<li>🔸 Prototypes or proof-of-concepts</li>
+<li>🔸 Single-developer projects</li>
+<li>🔸 Applications with minimal business logic</li>
+</ul>
+<h2 id="%F0%9F%9A%80-getting-started">🚀 <strong>Getting Started</strong></h2>
+<h3 id="1-create-module-template"><strong>1. Create Module Template</strong></h3>
+<pre class="hljs"><code><div>mkdir -p src/{auth,users,posts}
+<span class="hljs-keyword">for</span> module <span class="hljs-keyword">in</span> auth users posts; <span class="hljs-keyword">do</span>
+    touch src/<span class="hljs-variable">$module</span>/{__init__.py,router.py,schemas.py,models.py,service.py,dependencies.py,config.py,constants.py,exceptions.py,utils.py}
+<span class="hljs-keyword">done</span>
+</div></code></pre>
+<h3 id="2-set-up-dependencies"><strong>2. Set Up Dependencies</strong></h3>
+<pre class="hljs"><code><div>pip install fastapi uvicorn sqlalchemy alembic psycopg2-binary
+pip install python-jose[cryptography] passlib[bcrypt] python-multipart
+</div></code></pre>
+<h3 id="3-initialize-database"><strong>3. Initialize Database</strong></h3>
+<pre class="hljs"><code><div>alembic init alembic
+alembic revision --autogenerate -m <span class="hljs-string">"Initial migration"</span>
+alembic upgrade head
+</div></code></pre>
+<hr>
+
+</body>
+</html>
