@@ -1011,7 +1011,772 @@ router = APIRouter(prefix=<span class="hljs-string">"/user"</span>, tags=[<span 
 <li><strong>Implement consistent error handling</strong> across models</li>
 <li><strong>Structure your project</strong> for scalability and maintainability</li>
 </ol>
-<p>This comprehensive guide provides a solid foundation for building robust FastAPI applications with proper model management and user authentication systems.</p>
+<hr>
+<h1 id="fastapi-user-management-system---function-wise-complete-implementation">FastAPI User Management System - Function-wise Complete Implementation</h1>
+<hr>
+<h2 id="%F0%9F%93%81-project-structure">📁 Project Structure</h2>
+<hr>
+<pre class="hljs"><code><div>app/
+├── models/
+│   ├── request/
+│   │   └── user.py
+│   ├── response/
+│   │   └── user.py
+│   └── internal/
+│       └── user.py
+├── services/
+│   └── user_service.py
+├── routers/
+│   └── user_router.py
+└── main.py
+</div></code></pre>
+<h2 id="%F0%9F%94%A7-1-registeruser-function">🔧 1. registerUser Function</h2>
+<h3 id="request-model">Request Model</h3>
+<pre class="hljs"><code><div><span class="hljs-comment"># models/request/user.py</span>
+<span class="hljs-keyword">from</span> pydantic <span class="hljs-keyword">import</span> BaseModel, EmailStr, Field, validator
+<span class="hljs-keyword">import</span> re
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">RegisterUserRequest</span><span class="hljs-params">(BaseModel)</span>:</span>
+    username: str = Field(..., min_length=<span class="hljs-number">3</span>, max_length=<span class="hljs-number">20</span>)
+    email: EmailStr
+    password: str = Field(..., min_length=<span class="hljs-number">8</span>)
+    full_name: str = Field(..., min_length=<span class="hljs-number">2</span>, max_length=<span class="hljs-number">50</span>)
+    
+<span class="hljs-meta">    @validator('username')</span>
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">validate_username</span><span class="hljs-params">(cls, v)</span>:</span>
+        <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> re.match(<span class="hljs-string">r'^[a-zA-Z0-9_]+$'</span>, v):
+            <span class="hljs-keyword">raise</span> ValueError(<span class="hljs-string">'Username can only contain letters, numbers, and underscores'</span>)
+        <span class="hljs-keyword">return</span> v
+    
+<span class="hljs-meta">    @validator('password')</span>
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">validate_password</span><span class="hljs-params">(cls, v)</span>:</span>
+        <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> re.search(<span class="hljs-string">r'[A-Z]'</span>, v):
+            <span class="hljs-keyword">raise</span> ValueError(<span class="hljs-string">'Password must contain at least one uppercase letter'</span>)
+        <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> re.search(<span class="hljs-string">r'[a-z]'</span>, v):
+            <span class="hljs-keyword">raise</span> ValueError(<span class="hljs-string">'Password must contain at least one lowercase letter'</span>)
+        <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> re.search(<span class="hljs-string">r'\d'</span>, v):
+            <span class="hljs-keyword">raise</span> ValueError(<span class="hljs-string">'Password must contain at least one digit'</span>)
+        <span class="hljs-keyword">return</span> v
+</div></code></pre>
+<h3 id="db-model-same-for-all">DB Model (Same for All)</h3>
+<pre class="hljs"><code><div><span class="hljs-comment"># models/internal/user.py</span>
+<span class="hljs-keyword">from</span> datetime <span class="hljs-keyword">import</span> datetime
+<span class="hljs-keyword">from</span> typing <span class="hljs-keyword">import</span> Optional, Dict, Any
+<span class="hljs-keyword">from</span> pydantic <span class="hljs-keyword">import</span> BaseModel, EmailStr, Field
+<span class="hljs-keyword">from</span> bson <span class="hljs-keyword">import</span> ObjectId
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">PyObjectId</span><span class="hljs-params">(ObjectId)</span>:</span>
+<span class="hljs-meta">    @classmethod</span>
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__get_validators__</span><span class="hljs-params">(cls)</span>:</span>
+        <span class="hljs-keyword">yield</span> cls.validate
+
+<span class="hljs-meta">    @classmethod</span>
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">validate</span><span class="hljs-params">(cls, v)</span>:</span>
+        <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> ObjectId.is_valid(v):
+            <span class="hljs-keyword">raise</span> ValueError(<span class="hljs-string">"Invalid objectid"</span>)
+        <span class="hljs-keyword">return</span> ObjectId(v)
+
+<span class="hljs-meta">    @classmethod</span>
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__modify_schema__</span><span class="hljs-params">(cls, field_schema)</span>:</span>
+        field_schema.update(type=<span class="hljs-string">"string"</span>)
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">UserInDB</span><span class="hljs-params">(BaseModel)</span>:</span>
+    id: Optional[PyObjectId] = Field(default_factory=PyObjectId, alias=<span class="hljs-string">"_id"</span>)
+    username: str = Field(..., unique=<span class="hljs-literal">True</span>, index=<span class="hljs-literal">True</span>)
+    email: EmailStr = Field(..., unique=<span class="hljs-literal">True</span>, index=<span class="hljs-literal">True</span>)
+    hashed_password: str
+    full_name: str
+    is_active: bool = <span class="hljs-literal">True</span>
+    is_verified: bool = <span class="hljs-literal">False</span>
+    
+    <span class="hljs-comment"># Profile information</span>
+    bio: Optional[str] = <span class="hljs-literal">None</span>
+    location: Optional[str] = <span class="hljs-literal">None</span>
+    website: Optional[str] = <span class="hljs-literal">None</span>
+    avatar_url: Optional[str] = <span class="hljs-literal">None</span>
+    cover_image_url: Optional[str] = <span class="hljs-literal">None</span>
+    
+    <span class="hljs-comment"># Timestamps</span>
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+    updated_at: datetime = Field(default_factory=datetime.utcnow)
+    last_login: Optional[datetime] = <span class="hljs-literal">None</span>
+    
+    <span class="hljs-comment"># Settings</span>
+    preferences: Dict[str, Any] = Field(default_factory=dict)
+    
+    <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Config</span>:</span>
+        allow_population_by_field_name = <span class="hljs-literal">True</span>
+        arbitrary_types_allowed = <span class="hljs-literal">True</span>
+        json_encoders = {ObjectId: str}
+</div></code></pre>
+<h3 id="response-model">Response Model</h3>
+<pre class="hljs"><code><div><span class="hljs-comment"># models/response/user.py</span>
+<span class="hljs-keyword">from</span> datetime <span class="hljs-keyword">import</span> datetime
+<span class="hljs-keyword">from</span> typing <span class="hljs-keyword">import</span> Optional
+<span class="hljs-keyword">from</span> pydantic <span class="hljs-keyword">import</span> BaseModel, EmailStr
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">RegisterUserResponse</span><span class="hljs-params">(BaseModel)</span>:</span>
+    success: bool = <span class="hljs-literal">True</span>
+    message: str = <span class="hljs-string">"User registered successfully"</span>
+    user_id: str
+    username: str
+    email: EmailStr
+    full_name: str
+    created_at: datetime
+</div></code></pre>
+<h3 id="implementation">Implementation</h3>
+<pre class="hljs"><code><div><span class="hljs-comment"># services/user_service.py</span>
+<span class="hljs-keyword">from</span> datetime <span class="hljs-keyword">import</span> datetime
+<span class="hljs-keyword">from</span> fastapi <span class="hljs-keyword">import</span> HTTPException, status
+<span class="hljs-keyword">from</span> passlib.context <span class="hljs-keyword">import</span> CryptContext
+<span class="hljs-keyword">from</span> models.request.user <span class="hljs-keyword">import</span> RegisterUserRequest
+<span class="hljs-keyword">from</span> models.internal.user <span class="hljs-keyword">import</span> UserInDB
+<span class="hljs-keyword">from</span> models.response.user <span class="hljs-keyword">import</span> RegisterUserResponse
+
+pwd_context = CryptContext(schemes=[<span class="hljs-string">"bcrypt"</span>], deprecated=<span class="hljs-string">"auto"</span>)
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">UserService</span>:</span>
+    
+    <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">register_user</span><span class="hljs-params">(self, user_data: RegisterUserRequest)</span> -&gt; RegisterUserResponse:</span>
+        <span class="hljs-comment"># Check if user exists</span>
+        existing_user = <span class="hljs-keyword">await</span> self.get_user_by_email(user_data.email)
+        <span class="hljs-keyword">if</span> existing_user:
+            <span class="hljs-keyword">raise</span> HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=<span class="hljs-string">"Email already registered"</span>
+            )
+        
+        existing_username = <span class="hljs-keyword">await</span> self.get_user_by_username(user_data.username)
+        <span class="hljs-keyword">if</span> existing_username:
+            <span class="hljs-keyword">raise</span> HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=<span class="hljs-string">"Username already taken"</span>
+            )
+
+        <span class="hljs-comment"># Hash password</span>
+        hashed_password = pwd_context.hash(user_data.password)
+        
+        <span class="hljs-comment"># Create user in DB</span>
+        user_in_db = UserInDB(
+            username=user_data.username,
+            email=user_data.email,
+            hashed_password=hashed_password,
+            full_name=user_data.full_name,
+            created_at=datetime.utcnow(),
+            updated_at=datetime.utcnow()
+        )
+        
+        <span class="hljs-comment"># Save to database</span>
+        saved_user = <span class="hljs-keyword">await</span> self.save_user_to_db(user_in_db)
+        
+        <span class="hljs-comment"># Return response</span>
+        <span class="hljs-keyword">return</span> RegisterUserResponse(
+            user_id=str(saved_user.id),
+            username=saved_user.username,
+            email=saved_user.email,
+            full_name=saved_user.full_name,
+            created_at=saved_user.created_at
+        )
+
+<span class="hljs-comment"># Router implementation</span>
+<span class="hljs-keyword">from</span> fastapi <span class="hljs-keyword">import</span> APIRouter, Depends
+<span class="hljs-keyword">from</span> services.user_service <span class="hljs-keyword">import</span> UserService
+
+router = APIRouter(prefix=<span class="hljs-string">"/user"</span>, tags=[<span class="hljs-string">"User Management"</span>])
+
+<span class="hljs-meta">@router.post("/register", response_model=RegisterUserResponse)</span>
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">register_user</span><span class="hljs-params">(user_data: RegisterUserRequest)</span>:</span>
+    user_service = UserService()
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">await</span> user_service.register_user(user_data)
+</div></code></pre>
+<h2 id="%F0%9F%94%90-2-loginuser-function">🔐 2. loginUser Function</h2>
+<h3 id="request-model">Request Model</h3>
+<pre class="hljs"><code><div><span class="hljs-comment"># models/request/user.py (add to existing file)</span>
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">LoginUserRequest</span><span class="hljs-params">(BaseModel)</span>:</span>
+    email: EmailStr
+    password: str = Field(..., min_length=<span class="hljs-number">1</span>)
+</div></code></pre>
+<h3 id="response-model">Response Model</h3>
+<pre class="hljs"><code><div><span class="hljs-comment"># models/response/user.py (add to existing file)</span>
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">LoginUserResponse</span><span class="hljs-params">(BaseModel)</span>:</span>
+    success: bool = <span class="hljs-literal">True</span>
+    message: str = <span class="hljs-string">"Login successful"</span>
+    access_token: str
+    refresh_token: str
+    token_type: str = <span class="hljs-string">"bearer"</span>
+    expires_in: int
+    user: dict
+</div></code></pre>
+<h3 id="implementation">Implementation</h3>
+<pre class="hljs"><code><div><span class="hljs-comment"># services/user_service.py (add to existing class)</span>
+<span class="hljs-keyword">from</span> jose <span class="hljs-keyword">import</span> jwt
+<span class="hljs-keyword">from</span> datetime <span class="hljs-keyword">import</span> timedelta
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">UserService</span>:</span>
+    
+    <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">login_user</span><span class="hljs-params">(self, login_data: LoginUserRequest)</span> -&gt; LoginUserResponse:</span>
+        <span class="hljs-comment"># Get user from DB</span>
+        user_in_db = <span class="hljs-keyword">await</span> self.get_user_by_email(login_data.email)
+        <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> user_in_db:
+            <span class="hljs-keyword">raise</span> HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail=<span class="hljs-string">"Invalid email or password"</span>
+            )
+        
+        <span class="hljs-comment"># Verify password</span>
+        <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> pwd_context.verify(login_data.password, user_in_db.hashed_password):
+            <span class="hljs-keyword">raise</span> HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail=<span class="hljs-string">"Invalid email or password"</span>
+            )
+        
+        <span class="hljs-comment"># Update last login</span>
+        user_in_db.last_login = datetime.utcnow()
+        user_in_db.updated_at = datetime.utcnow()
+        <span class="hljs-keyword">await</span> self.update_user_in_db(user_in_db)
+        
+        <span class="hljs-comment"># Create tokens</span>
+        access_token = self.create_access_token(
+            data={<span class="hljs-string">"sub"</span>: str(user_in_db.id), <span class="hljs-string">"email"</span>: user_in_db.email}
+        )
+        refresh_token = self.create_refresh_token(
+            data={<span class="hljs-string">"sub"</span>: str(user_in_db.id)}
+        )
+        
+        <span class="hljs-keyword">return</span> LoginUserResponse(
+            access_token=access_token,
+            refresh_token=refresh_token,
+            expires_in=<span class="hljs-number">1800</span>,  <span class="hljs-comment"># 30 minutes</span>
+            user={
+                <span class="hljs-string">"id"</span>: str(user_in_db.id),
+                <span class="hljs-string">"username"</span>: user_in_db.username,
+                <span class="hljs-string">"email"</span>: user_in_db.email,
+                <span class="hljs-string">"full_name"</span>: user_in_db.full_name
+            }
+        )
+    
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">create_access_token</span><span class="hljs-params">(self, data: dict)</span> -&gt; str:</span>
+        to_encode = data.copy()
+        expire = datetime.utcnow() + timedelta(minutes=<span class="hljs-number">30</span>)
+        to_encode.update({<span class="hljs-string">"exp"</span>: expire, <span class="hljs-string">"type"</span>: <span class="hljs-string">"access"</span>})
+        <span class="hljs-keyword">return</span> jwt.encode(to_encode, <span class="hljs-string">"SECRET_KEY"</span>, algorithm=<span class="hljs-string">"HS256"</span>)
+    
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">create_refresh_token</span><span class="hljs-params">(self, data: dict)</span> -&gt; str:</span>
+        to_encode = data.copy()
+        expire = datetime.utcnow() + timedelta(days=<span class="hljs-number">7</span>)
+        to_encode.update({<span class="hljs-string">"exp"</span>: expire, <span class="hljs-string">"type"</span>: <span class="hljs-string">"refresh"</span>})
+        <span class="hljs-keyword">return</span> jwt.encode(to_encode, <span class="hljs-string">"SECRET_KEY"</span>, algorithm=<span class="hljs-string">"HS256"</span>)
+
+<span class="hljs-comment"># Router</span>
+<span class="hljs-meta">@router.post("/login", response_model=LoginUserResponse)</span>
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">login_user</span><span class="hljs-params">(login_data: LoginUserRequest)</span>:</span>
+    user_service = UserService()
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">await</span> user_service.login_user(login_data)
+</div></code></pre>
+<h2 id="%F0%9F%9A%AA-3-logoutuser-function">🚪 3. logoutUser Function</h2>
+<h3 id="request-model">Request Model</h3>
+<pre class="hljs"><code><div><span class="hljs-comment"># models/request/user.py (add to existing file)</span>
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">LogoutUserRequest</span><span class="hljs-params">(BaseModel)</span>:</span>
+    refresh_token: str
+</div></code></pre>
+<h3 id="response-model">Response Model</h3>
+<pre class="hljs"><code><div><span class="hljs-comment"># models/response/user.py (add to existing file)</span>
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">LogoutUserResponse</span><span class="hljs-params">(BaseModel)</span>:</span>
+    success: bool = <span class="hljs-literal">True</span>
+    message: str = <span class="hljs-string">"Logout successful"</span>
+</div></code></pre>
+<h3 id="implementation">Implementation</h3>
+<pre class="hljs"><code><div><span class="hljs-comment"># services/user_service.py (add to existing class)</span>
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">UserService</span>:</span>
+    
+    <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">logout_user</span><span class="hljs-params">(self, logout_data: LogoutUserRequest, current_user: UserInDB)</span> -&gt; LogoutUserResponse:</span>
+        <span class="hljs-comment"># Blacklist the refresh token (implement token blacklist logic)</span>
+        <span class="hljs-keyword">await</span> self.blacklist_token(logout_data.refresh_token)
+        
+        <span class="hljs-comment"># Optionally update user's last activity</span>
+        current_user.updated_at = datetime.utcnow()
+        <span class="hljs-keyword">await</span> self.update_user_in_db(current_user)
+        
+        <span class="hljs-keyword">return</span> LogoutUserResponse(
+            message=<span class="hljs-string">"Successfully logged out"</span>
+        )
+    
+    <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">blacklist_token</span><span class="hljs-params">(self, token: str)</span>:</span>
+        <span class="hljs-comment"># Implement token blacklisting logic</span>
+        <span class="hljs-comment"># This could be storing in Redis, database, etc.</span>
+        <span class="hljs-keyword">pass</span>
+
+<span class="hljs-comment"># Router</span>
+<span class="hljs-meta">@router.post("/logout", response_model=LogoutUserResponse)</span>
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">logout_user</span><span class="hljs-params">(logout_data: LogoutUserRequest, current_user: UserInDB = Depends<span class="hljs-params">(get_current_user)</span>)</span>:</span>
+    user_service = UserService()
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">await</span> user_service.logout_user(logout_data, current_user)
+</div></code></pre>
+<h2 id="%F0%9F%94%84-4-refreshaccesstoken-function">🔄 4. refreshAccessToken Function</h2>
+<h3 id="request-model">Request Model</h3>
+<pre class="hljs"><code><div><span class="hljs-comment"># models/request/user.py (add to existing file)</span>
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">RefreshAccessTokenRequest</span><span class="hljs-params">(BaseModel)</span>:</span>
+    refresh_token: str
+</div></code></pre>
+<h3 id="response-model">Response Model</h3>
+<pre class="hljs"><code><div><span class="hljs-comment"># models/response/user.py (add to existing file)</span>
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">RefreshAccessTokenResponse</span><span class="hljs-params">(BaseModel)</span>:</span>
+    success: bool = <span class="hljs-literal">True</span>
+    message: str = <span class="hljs-string">"Token refreshed successfully"</span>
+    access_token: str
+    refresh_token: str
+    token_type: str = <span class="hljs-string">"bearer"</span>
+    expires_in: int
+</div></code></pre>
+<h3 id="implementation">Implementation</h3>
+<pre class="hljs"><code><div><span class="hljs-comment"># services/user_service.py (add to existing class)</span>
+<span class="hljs-keyword">from</span> jose <span class="hljs-keyword">import</span> JWTError, jwt
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">UserService</span>:</span>
+    
+    <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">refresh_access_token</span><span class="hljs-params">(self, refresh_data: RefreshAccessTokenRequest)</span> -&gt; RefreshAccessTokenResponse:</span>
+        <span class="hljs-keyword">try</span>:
+            <span class="hljs-comment"># Verify refresh token</span>
+            payload = jwt.decode(refresh_data.refresh_token, <span class="hljs-string">"SECRET_KEY"</span>, algorithms=[<span class="hljs-string">"HS256"</span>])
+            
+            <span class="hljs-keyword">if</span> payload.get(<span class="hljs-string">"type"</span>) != <span class="hljs-string">"refresh"</span>:
+                <span class="hljs-keyword">raise</span> HTTPException(
+                    status_code=status.HTTP_401_UNAUTHORIZED,
+                    detail=<span class="hljs-string">"Invalid token type"</span>
+                )
+            
+            user_id = payload.get(<span class="hljs-string">"sub"</span>)
+            <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> user_id:
+                <span class="hljs-keyword">raise</span> HTTPException(
+                    status_code=status.HTTP_401_UNAUTHORIZED,
+                    detail=<span class="hljs-string">"Invalid token"</span>
+                )
+            
+            <span class="hljs-comment"># Get user from DB</span>
+            user_in_db = <span class="hljs-keyword">await</span> self.get_user_by_id(user_id)
+            <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> user_in_db:
+                <span class="hljs-keyword">raise</span> HTTPException(
+                    status_code=status.HTTP_401_UNAUTHORIZED,
+                    detail=<span class="hljs-string">"User not found"</span>
+                )
+            
+            <span class="hljs-comment"># Create new tokens</span>
+            new_access_token = self.create_access_token(
+                data={<span class="hljs-string">"sub"</span>: str(user_in_db.id), <span class="hljs-string">"email"</span>: user_in_db.email}
+            )
+            new_refresh_token = self.create_refresh_token(
+                data={<span class="hljs-string">"sub"</span>: str(user_in_db.id)}
+            )
+            
+            <span class="hljs-keyword">return</span> RefreshAccessTokenResponse(
+                access_token=new_access_token,
+                refresh_token=new_refresh_token,
+                expires_in=<span class="hljs-number">1800</span>
+            )
+            
+        <span class="hljs-keyword">except</span> JWTError:
+            <span class="hljs-keyword">raise</span> HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail=<span class="hljs-string">"Invalid refresh token"</span>
+            )
+
+<span class="hljs-comment"># Router</span>
+<span class="hljs-meta">@router.post("/refresh-token", response_model=RefreshAccessTokenResponse)</span>
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">refresh_access_token</span><span class="hljs-params">(refresh_data: RefreshAccessTokenRequest)</span>:</span>
+    user_service = UserService()
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">await</span> user_service.refresh_access_token(refresh_data)
+</div></code></pre>
+<h2 id="%F0%9F%94%91-5-changecurrentpassword-function">🔑 5. changeCurrentPassword Function</h2>
+<h3 id="request-model">Request Model</h3>
+<pre class="hljs"><code><div><span class="hljs-comment"># models/request/user.py (add to existing file)</span>
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ChangeCurrentPasswordRequest</span><span class="hljs-params">(BaseModel)</span>:</span>
+    current_password: str
+    new_password: str = Field(..., min_length=<span class="hljs-number">8</span>)
+    
+<span class="hljs-meta">    @validator('new_password')</span>
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">validate_new_password</span><span class="hljs-params">(cls, v)</span>:</span>
+        <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> re.search(<span class="hljs-string">r'[A-Z]'</span>, v):
+            <span class="hljs-keyword">raise</span> ValueError(<span class="hljs-string">'Password must contain at least one uppercase letter'</span>)
+        <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> re.search(<span class="hljs-string">r'[a-z]'</span>, v):
+            <span class="hljs-keyword">raise</span> ValueError(<span class="hljs-string">'Password must contain at least one lowercase letter'</span>)
+        <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> re.search(<span class="hljs-string">r'\d'</span>, v):
+            <span class="hljs-keyword">raise</span> ValueError(<span class="hljs-string">'Password must contain at least one digit'</span>)
+        <span class="hljs-keyword">return</span> v
+</div></code></pre>
+<h3 id="response-model">Response Model</h3>
+<pre class="hljs"><code><div><span class="hljs-comment"># models/response/user.py (add to existing file)</span>
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ChangeCurrentPasswordResponse</span><span class="hljs-params">(BaseModel)</span>:</span>
+    success: bool = <span class="hljs-literal">True</span>
+    message: str = <span class="hljs-string">"Password changed successfully"</span>
+</div></code></pre>
+<h3 id="implementation">Implementation</h3>
+<pre class="hljs"><code><div><span class="hljs-comment"># services/user_service.py (add to existing class)</span>
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">UserService</span>:</span>
+    
+    <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">change_current_password</span><span class="hljs-params">(self, password_data: ChangeCurrentPasswordRequest, current_user: UserInDB)</span> -&gt; ChangeCurrentPasswordResponse:</span>
+        <span class="hljs-comment"># Verify current password</span>
+        <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> pwd_context.verify(password_data.current_password, current_user.hashed_password):
+            <span class="hljs-keyword">raise</span> HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=<span class="hljs-string">"Incorrect current password"</span>
+            )
+        
+        <span class="hljs-comment"># Hash new password</span>
+        new_hashed_password = pwd_context.hash(password_data.new_password)
+        
+        <span class="hljs-comment"># Update user in DB</span>
+        current_user.hashed_password = new_hashed_password
+        current_user.updated_at = datetime.utcnow()
+        <span class="hljs-keyword">await</span> self.update_user_in_db(current_user)
+        
+        <span class="hljs-keyword">return</span> ChangeCurrentPasswordResponse()
+
+<span class="hljs-comment"># Router</span>
+<span class="hljs-meta">@router.put("/change-password", response_model=ChangeCurrentPasswordResponse)</span>
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">change_current_password</span><span class="hljs-params">(
+    password_data: ChangeCurrentPasswordRequest,
+    current_user: UserInDB = Depends<span class="hljs-params">(get_current_user)</span>
+)</span>:</span>
+    user_service = UserService()
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">await</span> user_service.change_current_password(password_data, current_user)
+</div></code></pre>
+<h2 id="%F0%9F%91%A4-6-getcurrentuser-function">👤 6. getCurrentUser Function</h2>
+<h3 id="request-model">Request Model</h3>
+<pre class="hljs"><code><div><span class="hljs-comment"># models/request/user.py (add to existing file)</span>
+<span class="hljs-comment"># No request body needed for GET request</span>
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">GetCurrentUserRequest</span><span class="hljs-params">(BaseModel)</span>:</span>
+    <span class="hljs-keyword">pass</span>  <span class="hljs-comment"># Empty model or can be omitted</span>
+</div></code></pre>
+<h3 id="response-model">Response Model</h3>
+<pre class="hljs"><code><div><span class="hljs-comment"># models/response/user.py (add to existing file)</span>
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">GetCurrentUserResponse</span><span class="hljs-params">(BaseModel)</span>:</span>
+    success: bool = <span class="hljs-literal">True</span>
+    message: str = <span class="hljs-string">"User data retrieved successfully"</span>
+    user: dict
+</div></code></pre>
+<h3 id="implementation">Implementation</h3>
+<pre class="hljs"><code><div><span class="hljs-comment"># services/user_service.py (add to existing class)</span>
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">UserService</span>:</span>
+    
+    <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_current_user</span><span class="hljs-params">(self, current_user: UserInDB)</span> -&gt; GetCurrentUserResponse:</span>
+        <span class="hljs-keyword">return</span> GetCurrentUserResponse(
+            user={
+                <span class="hljs-string">"id"</span>: str(current_user.id),
+                <span class="hljs-string">"username"</span>: current_user.username,
+                <span class="hljs-string">"email"</span>: current_user.email,
+                <span class="hljs-string">"full_name"</span>: current_user.full_name,
+                <span class="hljs-string">"bio"</span>: current_user.bio,
+                <span class="hljs-string">"location"</span>: current_user.location,
+                <span class="hljs-string">"website"</span>: current_user.website,
+                <span class="hljs-string">"avatar_url"</span>: current_user.avatar_url,
+                <span class="hljs-string">"cover_image_url"</span>: current_user.cover_image_url,
+                <span class="hljs-string">"is_verified"</span>: current_user.is_verified,
+                <span class="hljs-string">"created_at"</span>: current_user.created_at,
+                <span class="hljs-string">"last_login"</span>: current_user.last_login,
+                <span class="hljs-string">"preferences"</span>: current_user.preferences
+            }
+        )
+
+<span class="hljs-comment"># Router</span>
+<span class="hljs-meta">@router.get("/me", response_model=GetCurrentUserResponse)</span>
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_current_user</span><span class="hljs-params">(current_user: UserInDB = Depends<span class="hljs-params">(get_current_user)</span>)</span>:</span>
+    user_service = UserService()
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">await</span> user_service.get_current_user(current_user)
+</div></code></pre>
+<h2 id="%E2%9C%8F%EF%B8%8F-7-updateaccountdetails-function">✏️ 7. updateAccountDetails Function</h2>
+<h3 id="request-model">Request Model</h3>
+<pre class="hljs"><code><div><span class="hljs-comment"># models/request/user.py (add to existing file)</span>
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">UpdateAccountDetailsRequest</span><span class="hljs-params">(BaseModel)</span>:</span>
+    full_name: Optional[str] = Field(<span class="hljs-literal">None</span>, min_length=<span class="hljs-number">2</span>, max_length=<span class="hljs-number">50</span>)
+    bio: Optional[str] = Field(<span class="hljs-literal">None</span>, max_length=<span class="hljs-number">500</span>)
+    location: Optional[str] = Field(<span class="hljs-literal">None</span>, max_length=<span class="hljs-number">100</span>)
+    website: Optional[str] = Field(<span class="hljs-literal">None</span>, max_length=<span class="hljs-number">200</span>)
+</div></code></pre>
+<h3 id="response-model">Response Model</h3>
+<pre class="hljs"><code><div><span class="hljs-comment"># models/response/user.py (add to existing file)</span>
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">UpdateAccountDetailsResponse</span><span class="hljs-params">(BaseModel)</span>:</span>
+    success: bool = <span class="hljs-literal">True</span>
+    message: str = <span class="hljs-string">"Account details updated successfully"</span>
+    user: dict
+</div></code></pre>
+<h3 id="implementation">Implementation</h3>
+<pre class="hljs"><code><div><span class="hljs-comment"># services/user_service.py (add to existing class)</span>
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">UserService</span>:</span>
+    
+    <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">update_account_details</span><span class="hljs-params">(self, update_data: UpdateAccountDetailsRequest, current_user: UserInDB)</span> -&gt; UpdateAccountDetailsResponse:</span>
+        <span class="hljs-comment"># Update only provided fields</span>
+        update_dict = update_data.dict(exclude_unset=<span class="hljs-literal">True</span>)
+        
+        <span class="hljs-keyword">for</span> field, value <span class="hljs-keyword">in</span> update_dict.items():
+            <span class="hljs-keyword">if</span> hasattr(current_user, field):
+                setattr(current_user, field, value)
+        
+        <span class="hljs-comment"># Update timestamp</span>
+        current_user.updated_at = datetime.utcnow()
+        
+        <span class="hljs-comment"># Save to database</span>
+        updated_user = <span class="hljs-keyword">await</span> self.update_user_in_db(current_user)
+        
+        <span class="hljs-keyword">return</span> UpdateAccountDetailsResponse(
+            user={
+                <span class="hljs-string">"id"</span>: str(updated_user.id),
+                <span class="hljs-string">"username"</span>: updated_user.username,
+                <span class="hljs-string">"email"</span>: updated_user.email,
+                <span class="hljs-string">"full_name"</span>: updated_user.full_name,
+                <span class="hljs-string">"bio"</span>: updated_user.bio,
+                <span class="hljs-string">"location"</span>: updated_user.location,
+                <span class="hljs-string">"website"</span>: updated_user.website,
+                <span class="hljs-string">"updated_at"</span>: updated_user.updated_at
+            }
+        )
+
+<span class="hljs-comment"># Router</span>
+<span class="hljs-meta">@router.put("/update-account", response_model=UpdateAccountDetailsResponse)</span>
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">update_account_details</span><span class="hljs-params">(
+    update_data: UpdateAccountDetailsRequest,
+    current_user: UserInDB = Depends<span class="hljs-params">(get_current_user)</span>
+)</span>:</span>
+    user_service = UserService()
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">await</span> user_service.update_account_details(update_data, current_user)
+</div></code></pre>
+<h2 id="%F0%9F%96%BC%EF%B8%8F-8-updateuseravatar-function">🖼️ 8. updateUserAvatar Function</h2>
+<h3 id="request-model">Request Model</h3>
+<pre class="hljs"><code><div><span class="hljs-comment"># models/request/user.py (add to existing file)</span>
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">UpdateUserAvatarRequest</span><span class="hljs-params">(BaseModel)</span>:</span>
+    avatar_url: str = Field(..., description=<span class="hljs-string">"URL of the uploaded avatar image"</span>)
+    
+<span class="hljs-meta">    @validator('avatar_url')</span>
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">validate_avatar_url</span><span class="hljs-params">(cls, v)</span>:</span>
+        <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> v.startswith((<span class="hljs-string">'http://'</span>, <span class="hljs-string">'https://'</span>)):
+            <span class="hljs-keyword">raise</span> ValueError(<span class="hljs-string">'Avatar URL must be a valid HTTP/HTTPS URL'</span>)
+        <span class="hljs-keyword">return</span> v
+</div></code></pre>
+<h3 id="response-model">Response Model</h3>
+<pre class="hljs"><code><div><span class="hljs-comment"># models/response/user.py (add to existing file)</span>
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">UpdateUserAvatarResponse</span><span class="hljs-params">(BaseModel)</span>:</span>
+    success: bool = <span class="hljs-literal">True</span>
+    message: str = <span class="hljs-string">"Avatar updated successfully"</span>
+    avatar_url: str
+    user_id: str
+</div></code></pre>
+<h3 id="implementation">Implementation</h3>
+<pre class="hljs"><code><div><span class="hljs-comment"># services/user_service.py (add to existing class)</span>
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">UserService</span>:</span>
+    
+    <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">update_user_avatar</span><span class="hljs-params">(self, avatar_data: UpdateUserAvatarRequest, current_user: UserInDB)</span> -&gt; UpdateUserAvatarResponse:</span>
+        <span class="hljs-comment"># Update avatar URL</span>
+        current_user.avatar_url = avatar_data.avatar_url
+        current_user.updated_at = datetime.utcnow()
+        
+        <span class="hljs-comment"># Save to database</span>
+        updated_user = <span class="hljs-keyword">await</span> self.update_user_in_db(current_user)
+        
+        <span class="hljs-keyword">return</span> UpdateUserAvatarResponse(
+            avatar_url=updated_user.avatar_url,
+            user_id=str(updated_user.id)
+        )
+
+<span class="hljs-comment"># Router</span>
+<span class="hljs-meta">@router.put("/update-avatar", response_model=UpdateUserAvatarResponse)</span>
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">update_user_avatar</span><span class="hljs-params">(
+    avatar_data: UpdateUserAvatarRequest,
+    current_user: UserInDB = Depends<span class="hljs-params">(get_current_user)</span>
+)</span>:</span>
+    user_service = UserService()
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">await</span> user_service.update_user_avatar(avatar_data, current_user)
+</div></code></pre>
+<h2 id="%F0%9F%8C%84-9-updateusercoverimage-function">🌄 9. updateUserCoverImage Function</h2>
+<h3 id="request-model">Request Model</h3>
+<pre class="hljs"><code><div><span class="hljs-comment"># models/request/user.py (add to existing file)</span>
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">UpdateUserCoverImageRequest</span><span class="hljs-params">(BaseModel)</span>:</span>
+    cover_image_url: str = Field(..., description=<span class="hljs-string">"URL of the uploaded cover image"</span>)
+    
+<span class="hljs-meta">    @validator('cover_image_url')</span>
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">validate_cover_image_url</span><span class="hljs-params">(cls, v)</span>:</span>
+        <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> v.startswith((<span class="hljs-string">'http://'</span>, <span class="hljs-string">'https://'</span>)):
+            <span class="hljs-keyword">raise</span> ValueError(<span class="hljs-string">'Cover image URL must be a valid HTTP/HTTPS URL'</span>)
+        <span class="hljs-keyword">return</span> v
+</div></code></pre>
+<h3 id="response-model">Response Model</h3>
+<pre class="hljs"><code><div><span class="hljs-comment"># models/response/user.py (add to existing file)</span>
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">UpdateUserCoverImageResponse</span><span class="hljs-params">(BaseModel)</span>:</span>
+    success: bool = <span class="hljs-literal">True</span>
+    message: str = <span class="hljs-string">"Cover image updated successfully"</span>
+    cover_image_url: str
+    user_id: str
+</div></code></pre>
+<h3 id="implementation">Implementation</h3>
+<pre class="hljs"><code><div><span class="hljs-comment"># services/user_service.py (add to existing class)</span>
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">UserService</span>:</span>
+    
+    <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">update_user_cover_image</span><span class="hljs-params">(self, cover_data: UpdateUserCoverImageRequest, current_user: UserInDB)</span> -&gt; UpdateUserCoverImageResponse:</span>
+        <span class="hljs-comment"># Update cover image URL</span>
+        current_user.cover_image_url = cover_data.cover_image_url
+        current_user.updated_at = datetime.utcnow()
+        
+        <span class="hljs-comment"># Save to database</span>
+        updated_user = <span class="hljs-keyword">await</span> self.update_user_in_db(current_user)
+        
+        <span class="hljs-keyword">return</span> UpdateUserCoverImageResponse(
+            cover_image_url=updated_user.cover_image_url,
+            user_id=str(updated_user.id)
+        )
+
+<span class="hljs-comment"># Router</span>
+<span class="hljs-meta">@router.put("/update-cover", response_model=UpdateUserCoverImageResponse)</span>
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">update_user_cover_image</span><span class="hljs-params">(
+    cover_data: UpdateUserCoverImageRequest,
+    current_user: UserInDB = Depends<span class="hljs-params">(get_current_user)</span>
+)</span>:</span>
+    user_service = UserService()
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">await</span> user_service.update_user_cover_image(cover_data, current_user)
+</div></code></pre>
+<h2 id="%F0%9F%9B%A0%EF%B8%8F-complete-database-helper-methods">🛠️ Complete Database Helper Methods</h2>
+<pre class="hljs"><code><div><span class="hljs-comment"># services/user_service.py (add these helper methods to UserService class)</span>
+<span class="hljs-keyword">from</span> typing <span class="hljs-keyword">import</span> Optional
+<span class="hljs-keyword">import</span> motor.motor_asyncio
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">UserService</span>:</span>
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__init__</span><span class="hljs-params">(self)</span>:</span>
+        <span class="hljs-comment"># Initialize MongoDB connection</span>
+        self.client = motor.motor_asyncio.AsyncIOMotorClient(<span class="hljs-string">"mongodb://localhost:27017"</span>)
+        self.database = self.client.user_management
+        self.collection = self.database.users
+    
+    <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">save_user_to_db</span><span class="hljs-params">(self, user: UserInDB)</span> -&gt; UserInDB:</span>
+        user_dict = user.dict(by_alias=<span class="hljs-literal">True</span>)
+        result = <span class="hljs-keyword">await</span> self.collection.insert_one(user_dict)
+        user.id = result.inserted_id
+        <span class="hljs-keyword">return</span> user
+    
+    <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_user_by_email</span><span class="hljs-params">(self, email: str)</span> -&gt; Optional[UserInDB]:</span>
+        user_data = <span class="hljs-keyword">await</span> self.collection.find_one({<span class="hljs-string">"email"</span>: email})
+        <span class="hljs-keyword">return</span> UserInDB(**user_data) <span class="hljs-keyword">if</span> user_data <span class="hljs-keyword">else</span> <span class="hljs-literal">None</span>
+    
+    <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_user_by_username</span><span class="hljs-params">(self, username: str)</span> -&gt; Optional[UserInDB]:</span>
+        user_data = <span class="hljs-keyword">await</span> self.collection.find_one({<span class="hljs-string">"username"</span>: username})
+        <span class="hljs-keyword">return</span> UserInDB(**user_data) <span class="hljs-keyword">if</span> user_data <span class="hljs-keyword">else</span> <span class="hljs-literal">None</span>
+    
+    <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_user_by_id</span><span class="hljs-params">(self, user_id: str)</span> -&gt; Optional[UserInDB]:</span>
+        user_data = <span class="hljs-keyword">await</span> self.collection.find_one({<span class="hljs-string">"_id"</span>: ObjectId(user_id)})
+        <span class="hljs-keyword">return</span> UserInDB(**user_data) <span class="hljs-keyword">if</span> user_data <span class="hljs-keyword">else</span> <span class="hljs-literal">None</span>
+    
+    <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">update_user_in_db</span><span class="hljs-params">(self, user: UserInDB)</span> -&gt; UserInDB:</span>
+        user_dict = user.dict(by_alias=<span class="hljs-literal">True</span>)
+        <span class="hljs-keyword">await</span> self.collection.update_one(
+            {<span class="hljs-string">"_id"</span>: user.id},
+            {<span class="hljs-string">"$set"</span>: user_dict}
+        )
+        <span class="hljs-keyword">return</span> user
+</div></code></pre>
+<h2 id="%F0%9F%8E%AF-complete-router-file">🎯 Complete Router File</h2>
+<pre class="hljs"><code><div><span class="hljs-comment"># routers/user_router.py</span>
+<span class="hljs-keyword">from</span> fastapi <span class="hljs-keyword">import</span> APIRouter, Depends, HTTPException, status
+<span class="hljs-keyword">from</span> fastapi.security <span class="hljs-keyword">import</span> HTTPBearer
+<span class="hljs-keyword">from</span> services.user_service <span class="hljs-keyword">import</span> UserService
+<span class="hljs-keyword">from</span> models.internal.user <span class="hljs-keyword">import</span> UserInDB
+
+<span class="hljs-comment"># Import all request models</span>
+<span class="hljs-keyword">from</span> models.request.user <span class="hljs-keyword">import</span> (
+    RegisterUserRequest,
+    LoginUserRequest,
+    LogoutUserRequest,
+    RefreshAccessTokenRequest,
+    ChangeCurrentPasswordRequest,
+    UpdateAccountDetailsRequest,
+    UpdateUserAvatarRequest,
+    UpdateUserCoverImageRequest
+)
+
+<span class="hljs-comment"># Import all response models</span>
+<span class="hljs-keyword">from</span> models.response.user <span class="hljs-keyword">import</span> (
+    RegisterUserResponse,
+    LoginUserResponse,
+    LogoutUserResponse,
+    RefreshAccessTokenResponse,
+    ChangeCurrentPasswordResponse,
+    GetCurrentUserResponse,
+    UpdateAccountDetailsResponse,
+    UpdateUserAvatarResponse,
+    UpdateUserCoverImageResponse
+)
+
+router = APIRouter(prefix=<span class="hljs-string">"/user"</span>, tags=[<span class="hljs-string">"User Management"</span>])
+security = HTTPBearer()
+
+<span class="hljs-comment"># Dependency to get current user</span>
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_current_user</span><span class="hljs-params">(token: str = Depends<span class="hljs-params">(security)</span>)</span> -&gt; UserInDB:</span>
+    user_service = UserService()
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">await</span> user_service.get_user_from_token(token)
+
+<span class="hljs-comment"># All 9 endpoints</span>
+<span class="hljs-meta">@router.post("/register", response_model=RegisterUserResponse)</span>
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">register_user</span><span class="hljs-params">(user_data: RegisterUserRequest)</span>:</span>
+    user_service = UserService()
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">await</span> user_service.register_user(user_data)
+
+<span class="hljs-meta">@router.post("/login", response_model=LoginUserResponse)</span>
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">login_user</span><span class="hljs-params">(login_data: LoginUserRequest)</span>:</span>
+    user_service = UserService()
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">await</span> user_service.login_user(login_data)
+
+<span class="hljs-meta">@router.post("/logout", response_model=LogoutUserResponse)</span>
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">logout_user</span><span class="hljs-params">(logout_data: LogoutUserRequest, current_user: UserInDB = Depends<span class="hljs-params">(get_current_user)</span>)</span>:</span>
+    user_service = UserService()
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">await</span> user_service.logout_user(logout_data, current_user)
+
+<span class="hljs-meta">@router.post("/refresh-token", response_model=RefreshAccessTokenResponse)</span>
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">refresh_access_token</span><span class="hljs-params">(refresh_data: RefreshAccessTokenRequest)</span>:</span>
+    user_service = UserService()
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">await</span> user_service.refresh_access_token(refresh_data)
+
+<span class="hljs-meta">@router.put("/change-password", response_model=ChangeCurrentPasswordResponse)</span>
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">change_current_password</span><span class="hljs-params">(
+    password_data: ChangeCurrentPasswordRequest,
+    current_user: UserInDB = Depends<span class="hljs-params">(get_current_user)</span>
+)</span>:</span>
+    user_service = UserService()
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">await</span> user_service.change_current_password(password_data, current_user)
+
+<span class="hljs-meta">@router.get("/me", response_model=GetCurrentUserResponse)</span>
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_current_user_info</span><span class="hljs-params">(current_user: UserInDB = Depends<span class="hljs-params">(get_current_user)</span>)</span>:</span>
+    user_service = UserService()
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">await</span> user_service.get_current_user(current_user)
+
+<span class="hljs-meta">@router.put("/update-account", response_model=UpdateAccountDetailsResponse)</span>
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">update_account_details</span><span class="hljs-params">(
+    update_data: UpdateAccountDetailsRequest,
+    current_user: UserInDB = Depends<span class="hljs-params">(get_current_user)</span>
+)</span>:</span>
+    user_service = UserService()
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">await</span> user_service.update_account_details(update_data, current_user)
+
+<span class="hljs-meta">@router.put("/update-avatar", response_model=UpdateUserAvatarResponse)</span>
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">update_user_avatar</span><span class="hljs-params">(
+    avatar_data: UpdateUserAvatarRequest,
+    current_user: UserInDB = Depends<span class="hljs-params">(get_current_user)</span>
+)</span>:</span>
+    user_service = UserService()
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">await</span> user_service.update_user_avatar(avatar_data, current_user)
+
+<span class="hljs-meta">@router.put("/update-cover", response_model=UpdateUserCoverImageResponse)</span>
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">update_user_cover_image</span><span class="hljs-params">(
+    cover_data: UpdateUserCoverImageRequest,
+    current_user: UserInDB = Depends<span class="hljs-params">(get_current_user)</span>
+)</span>:</span>
+    user_service = UserService()
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">await</span> user_service.update_user_cover_image(cover_data, current_user)
+</div></code></pre>
+<p>This complete implementation provides:
+✅ <strong>9 separate functions</strong> with dedicated models
+✅ <strong>Individual request/response models</strong> for each function
+✅ <strong>Shared UserInDB model</strong> for all database operations
+✅ <strong>Complete service layer</strong> implementation
+✅ <strong>Full router setup</strong> with proper endpoints
+✅ <strong>Proper validation</strong> and error handling
+✅ <strong>Database integration</strong> helpers
+✅ <strong>JWT token management</strong> for authentication</p>
+<hr>
 
 </body>
 </html>
