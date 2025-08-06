@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>9. OAuth.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h1 id="9-oauth2-authentication-in-fastapi">9. OAuth2 Authentication in FastAPI</h1>
+<h2 id="%F0%9F%9A%80-overview">🚀 Overview</h2>
+<p>This guide covers implementing OAuth2 authentication in FastAPI using JWTs, including both <strong>access tokens</strong> and <strong>refresh tokens</strong>. You'll learn:</p>
+<ul>
+<li>How OAuth2 works in FastAPI</li>
+<li>How to register users</li>
+<li>How to generate and use access/refresh tokens</li>
+<li>How to protect endpoints</li>
+<li>How to test with Swagger UI</li>
+<li>Full code with comments and explanations</li>
+</ul>
+<hr>
+<h2 id="%F0%9F%94%90-what-is-oauth2">🔐 What is OAuth2?</h2>
+<p>OAuth2 is a standard protocol for authorization. In FastAPI, the most common flow is <strong>OAuth2 Password Flow</strong> with JWTs (JSON Web Tokens). This lets users log in with a username and password, receive a token, and use that token to access protected endpoints.</p>
+<hr>
+<h2 id="%F0%9F%97%82%EF%B8%8F-project-structure-relevant-files">🗂️ Project Structure (Relevant Files)</h2>
+<pre class="hljs"><code><div>.
+├── main.py
+├── routers/
+│   └── user.py
+├── db/
+│   ├── database.py
+│   ├── models.py
+│   ├── db_user.py
+│   └── hash.py
+├── auth/
+│   └── oauth.py
+├── schemas.py
+└── Blogs/
+    └── 9. OAuth.md
+</div></code></pre>
+<hr>
+<h2 id="1%EF%B8%8F%E2%83%A3-user-registration">1️⃣ User Registration</h2>
+<p>Register users with hashed passwords.</p>
+<p><strong>schemas.py</strong></p>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> pydantic <span class="hljs-keyword">import</span> BaseModel
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">UserBase</span><span class="hljs-params">(BaseModel)</span>:</span>
+    username: str
+    email: str
+    password: str
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">UserDisplay</span><span class="hljs-params">(BaseModel)</span>:</span>
+    username: str
+    email: str
+    <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Config</span>:</span>
+        orm_mode = <span class="hljs-literal">True</span>  <span class="hljs-comment"># For ORM compatibility</span>
+</div></code></pre>
+<p><strong>db/models.py</strong></p>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> sqlalchemy.sql.sqltypes <span class="hljs-keyword">import</span> Integer, String
+<span class="hljs-keyword">from</span> db.database <span class="hljs-keyword">import</span> Base
+<span class="hljs-keyword">from</span> sqlalchemy <span class="hljs-keyword">import</span> Column
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">DbUser</span><span class="hljs-params">(Base)</span>:</span>
+    __tablename__ = <span class="hljs-string">'users'</span>
+    id = Column(Integer, primary_key=<span class="hljs-literal">True</span>, index=<span class="hljs-literal">True</span>)
+    username = Column(String)
+    email = Column(String)
+    password = Column(String)  <span class="hljs-comment"># Hashed password</span>
+</div></code></pre>
+<p><strong>db/hash.py</strong></p>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> passlib.context <span class="hljs-keyword">import</span> CryptContext
+
+pwd_cxt = CryptContext(schemes=[<span class="hljs-string">'bcrypt'</span>], deprecated=<span class="hljs-string">'auto'</span>)
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Hash</span><span class="hljs-params">()</span>:</span>
+<span class="hljs-meta">    @staticmethod</span>
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">bcrypt</span><span class="hljs-params">(password: str)</span>:</span>
+        <span class="hljs-keyword">return</span> pwd_cxt.hash(password)
+<span class="hljs-meta">    @staticmethod</span>
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">verify</span><span class="hljs-params">(hashed_password, plain_password)</span>:</span>
+        <span class="hljs-keyword">return</span> pwd_cxt.verify(plain_password, hashed_password)
+</div></code></pre>
+<p><strong>db/db_user.py</strong></p>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> sqlalchemy.orm <span class="hljs-keyword">import</span> Session
+<span class="hljs-keyword">from</span> schemas <span class="hljs-keyword">import</span> UserBase
+<span class="hljs-keyword">from</span> db.models <span class="hljs-keyword">import</span> DbUser
+<span class="hljs-keyword">from</span> db.hash <span class="hljs-keyword">import</span> Hash
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">create_user</span><span class="hljs-params">(db: Session, request: UserBase)</span>:</span>
+    new_user = DbUser(
+        username=request.username,
+        email=request.email,
+        password=Hash.bcrypt(request.password)
+    )
+    db.add(new_user)
+    db.commit()
+    db.refresh(new_user)
+    <span class="hljs-keyword">return</span> new_user
+</div></code></pre>
+<p><strong>routers/user.py</strong></p>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> fastapi <span class="hljs-keyword">import</span> APIRouter, Depends
+<span class="hljs-keyword">from</span> sqlalchemy.orm <span class="hljs-keyword">import</span> Session
+<span class="hljs-keyword">from</span> schemas <span class="hljs-keyword">import</span> UserBase, UserDisplay
+<span class="hljs-keyword">from</span> db.database <span class="hljs-keyword">import</span> get_db
+<span class="hljs-keyword">from</span> db <span class="hljs-keyword">import</span> db_user
+
+router = APIRouter(prefix=<span class="hljs-string">"/user"</span>, tags=[<span class="hljs-string">"user"</span>])
+
+<span class="hljs-meta">@router.post("/", response_model=UserDisplay)</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">create_user</span><span class="hljs-params">(request: UserBase, db: Session = Depends<span class="hljs-params">(get_db)</span>)</span>:</span>
+    <span class="hljs-keyword">return</span> db_user.create_user(db, request)
+</div></code></pre>
+<hr>
+<h2 id="2%EF%B8%8F%E2%83%A3-oauth2-token-generation-access--refresh">2️⃣ OAuth2 Token Generation (Access &amp; Refresh)</h2>
+<p><strong>schemas.py</strong></p>
+<pre class="hljs"><code><div><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Token</span><span class="hljs-params">(BaseModel)</span>:</span>
+    access_token: str
+    token_type: str
+    refresh_token: str
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">TokenData</span><span class="hljs-params">(BaseModel)</span>:</span>
+    username: str | <span class="hljs-literal">None</span> = <span class="hljs-literal">None</span>
+</div></code></pre>
+<p><strong>auth/oauth.py</strong></p>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> fastapi.security <span class="hljs-keyword">import</span> OAuth2PasswordBearer
+<span class="hljs-keyword">from</span> datetime <span class="hljs-keyword">import</span> datetime, timedelta
+<span class="hljs-keyword">from</span> jose <span class="hljs-keyword">import</span> JWTError, jwt
+<span class="hljs-keyword">from</span> fastapi <span class="hljs-keyword">import</span> Depends, HTTPException, status
+<span class="hljs-keyword">from</span> sqlalchemy.orm <span class="hljs-keyword">import</span> Session
+<span class="hljs-keyword">from</span> db.database <span class="hljs-keyword">import</span> get_db
+<span class="hljs-keyword">from</span> db.models <span class="hljs-keyword">import</span> DbUser
+<span class="hljs-keyword">from</span> db.hash <span class="hljs-keyword">import</span> Hash
+<span class="hljs-keyword">from</span> schemas <span class="hljs-keyword">import</span> TokenData
+
+SECRET_KEY = <span class="hljs-string">"supersecretkey"</span>  <span class="hljs-comment"># Use env var in production</span>
+ALGORITHM = <span class="hljs-string">"HS256"</span>
+ACCESS_TOKEN_EXPIRE_MINUTES = <span class="hljs-number">15</span>
+REFRESH_TOKEN_EXPIRE_MINUTES = <span class="hljs-number">60</span> * <span class="hljs-number">24</span> * <span class="hljs-number">7</span>  <span class="hljs-comment"># 7 days</span>
+
+oauth2_schema = OAuth2PasswordBearer(tokenUrl=<span class="hljs-string">'token'</span>)
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">create_access_token</span><span class="hljs-params">(data: dict, expires_delta: timedelta | None = None)</span>:</span>
+    to_encode = data.copy()
+    expire = datetime.utcnow() + (expires_delta <span class="hljs-keyword">or</span> timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES))
+    to_encode.update({<span class="hljs-string">"exp"</span>: expire})
+    <span class="hljs-keyword">return</span> jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">create_refresh_token</span><span class="hljs-params">(data: dict)</span>:</span>
+    expire = datetime.utcnow() + timedelta(minutes=REFRESH_TOKEN_EXPIRE_MINUTES)
+    to_encode = data.copy()
+    to_encode.update({<span class="hljs-string">"exp"</span>: expire, <span class="hljs-string">"scope"</span>: <span class="hljs-string">"refresh_token"</span>})
+    <span class="hljs-keyword">return</span> jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">authenticate_user</span><span class="hljs-params">(db: Session, username: str, password: str)</span>:</span>
+    user = db.query(DbUser).filter(DbUser.username == username).first()
+    <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> user <span class="hljs-keyword">or</span> <span class="hljs-keyword">not</span> Hash.verify(user.password, password):
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">False</span>
+    <span class="hljs-keyword">return</span> user
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_current_user</span><span class="hljs-params">(token: str = Depends<span class="hljs-params">(oauth2_schema)</span>, db: Session = Depends<span class="hljs-params">(get_db)</span>)</span>:</span>
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail=<span class="hljs-string">"Could not validate credentials"</span>,
+        headers={<span class="hljs-string">"WWW-Authenticate"</span>: <span class="hljs-string">"Bearer"</span>},
+    )
+    <span class="hljs-keyword">try</span>:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        username: str = payload.get(<span class="hljs-string">"sub"</span>)
+        <span class="hljs-keyword">if</span> username <span class="hljs-keyword">is</span> <span class="hljs-literal">None</span>:
+            <span class="hljs-keyword">raise</span> credentials_exception
+        token_data = TokenData(username=username)
+    <span class="hljs-keyword">except</span> JWTError:
+        <span class="hljs-keyword">raise</span> credentials_exception
+    user = db.query(DbUser).filter(DbUser.username == token_data.username).first()
+    <span class="hljs-keyword">if</span> user <span class="hljs-keyword">is</span> <span class="hljs-literal">None</span>:
+        <span class="hljs-keyword">raise</span> credentials_exception
+    <span class="hljs-keyword">return</span> user
+</div></code></pre>
+<hr>
+<h2 id="3%EF%B8%8F%E2%83%A3-login--token-endpoints">3️⃣ Login &amp; Token Endpoints</h2>
+<p><strong>routers/user.py</strong></p>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> fastapi.security <span class="hljs-keyword">import</span> OAuth2PasswordRequestForm
+<span class="hljs-keyword">from</span> fastapi <span class="hljs-keyword">import</span> status, HTTPException, Depends
+<span class="hljs-keyword">from</span> auth.oauth <span class="hljs-keyword">import</span> authenticate_user, create_access_token, create_refresh_token, get_current_user
+<span class="hljs-keyword">from</span> schemas <span class="hljs-keyword">import</span> Token
+<span class="hljs-keyword">from</span> sqlalchemy.orm <span class="hljs-keyword">import</span> Session
+<span class="hljs-keyword">from</span> db.database <span class="hljs-keyword">import</span> get_db
+
+<span class="hljs-meta">@router.post("/token", response_model=Token)</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">login_for_access_token</span><span class="hljs-params">(form_data: OAuth2PasswordRequestForm = Depends<span class="hljs-params">()</span>, db: Session = Depends<span class="hljs-params">(get_db)</span>)</span>:</span>
+    user = authenticate_user(db, form_data.username, form_data.password)
+    <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> user:
+        <span class="hljs-keyword">raise</span> HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail=<span class="hljs-string">"Incorrect username or password"</span>,
+            headers={<span class="hljs-string">"WWW-Authenticate"</span>: <span class="hljs-string">"Bearer"</span>},
+        )
+    access_token = create_access_token(data={<span class="hljs-string">"sub"</span>: user.username})
+    refresh_token = create_refresh_token(data={<span class="hljs-string">"sub"</span>: user.username})
+    <span class="hljs-keyword">return</span> {<span class="hljs-string">"access_token"</span>: access_token, <span class="hljs-string">"token_type"</span>: <span class="hljs-string">"bearer"</span>, <span class="hljs-string">"refresh_token"</span>: refresh_token}
+
+<span class="hljs-comment"># Refresh token endpoint</span>
+<span class="hljs-meta">@router.post("/refresh", response_model=Token)</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">refresh_access_token</span><span class="hljs-params">(refresh_token: str, db: Session = Depends<span class="hljs-params">(get_db)</span>)</span>:</span>
+    <span class="hljs-keyword">from</span> jose <span class="hljs-keyword">import</span> JWTError, jwt
+    <span class="hljs-keyword">from</span> auth.oauth <span class="hljs-keyword">import</span> SECRET_KEY, ALGORITHM, create_access_token, create_refresh_token
+    <span class="hljs-keyword">try</span>:
+        payload = jwt.decode(refresh_token, SECRET_KEY, algorithms=[ALGORITHM])
+        <span class="hljs-keyword">if</span> payload.get(<span class="hljs-string">"scope"</span>) != <span class="hljs-string">"refresh_token"</span>:
+            <span class="hljs-keyword">raise</span> HTTPException(status_code=<span class="hljs-number">401</span>, detail=<span class="hljs-string">"Invalid scope for token"</span>)
+        username: str = payload.get(<span class="hljs-string">"sub"</span>)
+        <span class="hljs-keyword">if</span> username <span class="hljs-keyword">is</span> <span class="hljs-literal">None</span>:
+            <span class="hljs-keyword">raise</span> HTTPException(status_code=<span class="hljs-number">401</span>, detail=<span class="hljs-string">"Invalid token payload"</span>)
+    <span class="hljs-keyword">except</span> JWTError:
+        <span class="hljs-keyword">raise</span> HTTPException(status_code=<span class="hljs-number">401</span>, detail=<span class="hljs-string">"Invalid refresh token"</span>)
+    access_token = create_access_token(data={<span class="hljs-string">"sub"</span>: username})
+    new_refresh_token = create_refresh_token(data={<span class="hljs-string">"sub"</span>: username})
+    <span class="hljs-keyword">return</span> {<span class="hljs-string">"access_token"</span>: access_token, <span class="hljs-string">"token_type"</span>: <span class="hljs-string">"bearer"</span>, <span class="hljs-string">"refresh_token"</span>: new_refresh_token}
+</div></code></pre>
+<hr>
+<h2 id="4%EF%B8%8F%E2%83%A3-protecting-endpoints">4️⃣ Protecting Endpoints</h2>
+<p><strong>routers/user.py</strong></p>
+<pre class="hljs"><code><div><span class="hljs-meta">@router.get("/me", response_model=UserDisplay)</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">read_users_me</span><span class="hljs-params">(current_user: UserBase = Depends<span class="hljs-params">(get_current_user)</span>)</span>:</span>
+    <span class="hljs-keyword">return</span> current_user
+</div></code></pre>
+<hr>
+<h2 id="5%EF%B8%8F%E2%83%A3-testing-in-swagger-ui">5️⃣ Testing in Swagger UI</h2>
+<ol>
+<li><strong>Register a user</strong>: <code>POST /user/</code> with JSON body.</li>
+<li><strong>Get tokens</strong>: <code>POST /user/token</code> with form data (username, password).</li>
+<li><strong>Authorize</strong>: Click <strong>Authorize</strong> in Swagger UI, paste the <code>access_token</code>.</li>
+<li><strong>Access protected endpoint</strong>: <code>GET /user/me</code>.</li>
+<li><strong>Refresh token</strong>: <code>POST /user/refresh</code> with the <code>refresh_token</code>.</li>
+</ol>
+<hr>
+<h2 id="%F0%9F%94%84-flow-diagram">🔄 Flow Diagram</h2>
+<pre><code class="language-mermaid"><div class="mermaid">sequenceDiagram
+    participant Client
+    participant API as FastAPI
+    participant DB as Database
+
+    Client->>API: POST /user/ (register)
+    API->>DB: Create user (hashed password)
+    Client->>API: POST /user/token (login)
+    API->>DB: Authenticate user
+    API-->>Client: access_token, refresh_token
+    Client->>API: GET /user/me (with Bearer access_token)
+    API->>DB: Validate token, get user
+    API-->>Client: user info
+    Client->>API: POST /user/refresh (with refresh_token)
+    API-->>Client: new access_token, refresh_token
+</div></code></pre>
+<hr>
+<h2 id="%F0%9F%93%9D-comments--explanations">📝 Comments &amp; Explanations</h2>
+<ul>
+<li><strong>Access Token</strong>: Short-lived, used for API access.</li>
+<li><strong>Refresh Token</strong>: Long-lived, used to get new access tokens without re-login.</li>
+<li><strong>JWT</strong>: Encodes user info and expiry, signed with a secret.</li>
+<li><strong>Security</strong>: Store secrets securely, use HTTPS in production.</li>
+<li><strong>Swagger UI</strong>: Makes testing easy—register, login, authorize, and test protected endpoints.</li>
+</ul>
+<hr>
+<h2 id="%E2%9C%85-summary-table">✅ Summary Table</h2>
+<table>
+<thead>
+<tr>
+<th>Step</th>
+<th>Endpoint</th>
+<th>Method</th>
+<th>Auth Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Register</td>
+<td>/user/</td>
+<td>POST</td>
+<td>No</td>
+<td>Create a new user</td>
+</tr>
+<tr>
+<td>Login (get tokens)</td>
+<td>/user/token</td>
+<td>POST</td>
+<td>No</td>
+<td>Get access &amp; refresh tokens</td>
+</tr>
+<tr>
+<td>Refresh token</td>
+<td>/user/refresh</td>
+<td>POST</td>
+<td>No</td>
+<td>Get new tokens with refresh</td>
+</tr>
+<tr>
+<td>Protected endpoint</td>
+<td>/user/me</td>
+<td>GET</td>
+<td>Yes</td>
+<td>Get current user info</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="%F0%9F%A7%A0-best-practices">🧠 Best Practices</h2>
+<ul>
+<li>Never store plain passwords.</li>
+<li>Use short expiry for access tokens.</li>
+<li>Use refresh tokens for long sessions.</li>
+<li>Secure your secret key and use environment variables.</li>
+<li>Use HTTPS in production.</li>
+</ul>
+<hr>
+<h2 id="%F0%9F%8E%93-references">🎓 References</h2>
+<ul>
+<li><a href="https://fastapi.tiangolo.com/tutorial/security/oauth2-jwt/">FastAPI Security Docs</a></li>
+<li><a href="https://datatracker.ietf.org/doc/html/rfc6749">OAuth2 RFC</a></li>
+<li><a href="https://jwt.io/">JWT.io</a></li>
+</ul>
+<hr>
+<h1 id="%F0%9F%94%90-fastapi-authentication-%E2%80%93-oauth2-with-password-flow-jwt-based">🔐 FastAPI Authentication – OAuth2 with Password Flow (JWT Based)</h1>
+<hr>
+<h2 id="%F0%9F%A7%A9-why-authentication">🧩 Why Authentication?</h2>
+<p>Authentication verifies <strong>&quot;who you are&quot;</strong> 🧑‍💻.</p>
+<p>It’s needed for:</p>
+<ul>
+<li>🔐 Protecting routes</li>
+<li>📦 Handling user identity</li>
+<li>🛡️ Role-based access control</li>
+</ul>
+<hr>
+<h2 id="%F0%9F%94%91-oauth2--password-flow-with-jwt">🔑 OAuth2 + Password Flow (with JWT)</h2>
+<h3 id="what-is-it">What is it?</h3>
+<p>A simplified <strong>login system</strong> using:</p>
+<ol>
+<li><strong>Username + Password</strong> from user</li>
+<li>Return a <strong>JWT token</strong></li>
+<li>Client stores it (usually in localStorage / cookies)</li>
+<li>Uses token for all <strong>future requests</strong></li>
+</ol>
+<hr>
+<h2 id="%F0%9F%A7%AD-authentication-flow-step-by-step">🧭 Authentication Flow (Step-by-step):</h2>
+<h3 id="%E2%9C%85-flow-summary">✅ Flow Summary</h3>
+<pre class="hljs"><code><div>[1] User → POST /login  (username, password)
+      |
+[2] Backend verifies credentials
+      |
+[3] If valid → returns JWT token (access_token)
+      |
+[4] User stores token and sends it in Authorization header
+      |
+[5] For protected routes → backend checks token validity
+      |
+[6] If token is valid → access granted
+</div></code></pre>
+<hr>
+<h2 id="%F0%9F%A7%91%E2%80%8D%F0%9F%92%BB-code-implementation-full-working-flow">🧑‍💻 Code Implementation: Full Working Flow</h2>
+<h3 id="1%EF%B8%8F%E2%83%A3-install-required-packages">1️⃣ Install required packages</h3>
+<pre class="hljs"><code><div>pip install fastapi uvicorn python-jose[cryptography] passlib[bcrypt]
+</div></code></pre>
+<hr>
+<h3 id="2%EF%B8%8F%E2%83%A3-basic-setup">2️⃣ Basic Setup</h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> fastapi <span class="hljs-keyword">import</span> FastAPI, Depends, HTTPException, status
+<span class="hljs-keyword">from</span> fastapi.security <span class="hljs-keyword">import</span> OAuth2PasswordBearer, OAuth2PasswordRequestForm
+<span class="hljs-keyword">from</span> jose <span class="hljs-keyword">import</span> JWTError, jwt
+<span class="hljs-keyword">from</span> passlib.context <span class="hljs-keyword">import</span> CryptContext
+<span class="hljs-keyword">from</span> datetime <span class="hljs-keyword">import</span> datetime, timedelta
+
+app = FastAPI()
+</div></code></pre>
+<hr>
+<h3 id="3%EF%B8%8F%E2%83%A3-secrets-and-constants-%F0%9F%94%90">3️⃣ Secrets and Constants 🔐</h3>
+<pre class="hljs"><code><div><span class="hljs-comment"># 👇 Used to sign JWT token</span>
+SECRET_KEY = <span class="hljs-string">"your-secret-key"</span>
+ALGORITHM = <span class="hljs-string">"HS256"</span>
+ACCESS_TOKEN_EXPIRE_MINUTES = <span class="hljs-number">30</span>
+</div></code></pre>
+<hr>
+<h3 id="4%EF%B8%8F%E2%83%A3-password-hashing-%F0%9F%94%91">4️⃣ Password Hashing 🔑</h3>
+<pre class="hljs"><code><div>pwd_context = CryptContext(schemes=[<span class="hljs-string">"bcrypt"</span>], deprecated=<span class="hljs-string">"auto"</span>)
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">verify_password</span><span class="hljs-params">(plain_pwd, hashed_pwd)</span>:</span>
+    <span class="hljs-keyword">return</span> pwd_context.verify(plain_pwd, hashed_pwd)
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">hash_password</span><span class="hljs-params">(password)</span>:</span>
+    <span class="hljs-keyword">return</span> pwd_context.hash(password)
+</div></code></pre>
+<hr>
+<h3 id="5%EF%B8%8F%E2%83%A3-dummy-user-db">5️⃣ Dummy User DB</h3>
+<pre class="hljs"><code><div>fake_user_db = {
+    <span class="hljs-string">"johndoe"</span>: {
+        <span class="hljs-string">"username"</span>: <span class="hljs-string">"johndoe"</span>,
+        <span class="hljs-string">"hashed_password"</span>: hash_password(<span class="hljs-string">"secret123"</span>),
+    }
+}
+</div></code></pre>
+<hr>
+<h3 id="6%EF%B8%8F%E2%83%A3-authenticate-user-function">6️⃣ Authenticate User Function</h3>
+<pre class="hljs"><code><div><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">authenticate_user</span><span class="hljs-params">(username: str, password: str)</span>:</span>
+    user = fake_user_db.get(username)
+    <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> user <span class="hljs-keyword">or</span> <span class="hljs-keyword">not</span> verify_password(password, user[<span class="hljs-string">"hashed_password"</span>]):
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">False</span>
+    <span class="hljs-keyword">return</span> user
+</div></code></pre>
+<hr>
+<h3 id="7%EF%B8%8F%E2%83%A3-jwt-token-creator-%F0%9F%8E%9F%EF%B8%8F">7️⃣ JWT Token Creator 🎟️</h3>
+<pre class="hljs"><code><div><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">create_access_token</span><span class="hljs-params">(data: dict, expires_delta: timedelta = None)</span>:</span>
+    to_encode = data.copy()
+    expire = datetime.utcnow() + (expires_delta <span class="hljs-keyword">or</span> timedelta(minutes=<span class="hljs-number">15</span>))
+    to_encode.update({<span class="hljs-string">"exp"</span>: expire})
+    <span class="hljs-keyword">return</span> jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+</div></code></pre>
+<hr>
+<h3 id="8%EF%B8%8F%E2%83%A3-oauth2-token-route-token">8️⃣ OAuth2 Token Route (<code>/token</code>)</h3>
+<pre class="hljs"><code><div>oauth2_scheme = OAuth2PasswordBearer(tokenUrl=<span class="hljs-string">"token"</span>)
+
+<span class="hljs-meta">@app.post("/token")</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">login</span><span class="hljs-params">(form_data: OAuth2PasswordRequestForm = Depends<span class="hljs-params">()</span>)</span>:</span>
+    user = authenticate_user(form_data.username, form_data.password)
+    <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> user:
+        <span class="hljs-keyword">raise</span> HTTPException(status_code=<span class="hljs-number">401</span>, detail=<span class="hljs-string">"Invalid credentials"</span>)
+
+    access_token = create_access_token(data={<span class="hljs-string">"sub"</span>: user[<span class="hljs-string">"username"</span>]})
+    <span class="hljs-keyword">return</span> {<span class="hljs-string">"access_token"</span>: access_token, <span class="hljs-string">"token_type"</span>: <span class="hljs-string">"bearer"</span>}
+</div></code></pre>
+<p>🧠 Note: <code>OAuth2PasswordRequestForm</code> expects:</p>
+<pre class="hljs"><code><div>  username=...&amp;password=...
+</div></code></pre>
+<hr>
+<h3 id="9%EF%B8%8F%E2%83%A3-protected-route-example">9️⃣ Protected Route Example</h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> jose <span class="hljs-keyword">import</span> JWTError, jwt
+<span class="hljs-keyword">from</span> fastapi <span class="hljs-keyword">import</span> Security
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_current_user</span><span class="hljs-params">(token: str = Depends<span class="hljs-params">(oauth2_scheme)</span>)</span>:</span>
+    <span class="hljs-keyword">try</span>:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        username: str = payload.get(<span class="hljs-string">"sub"</span>)
+        <span class="hljs-keyword">if</span> username <span class="hljs-keyword">is</span> <span class="hljs-literal">None</span>:
+            <span class="hljs-keyword">raise</span> HTTPException(status_code=<span class="hljs-number">401</span>, detail=<span class="hljs-string">"Token invalid"</span>)
+        <span class="hljs-keyword">return</span> fake_user_db.get(username)
+    <span class="hljs-keyword">except</span> JWTError:
+        <span class="hljs-keyword">raise</span> HTTPException(status_code=<span class="hljs-number">401</span>, detail=<span class="hljs-string">"Token invalid"</span>)
+
+<span class="hljs-meta">@app.get("/me")</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">read_current_user</span><span class="hljs-params">(current_user: dict = Depends<span class="hljs-params">(get_current_user)</span>)</span>:</span>
+    <span class="hljs-keyword">return</span> current_user
+</div></code></pre>
+<hr>
+<h2 id="%F0%9F%A7%AA-testing-the-flow-postman-or-curl">🧪 Testing the Flow (Postman or curl)</h2>
+<h3 id="1-%F0%9F%94%90-login--get-token">1. 🔐 Login — Get Token</h3>
+<pre class="hljs"><code><div>POST /token
+Content-Type: application/x-www-form-urlencoded
+
+username=johndoe&amp;password=secret123
+</div></code></pre>
+<p>💡 Response:</p>
+<pre class="hljs"><code><div>{
+  <span class="hljs-attr">"access_token"</span>: <span class="hljs-string">"eyJhbGciOiJIUzI1NiIsInR5cCI6..."</span>,
+  <span class="hljs-attr">"token_type"</span>: <span class="hljs-string">"bearer"</span>
+}
+</div></code></pre>
+<hr>
+<h3 id="2-%E2%9C%85-access-protected-route">2. ✅ Access Protected Route</h3>
+<pre class="hljs"><code><div><span class="hljs-attribute">GET /me
+Authorization</span>: Bearer &lt;access_token&gt;
+</div></code></pre>
+<hr>
+<h2 id="%F0%9F%A7%A0-summary-diagram">🧠 Summary Diagram</h2>
+<pre class="hljs"><code><div>CLIENT (React/Frontend)
+  ↓
+[POST] /token  ← login form (username, password)
+  ↓
+Returns JWT Token
+  ↓
+Stores token → uses it in header for future requests
+
+[GET] /me
+Authorization: Bearer &lt;token&gt;
+
+→ Server decodes token
+→ Checks expiry + user
+→ Returns secured data
+</div></code></pre>
+<hr>
+<h2 id="%F0%9F%8E%93-final-notes">🎓 Final Notes</h2>
+<table>
+<thead>
+<tr>
+<th>Concept</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>JWT</td>
+<td>Encoded token containing user info</td>
+</tr>
+<tr>
+<td>OAuth2PasswordForm</td>
+<td>Built-in FastAPI dependency for login</td>
+</tr>
+<tr>
+<td><code>Depends()</code></td>
+<td>Injects dependencies automatically</td>
+</tr>
+<tr>
+<td><code>Bearer Token</code></td>
+<td>Standard in <code>Authorization</code> header</td>
+</tr>
+<tr>
+<td><code>@app.post(&quot;/token&quot;)</code></td>
+<td>Auth route</td>
+</tr>
+<tr>
+<td><code>/me</code></td>
+<td>Protected route with user info</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h1 id="%F0%9F%94%90-fastapi-advanced-authentication-%E2%80%93-access--refresh-tokens--role-based-auth">🔐 FastAPI Advanced Authentication – Access &amp; Refresh Tokens + Role-based Auth</h1>
+<hr>
+<h2 id="%F0%9F%8C%90-what-are-access--refresh-tokens">🌐 What Are Access &amp; Refresh Tokens?</h2>
+<table>
+<thead>
+<tr>
+<th>Token Type</th>
+<th>Lifespan</th>
+<th>Use Case</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Access Token</td>
+<td>Short (15m)</td>
+<td>Used for accessing protected APIs</td>
+</tr>
+<tr>
+<td>Refresh Token</td>
+<td>Long (7d+)</td>
+<td>Used to get a new access token 🔄</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="%F0%9F%A7%AD-full-auth-flow-dual-token-logic">🧭 Full Auth Flow (Dual Token Logic)</h2>
+<pre class="hljs"><code><div>[1] User sends username + password → /login
+      |
+[2] Server returns:
+     - access_token (15 min)
+     - refresh_token (7 days)
+      |
+[3] Client stores both tokens (e.g., localStorage/cookies)
+      |
+[4] Use access_token in Authorization header
+      |
+[5] If access_token expires:
+      - Send refresh_token → /refresh
+      - Get new access_token
+</div></code></pre>
+<hr>
+<h2 id="%E2%9C%85-1-setup-constants--secrets">✅ 1. Setup Constants &amp; Secrets</h2>
+<pre class="hljs"><code><div>SECRET_KEY = <span class="hljs-string">"super-secret-key"</span>
+REFRESH_SECRET_KEY = <span class="hljs-string">"super-refresh-secret"</span>
+ALGORITHM = <span class="hljs-string">"HS256"</span>
+
+ACCESS_TOKEN_EXPIRE_MINUTES = <span class="hljs-number">15</span>
+REFRESH_TOKEN_EXPIRE_DAYS = <span class="hljs-number">7</span>
+</div></code></pre>
+<hr>
+<h2 id="%F0%9F%94%90-2-token-creation-functions">🔐 2. Token Creation Functions</h2>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> datetime <span class="hljs-keyword">import</span> datetime, timedelta
+<span class="hljs-keyword">from</span> jose <span class="hljs-keyword">import</span> jwt
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">create_access_token</span><span class="hljs-params">(data: dict)</span>:</span>
+    expire = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    to_encode = {**data, <span class="hljs-string">"exp"</span>: expire}
+    <span class="hljs-keyword">return</span> jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">create_refresh_token</span><span class="hljs-params">(data: dict)</span>:</span>
+    expire = datetime.utcnow() + timedelta(days=REFRESH_TOKEN_EXPIRE_DAYS)
+    to_encode = {**data, <span class="hljs-string">"exp"</span>: expire}
+    <span class="hljs-keyword">return</span> jwt.encode(to_encode, REFRESH_SECRET_KEY, algorithm=ALGORITHM)
+</div></code></pre>
+<hr>
+<h2 id="%F0%9F%94%90-3-login-endpoint-%E2%86%92-generate-dual-tokens">🔐 3. <code>/login</code> Endpoint → Generate Dual Tokens</h2>
+<pre class="hljs"><code><div><span class="hljs-meta">@app.post("/login")</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">login</span><span class="hljs-params">(form_data: OAuth2PasswordRequestForm = Depends<span class="hljs-params">()</span>)</span>:</span>
+    user = authenticate_user(form_data.username, form_data.password)
+    <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> user:
+        <span class="hljs-keyword">raise</span> HTTPException(status_code=<span class="hljs-number">401</span>, detail=<span class="hljs-string">"Invalid credentials"</span>)
+
+    user_data = {<span class="hljs-string">"sub"</span>: user[<span class="hljs-string">"username"</span>], <span class="hljs-string">"role"</span>: user.get(<span class="hljs-string">"role"</span>, <span class="hljs-string">"user"</span>)}
+    access_token = create_access_token(user_data)
+    refresh_token = create_refresh_token(user_data)
+
+    <span class="hljs-keyword">return</span> {
+        <span class="hljs-string">"access_token"</span>: access_token,
+        <span class="hljs-string">"refresh_token"</span>: refresh_token,
+        <span class="hljs-string">"token_type"</span>: <span class="hljs-string">"bearer"</span>
+    }
+</div></code></pre>
+<hr>
+<h2 id="%F0%9F%94%81-4-refresh-endpoint">🔁 4. <code>/refresh</code> Endpoint</h2>
+<pre class="hljs"><code><div><span class="hljs-meta">@app.post("/refresh")</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">refresh_token</span><span class="hljs-params">(refresh_token: str = Form<span class="hljs-params">(...)</span>)</span>:</span>
+    <span class="hljs-keyword">try</span>:
+        payload = jwt.decode(refresh_token, REFRESH_SECRET_KEY, algorithms=[ALGORITHM])
+        username = payload.get(<span class="hljs-string">"sub"</span>)
+        role = payload.get(<span class="hljs-string">"role"</span>)
+    <span class="hljs-keyword">except</span> JWTError:
+        <span class="hljs-keyword">raise</span> HTTPException(status_code=<span class="hljs-number">403</span>, detail=<span class="hljs-string">"Invalid refresh token"</span>)
+
+    new_access_token = create_access_token({<span class="hljs-string">"sub"</span>: username, <span class="hljs-string">"role"</span>: role})
+    <span class="hljs-keyword">return</span> {<span class="hljs-string">"access_token"</span>: new_access_token, <span class="hljs-string">"token_type"</span>: <span class="hljs-string">"bearer"</span>}
+</div></code></pre>
+<hr>
+<h2 id="%F0%9F%9A%AA-5-logout-token-blacklist-optional">🚪 5. Logout (Token Blacklist Optional)</h2>
+<p>JWT is <strong>stateless</strong>, so logout = remove token client-side.</p>
+<p>But for extra security 🔐 you can:</p>
+<ul>
+<li>Maintain a <strong>blacklist of tokens</strong></li>
+<li>Invalidate tokens manually</li>
+</ul>
+<p>Example:</p>
+<pre class="hljs"><code><div>blacklisted_tokens = set()
+
+<span class="hljs-meta">@app.post("/logout")</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">logout</span><span class="hljs-params">(token: str = Depends<span class="hljs-params">(oauth2_scheme)</span>)</span>:</span>
+    blacklisted_tokens.add(token)
+    <span class="hljs-keyword">return</span> {<span class="hljs-string">"msg"</span>: <span class="hljs-string">"Logged out successfully"</span>}
+</div></code></pre>
+<p>Check if token is blacklisted before allowing access.</p>
+<hr>
+<h2 id="%F0%9F%A7%A9-6-role-based-access-control">🧩 6. Role-Based Access Control</h2>
+<p>Add role into JWT, then restrict route access:</p>
+<pre class="hljs"><code><div><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_current_user</span><span class="hljs-params">(token: str = Depends<span class="hljs-params">(oauth2_scheme)</span>)</span>:</span>
+    <span class="hljs-keyword">try</span>:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        username = payload.get(<span class="hljs-string">"sub"</span>)
+        role = payload.get(<span class="hljs-string">"role"</span>)
+    <span class="hljs-keyword">except</span> JWTError:
+        <span class="hljs-keyword">raise</span> HTTPException(status_code=<span class="hljs-number">401</span>, detail=<span class="hljs-string">"Invalid token"</span>)
+
+    <span class="hljs-keyword">return</span> {<span class="hljs-string">"username"</span>: username, <span class="hljs-string">"role"</span>: role}
+</div></code></pre>
+<h3 id="%F0%9F%A7%91%E2%80%8D%F0%9F%92%BC-restrict-route-to-admin-only">🧑‍💼 Restrict route to <code>admin</code> only:</h3>
+<pre class="hljs"><code><div><span class="hljs-meta">@app.get("/admin")</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">read_admin_data</span><span class="hljs-params">(user: dict = Depends<span class="hljs-params">(get_current_user)</span>)</span>:</span>
+    <span class="hljs-keyword">if</span> user[<span class="hljs-string">"role"</span>] != <span class="hljs-string">"admin"</span>:
+        <span class="hljs-keyword">raise</span> HTTPException(status_code=<span class="hljs-number">403</span>, detail=<span class="hljs-string">"Admins only 🛑"</span>)
+    <span class="hljs-keyword">return</span> {<span class="hljs-string">"msg"</span>: <span class="hljs-string">"Welcome, admin!"</span>}
+</div></code></pre>
+<hr>
+<h2 id="%F0%9F%A7%A0-visual-flowchart">🧠 Visual Flowchart</h2>
+<pre class="hljs"><code><div>[ Client UI ]
+   ↓
+POST /login
+(username, password)
+   ↓
+[ Server ]
+✔ Validate credentials
+✔ Generate:
+   - access_token (15 min)
+   - refresh_token (7d)
+   ↓
+Client stores tokens
+⇣
+------ API CALLS (Protected) ------
+GET /profile
+Authorization: Bearer access_token
+⇣
+[ Server ]
+✔ Decode access_token → Allow access
+🧠 If token expired → use refresh
+
+--- Refresh Flow ---
+POST /refresh
+(refresh_token)
+  ↓
+✔ Decode → Issue new access_token
+</div></code></pre>
+<hr>
+<h2 id="%F0%9F%92%A1-example-token-payload">💡 Example Token Payload</h2>
+<pre class="hljs"><code><div>{
+  <span class="hljs-attr">"sub"</span>: <span class="hljs-string">"johndoe"</span>,
+  <span class="hljs-attr">"role"</span>: <span class="hljs-string">"admin"</span>,
+  <span class="hljs-attr">"exp"</span>: <span class="hljs-number">1724352812</span>
+}
+</div></code></pre>
+<hr>
+<h2 id="%F0%9F%94%91-summary-table">🔑 Summary Table</h2>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Endpoint</th>
+<th>Token Used</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Login</td>
+<td><code>/login</code></td>
+<td>-</td>
+<td>Returns access + refresh tokens</td>
+</tr>
+<tr>
+<td>Access Protected Route</td>
+<td><code>/me</code>, <code>/admin</code></td>
+<td><code>access_token</code></td>
+<td>Must send in <code>Authorization</code> header</td>
+</tr>
+<tr>
+<td>Refresh Token</td>
+<td><code>/refresh</code></td>
+<td><code>refresh_token</code></td>
+<td>Returns new <code>access_token</code></td>
+</tr>
+<tr>
+<td>Logout</td>
+<td><code>/logout</code></td>
+<td>access_token</td>
+<td>Add to blacklist (optional)</td>
+</tr>
+<tr>
+<td>Role Protection</td>
+<td>any route</td>
+<td>with <code>role</code> in JWT</td>
+<td>Check <code>user[&quot;role&quot;]</code> in logic</td>
+</tr>
+</tbody>
+</table>
+<hr>
+
+</body>
+</html>

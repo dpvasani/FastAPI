@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>3. Routing.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h1 id="%F0%9F%9A%80-fastapi-project-refactoring-with-routers">🚀 FastAPI Project Refactoring with Routers</h1>
+<blockquote>
+<p>🌿 Modular Structure · 📁 Folder Setup · 📦 Multiple Routers · 🔁 Clean Architecture</p>
+</blockquote>
+<hr>
+<h2 id="%F0%9F%8C%9F-why-refactor-with-routers">🌟 Why Refactor with Routers?</h2>
+<p>FastAPI lets you split large applications into <strong>independent, reusable router modules</strong>.</p>
+<h3 id="%E2%9C%85-benefits">✅ Benefits:</h3>
+<ul>
+<li>🧼 Clean and readable <code>main.py</code></li>
+<li>🧪 Easy to test &amp; scale</li>
+<li>♻️ Promotes code reuse</li>
+<li>📚 Organized by features (e.g., users, products, auth)</li>
+</ul>
+<hr>
+<h2 id="%F0%9F%93%81-suggested-folder-structure-scalable">📁 Suggested Folder Structure (Scalable)</h2>
+<pre class="hljs"><code><div>fastapi_backend/
+│
+├── app/
+│   ├── main.py               # 🚀 Entry point
+│   ├── routers/              # 📦 All route files
+│   │   ├── __init__.py
+│   │   ├── users.py          # 👤 /users routes
+│   │   └── products.py       # 📦 /products routes
+│   ├── models/               # 📄 Pydantic schemas
+│   │   └── user.py
+│   ├── database/             # 🗃 DB connection/config
+│   │   └── db.py
+│   └── utils/                # 🛠 Helpers / validators
+│       └── helpers.py
+│
+├── requirements.txt
+└── venv/
+</div></code></pre>
+<hr>
+<h2 id="%F0%9F%94%A7-step-1-refactor-mainpy-to-include-routers">🔧 Step 1: Refactor <code>main.py</code> to Include Routers</h2>
+<pre class="hljs"><code><div><span class="hljs-comment"># app/main.py</span>
+
+<span class="hljs-keyword">from</span> fastapi <span class="hljs-keyword">import</span> FastAPI
+<span class="hljs-keyword">from</span> app.routers <span class="hljs-keyword">import</span> users, products
+
+app = FastAPI(title=<span class="hljs-string">"Modular FastAPI App"</span>)
+
+<span class="hljs-comment"># 👇 Include routers</span>
+app.include_router(users.router, prefix=<span class="hljs-string">"/users"</span>, tags=[<span class="hljs-string">"Users"</span>])
+app.include_router(products.router, prefix=<span class="hljs-string">"/products"</span>, tags=[<span class="hljs-string">"Products"</span>])
+</div></code></pre>
+<hr>
+<h2 id="%F0%9F%93%A6-step-2-create-first-router-%E2%80%93-userspy">📦 Step 2: Create First Router – <code>users.py</code></h2>
+<pre class="hljs"><code><div><span class="hljs-comment"># app/routers/users.py</span>
+
+<span class="hljs-keyword">from</span> fastapi <span class="hljs-keyword">import</span> APIRouter
+
+router = APIRouter()
+
+<span class="hljs-meta">@router.get("/")</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_all_users</span><span class="hljs-params">()</span>:</span>
+    <span class="hljs-keyword">return</span> [{<span class="hljs-string">"id"</span>: <span class="hljs-number">1</span>, <span class="hljs-string">"name"</span>: <span class="hljs-string">"Alice"</span>}, {<span class="hljs-string">"id"</span>: <span class="hljs-number">2</span>, <span class="hljs-string">"name"</span>: <span class="hljs-string">"Bob"</span>}]
+
+<span class="hljs-meta">@router.post("/")</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">create_user</span><span class="hljs-params">(name: str)</span>:</span>
+    <span class="hljs-keyword">return</span> {<span class="hljs-string">"msg"</span>: <span class="hljs-string">f"User '<span class="hljs-subst">{name}</span>' created"</span>}
+</div></code></pre>
+<h3 id="%F0%9F%93%8C-this-exposes">📌 This exposes:</h3>
+<ul>
+<li><code>GET /users/</code></li>
+<li><code>POST /users/</code></li>
+</ul>
+<hr>
+<h2 id="%F0%9F%93%A6-step-3-add-second-router-%E2%80%93-productspy">📦 Step 3: Add Second Router – <code>products.py</code></h2>
+<pre class="hljs"><code><div><span class="hljs-comment"># app/routers/products.py</span>
+
+<span class="hljs-keyword">from</span> fastapi <span class="hljs-keyword">import</span> APIRouter
+
+router = APIRouter()
+
+<span class="hljs-meta">@router.get("/")</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">list_products</span><span class="hljs-params">()</span>:</span>
+    <span class="hljs-keyword">return</span> [<span class="hljs-string">"Laptop"</span>, <span class="hljs-string">"Tablet"</span>, <span class="hljs-string">"Phone"</span>]
+
+<span class="hljs-meta">@router.post("/")</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">add_product</span><span class="hljs-params">(name: str)</span>:</span>
+    <span class="hljs-keyword">return</span> {<span class="hljs-string">"msg"</span>: <span class="hljs-string">f"Product '<span class="hljs-subst">{name}</span>' added"</span>}
+</div></code></pre>
+<h3 id="%F0%9F%93%8C-this-exposes">📌 This exposes:</h3>
+<ul>
+<li><code>GET /products/</code></li>
+<li><code>POST /products/</code></li>
+</ul>
+<hr>
+<h2 id="%F0%9F%93%98-summary-includerouter-parameters">📘 Summary: <code>include_router</code> Parameters</h2>
+<table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Example Value</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>router</code></td>
+<td><code>users.router</code></td>
+<td>Router object</td>
+</tr>
+<tr>
+<td><code>prefix</code></td>
+<td><code>&quot;/users&quot;</code></td>
+<td>URL path prefix</td>
+</tr>
+<tr>
+<td><code>tags</code></td>
+<td><code>[&quot;Users&quot;]</code></td>
+<td>Swagger tag grouping</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="%F0%9F%93%9A-swagger-ui-structure">📚 Swagger UI Structure</h2>
+<p>When you visit <code>http://127.0.0.1:8000/docs</code>, you’ll see:</p>
+<pre class="hljs"><code><div>📁 Users
+  - GET /users/
+  - POST /users/
+
+📁 Products
+  - GET /products/
+  - POST /products/
+</div></code></pre>
+<hr>
+<h2 id="%F0%9F%92%A1-pro-tip-reusability">💡 Pro Tip: Reusability</h2>
+<ul>
+<li>Each <code>router</code> file is like its own <strong>mini app</strong></li>
+<li>You can <strong>import it into other projects</strong> or mount it under different prefixes</li>
+<li>You can even use <strong>sub-routers</strong> for nested routes</li>
+</ul>
+<hr>
+<h2 id="%F0%9F%94%81-bonus-modularizing-further">🔁 Bonus: Modularizing Further</h2>
+<p>Add Pydantic validation, services, and database logic to separate files:</p>
+<ul>
+<li><code>/models/user.py</code>: for request &amp; response schemas</li>
+<li><code>/services/user_service.py</code>: for business logic</li>
+<li><code>/database/db.py</code>: DB connection</li>
+</ul>
+<hr>
+<h2 id="%F0%9F%93%A6-example-using-a-pydantic-model-in-userspy">📦 Example: Using a Pydantic Model in <code>users.py</code></h2>
+<pre class="hljs"><code><div><span class="hljs-comment"># app/models/user.py</span>
+
+<span class="hljs-keyword">from</span> pydantic <span class="hljs-keyword">import</span> BaseModel
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">UserCreate</span><span class="hljs-params">(BaseModel)</span>:</span>
+    name: str
+    email: str
+</div></code></pre>
+<pre class="hljs"><code><div><span class="hljs-comment"># app/routers/users.py</span>
+
+<span class="hljs-keyword">from</span> fastapi <span class="hljs-keyword">import</span> APIRouter
+<span class="hljs-keyword">from</span> app.models.user <span class="hljs-keyword">import</span> UserCreate
+
+router = APIRouter()
+
+<span class="hljs-meta">@router.post("/")</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">create_user</span><span class="hljs-params">(user: UserCreate)</span>:</span>
+    <span class="hljs-keyword">return</span> {<span class="hljs-string">"msg"</span>: <span class="hljs-string">f"User '<span class="hljs-subst">{user.name}</span>' created with email '<span class="hljs-subst">{user.email}</span>'"</span>}
+</div></code></pre>
+<p>✅ Automatically shows fields in Swagger
+✅ Auto-validates input and returns <code>422</code> on error</p>
+<hr>
+<h2 id="%F0%9F%A7%BE-final-recap-what-youve-learned">🧾 Final Recap: What You’ve Learned</h2>
+<table>
+<thead>
+<tr>
+<th>Concept</th>
+<th>Summary</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>APIRouter()</code></td>
+<td>Used to define routes in separate files</td>
+</tr>
+<tr>
+<td><code>include_router()</code></td>
+<td>Used in <code>main.py</code> to mount routers with prefixes</td>
+</tr>
+<tr>
+<td><code>prefix</code></td>
+<td>Base path for all routes in that router</td>
+</tr>
+<tr>
+<td><code>tags</code></td>
+<td>Group routes visually in Swagger UI</td>
+</tr>
+<tr>
+<td>Refactoring</td>
+<td>Makes code scalable, testable, clean</td>
+</tr>
+<tr>
+<td>Second Router</td>
+<td>Works exactly like the first – just plug &amp; play</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="fastapi-folder-structure">FastAPI folder structure</h2>
+<hr>
+<h2 id="%E2%9C%85-your-mern-stack-folder-recap-youtweetbackendsrc">✅ Your MERN Stack Folder Recap (<code>YouTweet/backend/src</code>):</h2>
+<pre class="hljs"><code><div>📁 src/
+│
+├── components/       → Reusable frontend components
+├── config/           → Config files (env, DB, etc.)
+├── controllers/      → Route logic (Express handlers)
+├── db/               → MongoDB connection
+├── middlewares/      → Express middleware (auth, error, etc.)
+├── models/           → Mongoose schemas
+├── pages/            → (Next.js / frontend routing - N/A in backend)
+├── routes/           → Express routes
+├── store/            → Redux store (frontend concern)
+├── utils/            → Utility functions
+├── app.js            → Express app
+├── index.js          → Entry point
+</div></code></pre>
+<hr>
+<h2 id="%E2%9A%99%EF%B8%8F-equivalent-fastapi-backend-structure">⚙️ Equivalent <strong>FastAPI Backend Structure</strong></h2>
+<pre class="hljs"><code><div>📁 app/
+│
+├── main.py                  <span class="hljs-comment"># Entry point (like `index.js`)</span>
+├── config/                  <span class="hljs-comment"># Env vars, DB URLs</span>
+│   └── settings.py
+│
+├── core/                    <span class="hljs-comment"># App configuration, startup logic</span>
+│   └── init_db.py
+│   └── security.py
+│
+├── api/                     <span class="hljs-comment"># Routers (like Express `routes/`)</span>
+│   ├── deps.py              <span class="hljs-comment"># Dependencies for routes</span>
+│   ├── v1/                  <span class="hljs-comment"># Versioned routes</span>
+│   │   ├── endpoints/
+│   │   │   ├── user.py
+│   │   │   └── auth.py
+│   │   └── api.py           <span class="hljs-comment"># Include all v1 routers</span>
+│
+├── models/                  <span class="hljs-comment"># SQLAlchemy / Pydantic models</span>
+│   ├── user.py
+│   └── tweet.py
+│
+├── schemas/                 <span class="hljs-comment"># Pydantic schemas (like Mongoose shape + Joi validation)</span>
+│   ├── user.py
+│   └── tweet.py
+│
+├── services/                <span class="hljs-comment"># Business logic (like controllers)</span>
+│   └── tweet_service.py
+│
+├── db/                      <span class="hljs-comment"># DB session, connection, migrations</span>
+│   ├── base.py
+│   └── session.py
+│
+├── middlewares/            <span class="hljs-comment"># Custom middlewares</span>
+│   └── error_handler.py
+│
+├── utils/                   <span class="hljs-comment"># Helper functions</span>
+│   └── hashing.py
+│
+├── static/                  <span class="hljs-comment"># Static files (like `public/`)</span>
+│
+└── .env
+</div></code></pre>
+<hr>
+<h2 id="%F0%9F%A7%A0-key-mappings-between-mern-and-fastapi">🧠 Key Mappings Between MERN and FastAPI</h2>
+<table>
+<thead>
+<tr>
+<th>MERN (Express.js)</th>
+<th>FastAPI Equivalent</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>routes/</code></td>
+<td><code>api/v1/endpoints/</code></td>
+<td>Use routers and include them</td>
+</tr>
+<tr>
+<td><code>controllers/</code></td>
+<td><code>services/</code></td>
+<td>Handles logic for routes</td>
+</tr>
+<tr>
+<td><code>models/</code> (Mongoose)</td>
+<td><code>models/</code> + <code>schemas/</code></td>
+<td>Use SQLAlchemy + Pydantic</td>
+</tr>
+<tr>
+<td><code>middlewares/</code></td>
+<td><code>middlewares/</code></td>
+<td>Custom middleware via <code>add_middleware</code></td>
+</tr>
+<tr>
+<td><code>config/</code></td>
+<td><code>config/</code> + <code>.env</code></td>
+<td><code>pydantic.BaseSettings</code> or <code>dynaconf</code></td>
+</tr>
+<tr>
+<td><code>utils/</code></td>
+<td><code>utils/</code></td>
+<td>Same utility concept</td>
+</tr>
+<tr>
+<td><code>app.js</code> or <code>index.js</code></td>
+<td><code>main.py</code></td>
+<td>Entry file, loads FastAPI app</td>
+</tr>
+<tr>
+<td><code>db/</code></td>
+<td><code>db/session.py</code>, <code>init_db</code></td>
+<td>For SQLAlchemy sessions</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="%F0%9F%A7%B0-tech-stack-used-in-fastapi-equivalent">🧰 Tech Stack Used in FastAPI Equivalent</h2>
+<table>
+<thead>
+<tr>
+<th>Concern</th>
+<th>Tool Used</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Routing</td>
+<td>FastAPI Routers</td>
+</tr>
+<tr>
+<td>Models (DB)</td>
+<td>SQLAlchemy</td>
+</tr>
+<tr>
+<td>Data Validation</td>
+<td>Pydantic</td>
+</tr>
+<tr>
+<td>Environment Handling</td>
+<td>Python-dotenv or Pydantic Settings</td>
+</tr>
+<tr>
+<td>Middleware</td>
+<td>FastAPI's <code>add_middleware</code></td>
+</tr>
+<tr>
+<td>Static Files</td>
+<td><code>app.mount(&quot;/static&quot;, ...)</code></td>
+</tr>
+<tr>
+<td>ORM Migrations</td>
+<td>Alembic (optional)</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="%F0%9F%92%A1-tips-for-scaling-like-mern">💡 Tips for Scaling Like MERN</h2>
+<ul>
+<li>Use <strong>versioned APIs</strong> in <code>api/v1/endpoints/</code></li>
+<li>Separate <strong>schemas</strong> (validation) from <strong>models</strong> (DB)</li>
+<li>Use <code>services/</code> layer to keep logic separate from route files</li>
+<li>Autoload routers using a single <code>api.py</code> file in <code>v1/</code></li>
+</ul>
+<hr>
+<h2 id="%F0%9F%A7%A9-1-folder-structure-express-like-in-fastapi">🧩 1. Folder Structure (Express-like in FastAPI)</h2>
+<p>Here's a folder structure mimicking a typical MERN backend:</p>
+<pre class="hljs"><code><div>you_tweet_fastapi_backend/
+│
+├── app/
+│   ├── main.py                 # Entry point
+│   ├── models/                 # Pydantic models / SQLAlchemy models
+│   │   └── user.py
+│   ├── routes/                 # Routers (like Express routes)
+│   │   ├── __init__.py
+│   │   ├── user.py             # All user-related routes
+│   │   └── tweet.py
+│   ├── services/               # Business logic
+│   └── database/               # DB config/connection
+│       └── db.py
+│
+└── requirements.txt
+</div></code></pre>
+<hr>
+<h2 id="%F0%9F%9A%80-2-how-to-create-modular-routers-with-prefix-and-tags">🚀 2. How to Create Modular Routers with Prefix and Tags</h2>
+<h3 id="%F0%9F%93%81-routesuserpy">📁 <code>routes/user.py</code></h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> fastapi <span class="hljs-keyword">import</span> APIRouter
+
+router = APIRouter(
+    prefix=<span class="hljs-string">"/users"</span>,
+    tags=[<span class="hljs-string">"Users"</span>]
+)
+
+<span class="hljs-meta">@router.get("/")</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_users</span><span class="hljs-params">()</span>:</span>
+    <span class="hljs-keyword">return</span> {<span class="hljs-string">"message"</span>: <span class="hljs-string">"Get all users"</span>}
+
+<span class="hljs-meta">@router.post("/register")</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">register_user</span><span class="hljs-params">()</span>:</span>
+    <span class="hljs-keyword">return</span> {<span class="hljs-string">"message"</span>: <span class="hljs-string">"Register a user"</span>}
+</div></code></pre>
+<hr>
+<h3 id="%F0%9F%93%81-routestweetpy">📁 <code>routes/tweet.py</code></h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> fastapi <span class="hljs-keyword">import</span> APIRouter
+
+router = APIRouter(
+    prefix=<span class="hljs-string">"/tweets"</span>,
+    tags=[<span class="hljs-string">"Tweets"</span>]
+)
+
+<span class="hljs-meta">@router.get("/")</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_tweets</span><span class="hljs-params">()</span>:</span>
+    <span class="hljs-keyword">return</span> {<span class="hljs-string">"message"</span>: <span class="hljs-string">"Get all tweets"</span>}
+
+<span class="hljs-meta">@router.post("/")</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">post_tweet</span><span class="hljs-params">()</span>:</span>
+    <span class="hljs-keyword">return</span> {<span class="hljs-string">"message"</span>: <span class="hljs-string">"Post a tweet"</span>}
+</div></code></pre>
+<hr>
+<h3 id="%F0%9F%93%84-mainpy-entry-point">📄 <code>main.py</code> (Entry Point)</h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> fastapi <span class="hljs-keyword">import</span> FastAPI
+<span class="hljs-keyword">from</span> app.routes <span class="hljs-keyword">import</span> user, tweet
+
+app = FastAPI()
+
+<span class="hljs-comment"># Include routers with shared prefix and tags</span>
+app.include_router(user.router)
+app.include_router(tweet.router)
+
+<span class="hljs-meta">@app.get("/")</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">root</span><span class="hljs-params">()</span>:</span>
+    <span class="hljs-keyword">return</span> {<span class="hljs-string">"message"</span>: <span class="hljs-string">"Welcome to YouTweet API"</span>}
+</div></code></pre>
+<hr>
+<h2 id="%F0%9F%93%98-3-output-in-swagger-ui">📘 3. Output in Swagger UI</h2>
+<p>Once you run:
+x</p>
+<pre class="hljs"><code><div>uvicorn app.main:app --reload
+</div></code></pre>
+<p>Open your browser at <a href="http://127.0.0.1:8000/docs">http://127.0.0.1:8000/docs</a> — you'll see the API docs grouped under:</p>
+<ul>
+<li>📁 <strong>Users</strong></li>
+<li>📁 <strong>Tweets</strong></li>
+</ul>
+<p>Each containing the relevant endpoints (<code>/users/</code>, <code>/tweets/</code>), just like you'd expect in Postman or Swagger in a Node.js project.</p>
+<hr>
+<h2 id="%F0%9F%8F%B7%EF%B8%8F-optional-add-dependencies-or-tags-per-operation">🏷️ Optional: Add Dependencies or Tags per Operation</h2>
+<pre class="hljs"><code><div><span class="hljs-meta">@router.get("/{user_id}", tags=["Users", "Get User by ID"])</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_user</span><span class="hljs-params">(user_id: int)</span>:</span>
+    ...
+</div></code></pre>
+<hr>
+<h1 id="%F0%9F%9A%A6-fastapi-routing-flow-%E2%80%93-full-guide">🚦 FastAPI Routing Flow – Full Guide</h1>
+<hr>
+<h2 id="%F0%9F%A7%B1-1-folder-structure">🧱 1. Folder Structure</h2>
+<p>A clean and modular FastAPI project typically looks like:</p>
+<pre class="hljs"><code><div>fastapi_app/
+├── main.py               # Entry point
+├── routers/
+│   ├── __init__.py
+│   ├── blog.py           # Blog-related routes
+│   └── user.py           # User-related routes
+├── models/
+│   └── blog.py           # Pydantic schemas
+├── database.py           # (Optional) DB config
+└── requirements.txt
+</div></code></pre>
+<hr>
+<h2 id="%F0%9F%93%8C-2-entry-point-mainpy">📌 2. Entry Point: <code>main.py</code></h2>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> fastapi <span class="hljs-keyword">import</span> FastAPI
+<span class="hljs-keyword">from</span> routers <span class="hljs-keyword">import</span> blog, user
+
+app = FastAPI(title=<span class="hljs-string">"My Blog API 🚀"</span>)
+
+<span class="hljs-comment"># Registering routers</span>
+app.include_router(blog.router, prefix=<span class="hljs-string">"/blog"</span>, tags=[<span class="hljs-string">"Blog"</span>])
+app.include_router(user.router, prefix=<span class="hljs-string">"/user"</span>, tags=[<span class="hljs-string">"User"</span>])
+
+<span class="hljs-meta">@app.get("/", tags=["Root"])</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">read_root</span><span class="hljs-params">()</span>:</span>
+    <span class="hljs-keyword">return</span> {<span class="hljs-string">"message"</span>: <span class="hljs-string">"Welcome to the Blog API!"</span>}
+</div></code></pre>
+<hr>
+<h2 id="%F0%9F%93%81-3-blog-router-routersblogpy">📁 3. Blog Router: <code>routers/blog.py</code></h2>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> fastapi <span class="hljs-keyword">import</span> APIRouter, Path, Query, Body
+<span class="hljs-keyword">from</span> pydantic <span class="hljs-keyword">import</span> BaseModel
+<span class="hljs-keyword">from</span> typing <span class="hljs-keyword">import</span> Optional
+
+router = APIRouter()
+
+<span class="hljs-comment"># Pydantic model</span>
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Blog</span><span class="hljs-params">(BaseModel)</span>:</span>
+    title: str
+    content: str
+    author: Optional[str] = <span class="hljs-string">"Anonymous"</span>
+
+<span class="hljs-meta">@router.get("/", summary="Get all blogs")</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_blogs</span><span class="hljs-params">(limit: int = Query<span class="hljs-params">(<span class="hljs-number">10</span>, description=<span class="hljs-string">"Limit number of blogs"</span>)</span>)</span>:</span>
+    <span class="hljs-keyword">return</span> {<span class="hljs-string">"message"</span>: <span class="hljs-string">f"<span class="hljs-subst">{limit}</span> blog(s) retrieved"</span>}
+
+<span class="hljs-meta">@router.get("/{id}", summary="Get blog by ID")</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_blog</span><span class="hljs-params">(id: int = Path<span class="hljs-params">(..., gt=<span class="hljs-number">0</span>)</span>)</span>:</span>
+    <span class="hljs-keyword">return</span> {<span class="hljs-string">"id"</span>: id, <span class="hljs-string">"title"</span>: <span class="hljs-string">"Sample Blog"</span>}
+
+<span class="hljs-meta">@router.post("/", summary="Create a new blog")</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">create_blog</span><span class="hljs-params">(blog: Blog = Body<span class="hljs-params">(...)</span>)</span>:</span>
+    <span class="hljs-keyword">return</span> {<span class="hljs-string">"message"</span>: <span class="hljs-string">"Blog created!"</span>, <span class="hljs-string">"data"</span>: blog}
+</div></code></pre>
+<hr>
+<h2 id="%F0%9F%93%81-4-user-router-routersuserpy">📁 4. User Router: <code>routers/user.py</code></h2>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> fastapi <span class="hljs-keyword">import</span> APIRouter
+<span class="hljs-keyword">from</span> pydantic <span class="hljs-keyword">import</span> BaseModel
+
+router = APIRouter()
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">User</span><span class="hljs-params">(BaseModel)</span>:</span>
+    username: str
+    email: str
+
+<span class="hljs-meta">@router.get("/", summary="List all users")</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">list_users</span><span class="hljs-params">()</span>:</span>
+    <span class="hljs-keyword">return</span> {<span class="hljs-string">"users"</span>: [<span class="hljs-string">"Darshan"</span>, <span class="hljs-string">"Alice"</span>, <span class="hljs-string">"Bob"</span>]}
+
+<span class="hljs-meta">@router.post("/", summary="Register a user")</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">register_user</span><span class="hljs-params">(user: User)</span>:</span>
+    <span class="hljs-keyword">return</span> {<span class="hljs-string">"message"</span>: <span class="hljs-string">f"User <span class="hljs-subst">{user.username}</span> registered!"</span>}
+</div></code></pre>
+<hr>
+<h2 id="%F0%9F%A7%A0-5-how-it-all-works">🧠 5. How It All Works</h2>
+<table>
+<thead>
+<tr>
+<th>FastAPI Concept</th>
+<th>Express Equivalent (MERN)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>APIRouter()</code></td>
+<td><code>express.Router()</code></td>
+</tr>
+<tr>
+<td><code>@app.include_router()</code></td>
+<td><code>app.use('/path', router)</code></td>
+</tr>
+<tr>
+<td><code>@router.get()</code> / <code>.post()</code></td>
+<td><code>router.get()</code>, <code>router.post()</code></td>
+</tr>
+<tr>
+<td><code>BaseModel</code> (Pydantic)</td>
+<td><code>Joi</code>, <code>mongoose.Schema</code></td>
+</tr>
+<tr>
+<td><code>Query</code>, <code>Path</code>, <code>Body</code></td>
+<td><code>req.query</code>, <code>req.params</code>, <code>req.body</code></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="%F0%9F%94%A5-bonus-swagger-docs">🔥 Bonus: Swagger Docs</h2>
+<p>When you run:</p>
+<pre class="hljs"><code><div>uvicorn main:app --reload
+</div></code></pre>
+<p>Open in browser:</p>
+<pre class="hljs"><code><div>http://127.0.0.1:8000/docs
+</div></code></pre>
+<p>You'll see:</p>
+<ul>
+<li>All routes grouped by <strong>tags</strong></li>
+<li>Metadata like <strong>summary</strong>, <strong>descriptions</strong>, <strong>examples</strong></li>
+<li>Built-in testing UI</li>
+</ul>
+<hr>
+<h2 id="%F0%9F%A7%AA-optional-add-response-model">🧪 Optional: Add Response Model</h2>
+<p>To enforce return type:</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> typing <span class="hljs-keyword">import</span> List
+
+<span class="hljs-meta">@router.get("/", response_model=List[Blog])</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_blogs</span><span class="hljs-params">()</span>:</span>
+    <span class="hljs-keyword">return</span> [
+        {<span class="hljs-string">"title"</span>: <span class="hljs-string">"One"</span>, <span class="hljs-string">"content"</span>: <span class="hljs-string">"First blog"</span>, <span class="hljs-string">"author"</span>: <span class="hljs-string">"Darshan"</span>},
+        {<span class="hljs-string">"title"</span>: <span class="hljs-string">"Two"</span>, <span class="hljs-string">"content"</span>: <span class="hljs-string">"Second blog"</span>}
+    ]
+</div></code></pre>
+<hr>
+<h2 id="%E2%9C%85-summary-routing-flow">✅ Summary Routing Flow</h2>
+<pre class="hljs"><code><div>main.py
+│
+├── Creates FastAPI app
+├── Includes modular routers with prefixes
+│
+├── /blog routes → handled in routers/blog.py
+├── /user routes → handled in routers/user.py
+│
+├── All routes auto-documented via Swagger UI
+</div></code></pre>
+<hr>
+<h2 id="%F0%9F%9B%A0-toolscommands">🛠 Tools/Commands</h2>
+<pre class="hljs"><code><div>uvicorn main:app --reload           <span class="hljs-comment"># Start dev server</span>
+pip install fastapi uvicorn         <span class="hljs-comment"># Install deps</span>
+</div></code></pre>
+<hr>
+
+</body>
+</html>

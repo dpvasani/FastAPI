@@ -1,0 +1,1393 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>7. Concepts.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h1 id="%E2%9A%A1-fastapi-other-concepts-overview">⚡ FastAPI Other Concepts Overview</h1>
+<hr>
+<h2 id="%F0%9F%9A%A8-1-error-handling-in-fastapi">🚨 1. Error Handling in FastAPI</h2>
+<h3 id="%E2%9C%85-built-in-exception-handling">✅ Built-in Exception Handling</h3>
+<p>FastAPI provides built-in exceptions like <code>HTTPException</code>.</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> fastapi <span class="hljs-keyword">import</span> FastAPI, HTTPException
+
+app = FastAPI()
+
+<span class="hljs-meta">@app.get("/item/{item_id}")</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">read_item</span><span class="hljs-params">(item_id: int)</span>:</span>
+    <span class="hljs-keyword">if</span> item_id == <span class="hljs-number">0</span>:
+        <span class="hljs-keyword">raise</span> HTTPException(status_code=<span class="hljs-number">404</span>, detail=<span class="hljs-string">"Item not found 🚫"</span>)
+    <span class="hljs-keyword">return</span> {<span class="hljs-string">"item_id"</span>: item_id}
+</div></code></pre>
+<h3 id="%E2%9C%85-custom-exception-handling">✅ Custom Exception Handling</h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> fastapi <span class="hljs-keyword">import</span> Request
+<span class="hljs-keyword">from</span> fastapi.responses <span class="hljs-keyword">import</span> JSONResponse
+<span class="hljs-keyword">from</span> fastapi.exceptions <span class="hljs-keyword">import</span> RequestValidationError
+
+<span class="hljs-meta">@app.exception_handler(RequestValidationError)</span>
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">validation_exception_handler</span><span class="hljs-params">(request: Request, exc: RequestValidationError)</span>:</span>
+    <span class="hljs-keyword">return</span> JSONResponse(
+        status_code=<span class="hljs-number">422</span>,
+        content={<span class="hljs-string">"message"</span>: <span class="hljs-string">"Validation failed 😵"</span>, <span class="hljs-string">"details"</span>: exc.errors()},
+    )
+</div></code></pre>
+<h3 id="%F0%9F%94%90-best-practices">🔐 Best Practices</h3>
+<ul>
+<li>Use descriptive <code>detail</code> in errors.</li>
+<li>Handle common errors (e.g., 404, 400, 500) globally.</li>
+<li>Avoid leaking sensitive info in error messages.</li>
+</ul>
+<hr>
+<h2 id="%F0%9F%93%AC-2-custom-responses">📬 2. Custom Responses</h2>
+<h3 id="%E2%9C%85-using-jsonresponse-htmlresponse-plaintextresponse">✅ Using <code>JSONResponse</code>, <code>HTMLResponse</code>, <code>PlainTextResponse</code></h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> fastapi.responses <span class="hljs-keyword">import</span> JSONResponse, HTMLResponse, PlainTextResponse
+
+<span class="hljs-meta">@app.get("/json")</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">custom_json</span><span class="hljs-params">()</span>:</span>
+    <span class="hljs-keyword">return</span> JSONResponse(content={<span class="hljs-string">"msg"</span>: <span class="hljs-string">"Hello JSON 👋"</span>})
+
+<span class="hljs-meta">@app.get("/html")</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">custom_html</span><span class="hljs-params">()</span>:</span>
+    <span class="hljs-keyword">return</span> HTMLResponse(content=<span class="hljs-string">"&lt;h1&gt;Hello HTML 🧑‍💻&lt;/h1&gt;"</span>)
+
+<span class="hljs-meta">@app.get("/text")</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">custom_text</span><span class="hljs-params">()</span>:</span>
+    <span class="hljs-keyword">return</span> PlainTextResponse(content=<span class="hljs-string">"Hello Text 📝"</span>)
+</div></code></pre>
+<h3 id="%F0%9F%94%90-best-practices">🔐 Best Practices</h3>
+<ul>
+<li>Use appropriate content types.</li>
+<li>Set custom status codes when needed (<code>status_code=201</code>).</li>
+<li>Always document your custom responses using <code>@app.get(..., responses={})</code>.</li>
+</ul>
+<hr>
+<h2 id="%F0%9F%A7%BE-3-headers-in-fastapi">🧾 3. Headers in FastAPI</h2>
+<h3 id="%E2%9C%85-accessing-request-headers">✅ Accessing Request Headers</h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> fastapi <span class="hljs-keyword">import</span> Header
+
+<span class="hljs-meta">@app.get("/headers/")</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">read_headers</span><span class="hljs-params">(user_agent: str = Header<span class="hljs-params">(...)</span>)</span>:</span>
+    <span class="hljs-keyword">return</span> {<span class="hljs-string">"User-Agent"</span>: user_agent}
+</div></code></pre>
+<h3 id="%E2%9C%85-setting-response-headers">✅ Setting Response Headers</h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> fastapi.responses <span class="hljs-keyword">import</span> Response
+
+<span class="hljs-meta">@app.get("/set-header/")</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">custom_header</span><span class="hljs-params">(response: Response)</span>:</span>
+    response.headers[<span class="hljs-string">"X-Custom-Header"</span>] = <span class="hljs-string">"FastAPI ❤️"</span>
+    <span class="hljs-keyword">return</span> {<span class="hljs-string">"message"</span>: <span class="hljs-string">"Custom header sent!"</span>}
+</div></code></pre>
+<h3 id="%F0%9F%94%90-best-practices">🔐 Best Practices</h3>
+<ul>
+<li>Avoid sensitive data in headers.</li>
+<li>Use standard naming conventions (<code>X-Custom-Header</code>, etc).</li>
+</ul>
+<hr>
+<h2 id="%F0%9F%8D%AA-4-cookies-in-fastapi">🍪 4. Cookies in FastAPI</h2>
+<h3 id="%E2%9C%85-setting-cookies">✅ Setting Cookies</h3>
+<pre class="hljs"><code><div><span class="hljs-meta">@app.get("/set-cookie/")</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">set_cookie</span><span class="hljs-params">(response: Response)</span>:</span>
+    response.set_cookie(key=<span class="hljs-string">"session_id"</span>, value=<span class="hljs-string">"abc123"</span>, httponly=<span class="hljs-literal">True</span>)
+    <span class="hljs-keyword">return</span> {<span class="hljs-string">"message"</span>: <span class="hljs-string">"🍪 Cookie set!"</span>}
+</div></code></pre>
+<h3 id="%E2%9C%85-reading-cookies">✅ Reading Cookies</h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> fastapi <span class="hljs-keyword">import</span> Cookie
+
+<span class="hljs-meta">@app.get("/get-cookie/")</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_cookie</span><span class="hljs-params">(session_id: str = Cookie<span class="hljs-params">(None)</span>)</span>:</span>
+    <span class="hljs-keyword">return</span> {<span class="hljs-string">"session_id"</span>: session_id}
+</div></code></pre>
+<h3 id="%F0%9F%94%90-best-practices">🔐 Best Practices</h3>
+<ul>
+<li>Use <code>httponly=True</code> to prevent JavaScript access.</li>
+<li>Set <code>secure=True</code> for HTTPS.</li>
+<li>Prefer JWTs or sessions over plain cookies.</li>
+</ul>
+<hr>
+<h2 id="%F0%9F%A7%BE-5-form-data-handling">🧾 5. Form Data Handling</h2>
+<h3 id="%E2%9C%85-receiving-form-data">✅ Receiving Form Data</h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> fastapi <span class="hljs-keyword">import</span> Form
+
+<span class="hljs-meta">@app.post("/login/")</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">login</span><span class="hljs-params">(username: str = Form<span class="hljs-params">(...)</span>, password: str = Form<span class="hljs-params">(...)</span>)</span>:</span>
+    <span class="hljs-keyword">return</span> {<span class="hljs-string">"username"</span>: username, <span class="hljs-string">"message"</span>: <span class="hljs-string">"Login form submitted ✅"</span>}
+</div></code></pre>
+<h3 id="%F0%9F%94%90-best-practices">🔐 Best Practices</h3>
+<ul>
+<li>Always use <code>Form</code> for <code>x-www-form-urlencoded</code> POST data.</li>
+<li>Use HTTPS to protect credentials.</li>
+<li>Consider CSRF protection for forms in production apps.</li>
+</ul>
+<hr>
+<h2 id="%F0%9F%94%84-6-cors-cross-origin-resource-sharing">🔄 6. CORS (Cross-Origin Resource Sharing)</h2>
+<h3 id="%E2%9C%85-enable-cors-middleware">✅ Enable CORS Middleware</h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> fastapi.middleware.cors <span class="hljs-keyword">import</span> CORSMiddleware
+
+app = FastAPI()
+
+origins = [
+    <span class="hljs-string">"http://localhost:3000"</span>,  <span class="hljs-comment"># React frontend</span>
+    <span class="hljs-string">"https://myapp.com"</span>,      <span class="hljs-comment"># Production domain</span>
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,          <span class="hljs-comment"># or ["*"] for all</span>
+    allow_credentials=<span class="hljs-literal">True</span>,
+    allow_methods=[<span class="hljs-string">"*"</span>],
+    allow_headers=[<span class="hljs-string">"*"</span>],
+)
+</div></code></pre>
+<h3 id="%F0%9F%94%90-best-practices">🔐 Best Practices</h3>
+<ul>
+<li>In production, restrict <code>allow_origins</code> to known domains.</li>
+<li>Don’t use <code>[&quot;*&quot;]</code> for <code>allow_credentials=True</code> (violates spec).</li>
+<li>Allow only necessary headers and methods.</li>
+</ul>
+<hr>
+<h2 id="%F0%9F%94%81-flow-overview-diagram-text-based">🔁 Flow Overview Diagram (Text-Based)</h2>
+<pre class="hljs"><code><div>Frontend 🔄 ⟶ CORS Middleware 🌍
+          ⬇
+     FastAPI Endpoint 🧠
+          ⬇
+   - Read Headers/Cookies
+   - Parse Form Data
+   - Handle Errors (Custom/Built-in)
+   - Generate Response
+          ⬇
+    Response with Headers/Cookies 🔙
+</div></code></pre>
+<hr>
+<h2 id="%F0%9F%93%9A-summary-table">📚 Summary Table</h2>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Module</th>
+<th>Key Functionality</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Error Handling</td>
+<td><code>HTTPException</code>, <code>exception_handler()</code></td>
+<td>Global &amp; custom error responses</td>
+</tr>
+<tr>
+<td>Custom Responses</td>
+<td><code>JSONResponse</code>, <code>HTMLResponse</code></td>
+<td>Control response format and headers</td>
+</tr>
+<tr>
+<td>Headers</td>
+<td><code>Header</code>, <code>Response.headers</code></td>
+<td>Read and write HTTP headers</td>
+</tr>
+<tr>
+<td>Cookies</td>
+<td><code>Cookie</code>, <code>response.set_cookie()</code></td>
+<td>Store sessions or metadata in cookies</td>
+</tr>
+<tr>
+<td>Form Data</td>
+<td><code>Form</code></td>
+<td>Parse form submissions</td>
+</tr>
+<tr>
+<td>CORS</td>
+<td><code>CORSMiddleware</code></td>
+<td>Secure frontend-backend communication</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="%E2%9C%85-final-best-practices-checklist">✅ Final Best Practices Checklist</h2>
+<ul>
+<li><input type="checkbox" id="checkbox0" checked="true"><label for="checkbox0">🔐 Handle all exceptions gracefully.</label></li>
+<li><input type="checkbox" id="checkbox1" checked="true"><label for="checkbox1">💬 Provide meaningful error messages.</label></li>
+<li><input type="checkbox" id="checkbox2" checked="true"><label for="checkbox2">📦 Use correct response types.</label></li>
+<li><input type="checkbox" id="checkbox3" checked="true"><label for="checkbox3">🧁 Handle cookies with security flags (</label><code>HttpOnly</code>, <code>Secure</code>).</li>
+<li><input type="checkbox" id="checkbox4" checked="true"><label for="checkbox4">📨 Use CORS to secure frontend-backend interaction.</label></li>
+<li><input type="checkbox" id="checkbox5" checked="true"><label for="checkbox5">🧾 Validate all form and query data.</label></li>
+</ul>
+<hr>
+<h1 id="%F0%9F%8C%90-http-status-codes-cheat-sheet-with-fastapi-%F0%9F%92%A1">🌐 HTTP Status Codes Cheat Sheet with FastAPI 💡</h1>
+<hr>
+<h2 id="%F0%9F%94%B5-1xx--informational-responses">🔵 1xx — <strong>INFORMATIONAL RESPONSES</strong></h2>
+<blockquote>
+<p>✅ Request received, continuing process.</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>Code</th>
+<th>Meaning</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>100</td>
+<td>Continue</td>
+<td>Client should continue the request.</td>
+</tr>
+<tr>
+<td>101</td>
+<td>Switching Protocols</td>
+<td>Server agrees to change protocols.</td>
+</tr>
+<tr>
+<td>102</td>
+<td>Processing (WebDAV)</td>
+<td>Server has accepted request but not completed it.</td>
+</tr>
+</tbody>
+</table>
+<p>🧠 <strong>FastAPI Tip</strong>: Rarely used directly.</p>
+<hr>
+<h2 id="%F0%9F%9F%A2-2xx--successful-responses">🟢 2xx — <strong>SUCCESSFUL RESPONSES</strong></h2>
+<blockquote>
+<p>🎉 The request was successfully received, understood, and accepted.</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>Code</th>
+<th>Meaning</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>200</td>
+<td>OK</td>
+<td>Standard success for GET/PUT/DELETE.</td>
+</tr>
+<tr>
+<td>201</td>
+<td>Created</td>
+<td>Used after successful POST (e.g., resource created).</td>
+</tr>
+<tr>
+<td>202</td>
+<td>Accepted</td>
+<td>Request accepted but not completed yet.</td>
+</tr>
+<tr>
+<td>204</td>
+<td>No Content</td>
+<td>Success, but no response body (e.g., DELETE).</td>
+</tr>
+</tbody>
+</table>
+<p>📦 <strong>FastAPI Usage Example</strong>:</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> fastapi <span class="hljs-keyword">import</span> status
+
+<span class="hljs-meta">@app.post("/user", status_code=status.HTTP_201_CREATED)</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">create_user</span><span class="hljs-params">()</span>:</span> 
+    <span class="hljs-keyword">return</span> {<span class="hljs-string">"message"</span>: <span class="hljs-string">"User created ✅"</span>}
+</div></code></pre>
+<hr>
+<h2 id="%F0%9F%9F%A1-3xx--redirection-messages">🟡 3xx — <strong>REDIRECTION MESSAGES</strong></h2>
+<blockquote>
+<p>🔁 The client must take additional action.</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>Code</th>
+<th>Meaning</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>301</td>
+<td>Moved Permanently</td>
+<td>Resource has a new URL. Update your links!</td>
+</tr>
+<tr>
+<td>302</td>
+<td>Found (Temporary)</td>
+<td>Temporarily moved to another URI.</td>
+</tr>
+<tr>
+<td>304</td>
+<td>Not Modified</td>
+<td>Cached version can be used.</td>
+</tr>
+<tr>
+<td>307</td>
+<td>Temporary Redirect</td>
+<td>Like 302 but preserves method (POST/GET).</td>
+</tr>
+<tr>
+<td>308</td>
+<td>Permanent Redirect</td>
+<td>Like 301 but with method preservation.</td>
+</tr>
+</tbody>
+</table>
+<p>📦 <strong>FastAPI Example</strong>:</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> fastapi.responses <span class="hljs-keyword">import</span> RedirectResponse
+
+<span class="hljs-meta">@app.get("/old-link")</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">old_link</span><span class="hljs-params">()</span>:</span>
+    <span class="hljs-keyword">return</span> RedirectResponse(url=<span class="hljs-string">"/new-link"</span>, status_code=<span class="hljs-number">307</span>)
+</div></code></pre>
+<hr>
+<h2 id="%F0%9F%94%B4-4xx--client-error-responses">🔴 4xx — <strong>CLIENT ERROR RESPONSES</strong></h2>
+<blockquote>
+<p>🚫 The request contains bad syntax or cannot be fulfilled.</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>Code</th>
+<th>Meaning</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>400</td>
+<td>Bad Request</td>
+<td>Client error (validation, format, etc).</td>
+</tr>
+<tr>
+<td>401</td>
+<td>Unauthorized</td>
+<td>Authentication required.</td>
+</tr>
+<tr>
+<td>403</td>
+<td>Forbidden</td>
+<td>Authenticated but not allowed.</td>
+</tr>
+<tr>
+<td>404</td>
+<td>Not Found</td>
+<td>Resource doesn’t exist.</td>
+</tr>
+<tr>
+<td>405</td>
+<td>Method Not Allowed</td>
+<td>Method (GET/POST/etc) not supported.</td>
+</tr>
+<tr>
+<td>409</td>
+<td>Conflict</td>
+<td>Resource conflict (duplicate user, etc).</td>
+</tr>
+<tr>
+<td>422</td>
+<td>Unprocessable Entity</td>
+<td>Validation failed (e.g., FastAPI Pydantic errors).</td>
+</tr>
+<tr>
+<td>429</td>
+<td>Too Many Requests</td>
+<td>Rate limit hit.</td>
+</tr>
+</tbody>
+</table>
+<p>📦 <strong>FastAPI Example (422 Validation)</strong>:</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> fastapi <span class="hljs-keyword">import</span> HTTPException
+
+<span class="hljs-meta">@app.post("/login")</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">login</span><span class="hljs-params">(username: str)</span>:</span>
+    <span class="hljs-keyword">if</span> username == <span class="hljs-string">""</span>:
+        <span class="hljs-keyword">raise</span> HTTPException(status_code=<span class="hljs-number">400</span>, detail=<span class="hljs-string">"Username is required 🚫"</span>)
+</div></code></pre>
+<hr>
+<h2 id="%F0%9F%94%A5-5xx--server-error-responses">🔥 5xx — <strong>SERVER ERROR RESPONSES</strong></h2>
+<blockquote>
+<p>💥 The server failed to fulfill a valid request.</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>Code</th>
+<th>Meaning</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>500</td>
+<td>Internal Server Error</td>
+<td>Generic server error.</td>
+</tr>
+<tr>
+<td>501</td>
+<td>Not Implemented</td>
+<td>Server doesn't support the requested feature.</td>
+</tr>
+<tr>
+<td>502</td>
+<td>Bad Gateway</td>
+<td>Invalid response from upstream server.</td>
+</tr>
+<tr>
+<td>503</td>
+<td>Service Unavailable</td>
+<td>Server is down or overloaded.</td>
+</tr>
+<tr>
+<td>504</td>
+<td>Gateway Timeout</td>
+<td>Upstream server timed out.</td>
+</tr>
+</tbody>
+</table>
+<p>📦 <strong>FastAPI Example (500 Error)</strong>:</p>
+<pre class="hljs"><code><div><span class="hljs-meta">@app.get("/crash")</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">cause_crash</span><span class="hljs-params">()</span>:</span>
+    <span class="hljs-keyword">raise</span> Exception(<span class="hljs-string">"💥 Boom! Something broke."</span>)
+</div></code></pre>
+<hr>
+<h2 id="%F0%9F%9A%A6-frequently-used-http-status-codes-dev-cheatsheet">🚦 Frequently Used HTTP Status Codes (Dev Cheatsheet)</h2>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Codes</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>✅ Success</td>
+<td><code>200</code>, <code>201</code>, <code>204</code></td>
+<td>Standard API success responses.</td>
+</tr>
+<tr>
+<td>❌ Client</td>
+<td><code>400</code>, <code>401</code>, <code>403</code>, <code>404</code>, <code>422</code></td>
+<td>Validation and auth errors.</td>
+</tr>
+<tr>
+<td>🔁 Redirect</td>
+<td><code>301</code>, <code>302</code>, <code>307</code>, <code>308</code></td>
+<td>Redirection flows.</td>
+</tr>
+<tr>
+<td>🧯 Server</td>
+<td><code>500</code>, <code>503</code></td>
+<td>Server crash or overload.</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="%F0%9F%A7%AA-fastapi-usage-summary">🧪 FastAPI Usage Summary</h2>
+<p>✅ You can use <strong>status codes</strong> directly via:</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> fastapi <span class="hljs-keyword">import</span> status
+
+<span class="hljs-meta">@app.post("/resource", status_code=status.HTTP_201_CREATED)</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">create</span><span class="hljs-params">()</span>:</span>
+    <span class="hljs-keyword">return</span> {<span class="hljs-string">"msg"</span>: <span class="hljs-string">"Created"</span>}
+</div></code></pre>
+<p>Or set manually in <code>JSONResponse</code>:</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> fastapi.responses <span class="hljs-keyword">import</span> JSONResponse
+
+<span class="hljs-keyword">return</span> JSONResponse(
+    status_code=<span class="hljs-number">404</span>,
+    content={<span class="hljs-string">"success"</span>: <span class="hljs-literal">False</span>, <span class="hljs-string">"message"</span>: <span class="hljs-string">"Not Found"</span>}
+)
+</div></code></pre>
+<hr>
+<h2 id="%E2%9C%85-best-practices-summary">✅ Best Practices Summary</h2>
+<ul>
+<li>🎯 Always return proper status codes based on result.</li>
+<li>🔒 Use 401 for auth and 403 for access control.</li>
+<li>📭 Use 422 for form/Pydantic validation errors.</li>
+<li>💬 Combine with <code>ApiResponse</code> or <code>ApiException</code> classes for consistent shape.</li>
+<li>🚨 Never expose stack traces or sensitive data in error responses in production.</li>
+</ul>
+<hr>
+<h2 id="%F0%9F%A7%AF-1-error-handling-in-fastapi">🧯 1. Error Handling in FastAPI</h2>
+<h3 id="%F0%9F%94%B9-custom-exception-classes">🔹 Custom Exception Classes</h3>
+<pre class="hljs"><code><div><span class="hljs-comment"># 👾 Define a custom exception</span>
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">StoryException</span><span class="hljs-params">(Exception)</span>:</span>
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__init__</span><span class="hljs-params">(self, name: str)</span>:</span>
+        self.name = name
+</div></code></pre>
+<h3 id="%F0%9F%94%B9-add-exception-handler">🔹 Add Exception Handler</h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> fastapi <span class="hljs-keyword">import</span> Request
+<span class="hljs-keyword">from</span> fastapi.responses <span class="hljs-keyword">import</span> JSONResponse
+
+<span class="hljs-meta">@app.exception_handler(StoryException)</span>
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">story_exception_handler</span><span class="hljs-params">(request: Request, exc: StoryException)</span>:</span>
+    <span class="hljs-keyword">return</span> JSONResponse(
+        status_code=<span class="hljs-number">418</span>,  <span class="hljs-comment"># 🔥 Custom status code</span>
+        content={<span class="hljs-string">"detail"</span>: <span class="hljs-string">f"Oops! <span class="hljs-subst">{exc.name}</span> caused an issue ☠️"</span>}
+    )
+</div></code></pre>
+<h3 id="%E2%9C%85-usage">✅ Usage</h3>
+<pre class="hljs"><code><div><span class="hljs-meta">@app.get("/story/")</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_story</span><span class="hljs-params">(flag: bool = False)</span>:</span>
+    <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> flag:
+        <span class="hljs-keyword">raise</span> StoryException(name=<span class="hljs-string">"Missing Story Flag 🏳️"</span>)
+    <span class="hljs-keyword">return</span> {<span class="hljs-string">"message"</span>: <span class="hljs-string">"Here's your story! 📖"</span>}
+</div></code></pre>
+<hr>
+<h2 id="%F0%9F%93%A6-2-custom-response">📦 2. Custom Response</h2>
+<h3 id="%F0%9F%94%B9-plaintextresponse-htmlresponse-fileresponse">🔹 PlainTextResponse, HTMLResponse, FileResponse</h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> fastapi.responses <span class="hljs-keyword">import</span> HTMLResponse, PlainTextResponse
+
+<span class="hljs-meta">@app.get("/html", response_class=HTMLResponse)</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_html</span><span class="hljs-params">()</span>:</span>
+    <span class="hljs-keyword">return</span> <span class="hljs-string">"&lt;h1&gt;Hello 🌍, this is raw HTML!&lt;/h1&gt;"</span>
+
+<span class="hljs-meta">@app.get("/text", response_class=PlainTextResponse)</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_text</span><span class="hljs-params">()</span>:</span>
+    <span class="hljs-keyword">return</span> <span class="hljs-string">"This is plain text ✉️"</span>
+</div></code></pre>
+<h3 id="%F0%9F%94%B9-fileresponse-download-files">🔹 FileResponse (Download files)</h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> fastapi.responses <span class="hljs-keyword">import</span> FileResponse
+
+<span class="hljs-meta">@app.get("/download")</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">download_file</span><span class="hljs-params">()</span>:</span>
+    <span class="hljs-keyword">return</span> FileResponse(<span class="hljs-string">"my_resume.pdf"</span>, media_type=<span class="hljs-string">'application/pdf'</span>, filename=<span class="hljs-string">"Resume.pdf"</span>)
+</div></code></pre>
+<hr>
+<h2 id="%F0%9F%A7%BE-3-headers">🧾 3. Headers</h2>
+<h3 id="%F0%9F%94%B9-access-headers-from-request">🔹 Access Headers from Request</h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> fastapi <span class="hljs-keyword">import</span> Request
+
+<span class="hljs-meta">@app.get("/headers/")</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">read_headers</span><span class="hljs-params">(request: Request)</span>:</span>
+    headers = request.headers
+    user_agent = headers.get(<span class="hljs-string">"user-agent"</span>)
+    <span class="hljs-keyword">return</span> {<span class="hljs-string">"user_agent"</span>: user_agent}
+</div></code></pre>
+<h3 id="%F0%9F%94%B9-send-custom-headers-in-response">🔹 Send Custom Headers in Response</h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> fastapi.responses <span class="hljs-keyword">import</span> JSONResponse
+
+<span class="hljs-meta">@app.get("/custom-header")</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">custom_header</span><span class="hljs-params">()</span>:</span>
+    content = {<span class="hljs-string">"message"</span>: <span class="hljs-string">"Hello with headers!"</span>}
+    headers = {<span class="hljs-string">"X-Powered-By"</span>: <span class="hljs-string">"FastAPI ⚡"</span>}
+    <span class="hljs-keyword">return</span> JSONResponse(content=content, headers=headers)
+</div></code></pre>
+<hr>
+<h2 id="%F0%9F%8D%AA-4-cookies">🍪 4. Cookies</h2>
+<h3 id="%F0%9F%94%B9-set-a-cookie-%F0%9F%8D%AA">🔹 Set a Cookie 🍪</h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> fastapi <span class="hljs-keyword">import</span> Response
+
+<span class="hljs-meta">@app.get("/set-cookie")</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">set_cookie</span><span class="hljs-params">(response: Response)</span>:</span>
+    response.set_cookie(key=<span class="hljs-string">"token"</span>, value=<span class="hljs-string">"abc123"</span>)
+    <span class="hljs-keyword">return</span> {<span class="hljs-string">"message"</span>: <span class="hljs-string">"Cookie set ✅"</span>}
+</div></code></pre>
+<h3 id="%F0%9F%94%B9-read-a-cookie">🔹 Read a Cookie</h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> fastapi <span class="hljs-keyword">import</span> Cookie
+
+<span class="hljs-meta">@app.get("/get-cookie")</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_cookie</span><span class="hljs-params">(token: str = Cookie<span class="hljs-params">(default=None)</span>)</span>:</span>
+    <span class="hljs-keyword">return</span> {<span class="hljs-string">"your_token"</span>: token}
+</div></code></pre>
+<hr>
+<h2 id="%F0%9F%93%9D-5-form-data">📝 5. Form Data</h2>
+<p>Used in <strong>HTML forms</strong> and <code>application/x-www-form-urlencoded</code> requests.</p>
+<h3 id="%F0%9F%94%B9-form-parsing-with-form">🔹 Form Parsing with <code>Form</code></h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> fastapi <span class="hljs-keyword">import</span> Form
+
+<span class="hljs-meta">@app.post("/login")</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">login</span><span class="hljs-params">(username: str = Form<span class="hljs-params">(...)</span>, password: str = Form<span class="hljs-params">(...)</span>)</span>:</span>
+    <span class="hljs-keyword">return</span> {<span class="hljs-string">"username"</span>: username, <span class="hljs-string">"message"</span>: <span class="hljs-string">"Logged in ✅"</span>}
+</div></code></pre>
+<p>📌 <code>Form(...)</code> means the field is <strong>required</strong>.</p>
+<hr>
+<h2 id="%F0%9F%94%84-6-cors-cross-origin-resource-sharing">🔄 6. CORS (Cross-Origin Resource Sharing)</h2>
+<h3 id="%F0%9F%94%90-what-is-cors">🔐 What is CORS?</h3>
+<p>CORS controls who can access your API. It’s especially important when frontend (e.g., React) is hosted on a different domain than backend (FastAPI).</p>
+<h3 id="%F0%9F%94%B9-enable-cors-middleware">🔹 Enable CORS Middleware</h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> fastapi.middleware.cors <span class="hljs-keyword">import</span> CORSMiddleware
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[<span class="hljs-string">"*"</span>],  <span class="hljs-comment"># Or restrict to ["https://your-frontend.com"]</span>
+    allow_credentials=<span class="hljs-literal">True</span>,
+    allow_methods=[<span class="hljs-string">"*"</span>],
+    allow_headers=[<span class="hljs-string">"*"</span>],
+)
+</div></code></pre>
+<hr>
+<h2 id="%F0%9F%8E%93-summary-table">🎓 Summary Table</h2>
+<table>
+<thead>
+<tr>
+<th>Topic</th>
+<th>Use Case</th>
+<th>Key Function/Class</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Error Handling</td>
+<td>Custom errors &amp; responses</td>
+<td><code>@app.exception_handler</code></td>
+</tr>
+<tr>
+<td>Custom Response</td>
+<td>Return HTML, Text, Files</td>
+<td><code>HTMLResponse</code>, <code>FileResponse</code></td>
+</tr>
+<tr>
+<td>Headers</td>
+<td>Metadata from client or sent by server</td>
+<td><code>request.headers</code>, <code>JSONResponse(headers=...)</code></td>
+</tr>
+<tr>
+<td>Cookies</td>
+<td>Session or auth tokens</td>
+<td><code>response.set_cookie()</code>, <code>Cookie()</code></td>
+</tr>
+<tr>
+<td>Form Data</td>
+<td>HTML form submissions</td>
+<td><code>Form()</code></td>
+</tr>
+<tr>
+<td>CORS</td>
+<td>Allow cross-origin frontend requests</td>
+<td><code>CORSMiddleware</code></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="%F0%9F%9A%A8-fastapi--exceptions--error-handling">🚨 FastAPI — Exceptions &amp; Error Handling</h2>
+<hr>
+<h3 id="%F0%9F%94%B9-what-are-exceptions">🔹 What Are Exceptions?</h3>
+<blockquote>
+<p>Exceptions in FastAPI allow us to <strong>notify the client</strong> that <strong>something went wrong</strong> in a clean and structured way.</p>
+</blockquote>
+<p>📌 When you <code>raise</code> an exception, it <strong>stops the execution</strong> of your code at that point and returns a well-defined <strong>error response</strong> to the client.</p>
+<hr>
+<h2 id="%F0%9F%A7%B1-built-in-exception--httpexception">🧱 Built-in Exception — <code>HTTPException</code></h2>
+<p>FastAPI provides a <strong>built-in exception</strong>:</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> fastapi <span class="hljs-keyword">import</span> HTTPException
+</div></code></pre>
+<hr>
+<h3 id="%F0%9F%A7%91%E2%80%8D%F0%9F%92%BB-example-raise-a-404-not-found-error">🧑‍💻 Example: Raise a 404 Not Found Error</h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> fastapi <span class="hljs-keyword">import</span> FastAPI, HTTPException
+
+app = FastAPI()
+
+fake_users_db = {<span class="hljs-string">"1"</span>: <span class="hljs-string">"Alice"</span>, <span class="hljs-string">"2"</span>: <span class="hljs-string">"Bob"</span>}
+
+<span class="hljs-meta">@app.get("/user/{user_id}")</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_user</span><span class="hljs-params">(user_id: str)</span>:</span>
+    user = fake_users_db.get(user_id)
+    <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> user:
+        <span class="hljs-comment"># 🚨 Raise an HTTP Exception</span>
+        <span class="hljs-keyword">raise</span> HTTPException(
+            status_code=<span class="hljs-number">404</span>,  <span class="hljs-comment"># Not Found ❌</span>
+            detail=<span class="hljs-string">f"User with id <span class="hljs-subst">{user_id}</span> not found"</span>
+        )
+    <span class="hljs-keyword">return</span> {<span class="hljs-string">"user"</span>: user}
+</div></code></pre>
+<hr>
+<h3 id="%F0%9F%94%8D-output-if-user-not-found">🔍 Output If User Not Found:</h3>
+<pre class="hljs"><code><div>{
+  <span class="hljs-attr">"detail"</span>: <span class="hljs-string">"User with id 6 not found"</span>
+}
+</div></code></pre>
+<p>🧠 Explanation:</p>
+<ul>
+<li><code>status_code=404</code>: Tells the client this is a <strong>&quot;Not Found&quot;</strong> error.</li>
+<li><code>detail</code>: Gives human-readable error info.</li>
+<li>✅ FastAPI automatically structures this as a proper JSON error response.</li>
+</ul>
+<hr>
+<h2 id="%F0%9F%94%A2-common-http-status-codes">🔢 Common HTTP Status Codes</h2>
+<table>
+<thead>
+<tr>
+<th>Code</th>
+<th>Name</th>
+<th>Use Case</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>400</td>
+<td>Bad Request</td>
+<td>Invalid input, wrong format 🚫</td>
+</tr>
+<tr>
+<td>401</td>
+<td>Unauthorized</td>
+<td>Missing or bad auth header 🔐</td>
+</tr>
+<tr>
+<td>403</td>
+<td>Forbidden</td>
+<td>Valid credentials, but access denied 🚷</td>
+</tr>
+<tr>
+<td>404</td>
+<td>Not Found</td>
+<td>Resource doesn't exist 🔎</td>
+</tr>
+<tr>
+<td>409</td>
+<td>Conflict</td>
+<td>Duplicate resource or version clash ⚔️</td>
+</tr>
+<tr>
+<td>422</td>
+<td>Unprocessable Entity</td>
+<td>Validation errors (FastAPI default) ❌</td>
+</tr>
+<tr>
+<td>500</td>
+<td>Internal Server Error</td>
+<td>Server-side crash 💥</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="%F0%9F%8E%AF-best-practice-raise-early">🎯 Best Practice: Raise Early</h2>
+<p>✅ Raising exceptions early prevents further code from executing.
+Example:</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> valid_data:
+    <span class="hljs-keyword">raise</span> HTTPException(status_code=<span class="hljs-number">400</span>, detail=<span class="hljs-string">"Invalid input data 🧨"</span>)
+<span class="hljs-comment"># ⛔ this line won't run if exception is raised</span>
+</div></code></pre>
+<hr>
+<h2 id="%E2%9C%8D%EF%B8%8F-custom-exception-example-optional">✍️ Custom Exception Example (Optional)</h2>
+<p>For more structured error handling:</p>
+<pre class="hljs"><code><div><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyCustomError</span><span class="hljs-params">(Exception)</span>:</span>
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__init__</span><span class="hljs-params">(self, name: str)</span>:</span>
+        self.name = name
+
+<span class="hljs-meta">@app.exception_handler(MyCustomError)</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">my_custom_handler</span><span class="hljs-params">(request, exc: MyCustomError)</span>:</span>
+    <span class="hljs-keyword">return</span> JSONResponse(status_code=<span class="hljs-number">418</span>, content={<span class="hljs-string">"detail"</span>: <span class="hljs-string">f"Oops! <span class="hljs-subst">{exc.name}</span> is invalid 🚫"</span>})
+</div></code></pre>
+<hr>
+<h2 id="%F0%9F%93%A6-summary">📦 Summary</h2>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>HTTPException</code></td>
+<td>FastAPI’s built-in error-raising mechanism</td>
+</tr>
+<tr>
+<td><code>status_code</code></td>
+<td>HTTP status (e.g. 404 for Not Found)</td>
+</tr>
+<tr>
+<td><code>detail</code></td>
+<td>Message shown to the client</td>
+</tr>
+<tr>
+<td>Stops execution</td>
+<td>Yes — further code won’t run after <code>raise</code></td>
+</tr>
+<tr>
+<td>Returns JSON response</td>
+<td>Yes — structured automatically by FastAPI</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="%F0%9F%A7%A0-real-world-use-case">🧠 Real-World Use Case</h2>
+<pre class="hljs"><code><div><span class="hljs-meta">@app.get("/product/{product_id}")</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_product</span><span class="hljs-params">(product_id: int)</span>:</span>
+    product = db.get_product_by_id(product_id)
+    <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> product:
+        <span class="hljs-keyword">raise</span> HTTPException(
+            status_code=<span class="hljs-number">404</span>,
+            detail=<span class="hljs-string">f"Product with id <span class="hljs-subst">{product_id}</span> not found 😔"</span>
+        )
+    <span class="hljs-keyword">return</span> product
+</div></code></pre>
+<hr>
+<h1 id="%F0%9F%9A%80-fastapi--deep-dive-into-response-handling">🚀 FastAPI — Deep Dive into Response Handling</h1>
+<hr>
+<h2 id="%F0%9F%A7%B5-1-%E2%9C%85-standard-response">🧵 1. ✅ Standard Response</h2>
+<p>FastAPI allows returning any of the following as a valid response:</p>
+<p>✅ Python Types → Automatically converted into JSON by FastAPI</p>
+<ul>
+<li><code>dict</code></li>
+<li><code>list</code></li>
+<li><code>pydantic models</code></li>
+<li><code>ORM objects</code> (if serialized)</li>
+<li>Even <code>str</code>, <code>int</code>, etc.</li>
+</ul>
+<pre class="hljs"><code><div><span class="hljs-meta">@app.get("/greet")</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">greet</span><span class="hljs-params">()</span>:</span>
+    <span class="hljs-keyword">return</span> {<span class="hljs-string">"message"</span>: <span class="hljs-string">"Hello, FastAPI 👋"</span>}
+</div></code></pre>
+<p>FastAPI ⏩ Automatically converts this dict into:</p>
+<pre class="hljs"><code><div>{
+  <span class="hljs-attr">"message"</span>: <span class="hljs-string">"Hello, FastAPI 👋"</span>
+}
+</div></code></pre>
+<hr>
+<h2 id="%F0%9F%A7%8A-2-%F0%9F%94%A7-customizing-response">🧊 2. 🔧 Customizing <code>Response</code></h2>
+<p>Use <code>fastapi.responses.Response</code> or <code>HTMLResponse</code>, <code>PlainTextResponse</code>, etc., to <strong>manually control</strong> what gets returned.</p>
+<h3 id="example-return-html-content">Example: Return HTML Content</h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> fastapi.responses <span class="hljs-keyword">import</span> Response
+
+<span class="hljs-meta">@app.get("/html")</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_html</span><span class="hljs-params">()</span>:</span>
+    html = <span class="hljs-string">"&lt;h1&gt;🚀 Welcome to FastAPI&lt;/h1&gt;"</span>
+    <span class="hljs-keyword">return</span> Response(content=html, media_type=<span class="hljs-string">"text/html"</span>)
+</div></code></pre>
+<h3 id="why-use-custom-response">Why use Custom Response?</h3>
+<p>✅ Full control over:</p>
+<ul>
+<li><code>Headers</code></li>
+<li><code>Cookies</code></li>
+<li><code>Streaming</code></li>
+<li><code>Media Type</code> (HTML, XML, JSON, etc.)</li>
+<li>No auto data conversion</li>
+<li>Better docs + Swagger behavior</li>
+</ul>
+<hr>
+<h2 id="%F0%9F%A7%83-3-types-of-responses">🧃 3. Types of Responses</h2>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Class</th>
+<th>Use case</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>text/plain</code></td>
+<td><code>PlainTextResponse</code></td>
+<td>Return plain text 📃</td>
+</tr>
+<tr>
+<td><code>text/html</code></td>
+<td><code>HTMLResponse</code></td>
+<td>Render raw HTML content 🌐</td>
+</tr>
+<tr>
+<td><code>application/xml</code></td>
+<td><code>Response(media_type=&quot;application/xml&quot;)</code></td>
+<td>For XML APIs 🧾</td>
+</tr>
+<tr>
+<td><code>application/json</code></td>
+<td>Default</td>
+<td>JSON APIs</td>
+</tr>
+<tr>
+<td>Files</td>
+<td><code>FileResponse</code></td>
+<td>Serve static files 📂</td>
+</tr>
+<tr>
+<td>Streaming</td>
+<td><code>StreamingResponse</code></td>
+<td>Big file/data streaming 💾</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="%F0%9F%93%AC-4-add-request-headers">📬 4. Add Request Headers</h2>
+<p>You can <strong>read headers</strong> sent by the client using the <code>Header</code> class.</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> fastapi <span class="hljs-keyword">import</span> Header
+<span class="hljs-keyword">from</span> typing <span class="hljs-keyword">import</span> Optional
+
+<span class="hljs-meta">@app.get("/")</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_with_header</span><span class="hljs-params">(custom_header: Optional[str] = Header<span class="hljs-params">(None)</span>)</span>:</span>
+    <span class="hljs-keyword">return</span> {<span class="hljs-string">"Received-Header"</span>: custom_header}
+</div></code></pre>
+<p>🔁 Converts <code>custom-header</code> automatically from <code>custom_header</code>.</p>
+<h3 id="%F0%9F%93%A5-list-of-headers">📥 List of Headers</h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> typing <span class="hljs-keyword">import</span> List
+
+<span class="hljs-meta">@app.get("/")</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_headers</span><span class="hljs-params">(custom_header: Optional[List[str]] = Header<span class="hljs-params">(None)</span>)</span>:</span>
+    <span class="hljs-keyword">return</span> {<span class="hljs-string">"custom_header"</span>: custom_header}
+</div></code></pre>
+<hr>
+<h2 id="%F0%9F%93%A4-5-set-custom-response-headers">📤 5. Set Custom Response Headers</h2>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> fastapi <span class="hljs-keyword">import</span> Response
+
+<span class="hljs-meta">@app.get("/users")</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_all_users</span><span class="hljs-params">(response: Response)</span>:</span>
+    response.headers[<span class="hljs-string">"x-custom-header"</span>] = <span class="hljs-string">"abc123"</span>
+    <span class="hljs-keyword">return</span> {<span class="hljs-string">"users"</span>: [<span class="hljs-string">"Alice"</span>, <span class="hljs-string">"Bob"</span>]}
+</div></code></pre>
+<p>✅ Add metadata, tracking ID, token expiry info, etc.</p>
+<hr>
+<h2 id="%F0%9F%8D%AA-6-cookies">🍪 6. Cookies</h2>
+<p>Cookies = tiny pieces of info stored on client browsers.</p>
+<h3 id="%F0%9F%94%B8-set-cookie">🔸 Set Cookie</h3>
+<pre class="hljs"><code><div><span class="hljs-meta">@app.get("/set-cookie")</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">set_cookie</span><span class="hljs-params">(response: Response)</span>:</span>
+    response.set_cookie(key=<span class="hljs-string">"cookie"</span>, value=<span class="hljs-string">"test-cookie-value 🍪"</span>)
+    <span class="hljs-keyword">return</span> {<span class="hljs-string">"message"</span>: <span class="hljs-string">"Cookie has been set"</span>}
+</div></code></pre>
+<h3 id="%F0%9F%94%B8-get-cookie">🔸 Get Cookie</h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> fastapi <span class="hljs-keyword">import</span> Cookie
+
+<span class="hljs-meta">@app.get("/get-cookie")</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_cookie</span><span class="hljs-params">(cookie: Optional[str] = Cookie<span class="hljs-params">(None)</span>)</span>:</span>
+    <span class="hljs-keyword">return</span> {<span class="hljs-string">"Your cookie value"</span>: cookie}
+</div></code></pre>
+<hr>
+<h2 id="%F0%9F%93%9D-7-form-data-html">📝 7. Form Data (HTML)</h2>
+<p>Used in frontend <code>&lt;form&gt;</code> submissions.</p>
+<pre class="hljs"><code><div><span class="hljs-tag">&lt;<span class="hljs-name">form</span> <span class="hljs-attr">method</span>=<span class="hljs-string">"post"</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"username"</span> /&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"password"</span> /&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">form</span>&gt;</span>
+</div></code></pre>
+<h3 id="%F0%9F%93%A5-read-form-data">📥 Read Form Data</h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> fastapi <span class="hljs-keyword">import</span> Form
+
+<span class="hljs-meta">@app.post("/login")</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">login</span><span class="hljs-params">(username: str = Form<span class="hljs-params">(...)</span>, password: str = Form<span class="hljs-params">(...)</span>)</span>:</span>
+    <span class="hljs-keyword">return</span> {<span class="hljs-string">"username"</span>: username}
+</div></code></pre>
+<p>🛑 Media Type = <code>application/x-www-form-urlencoded</code> or <code>multipart/form-data</code> (for files)</p>
+<hr>
+<h2 id="%F0%9F%94%80-8-cors-cross-origin-resource-sharing">🔀 8. CORS (Cross-Origin Resource Sharing)</h2>
+<p>💡 Allows your backend (e.g., <code>localhost:8000</code>) to talk to a frontend on another domain (e.g., <code>localhost:3000</code>)</p>
+<h3 id="enable-cors">Enable CORS</h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> fastapi.middleware.cors <span class="hljs-keyword">import</span> CORSMiddleware
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[<span class="hljs-string">"http://localhost:3000"</span>],  <span class="hljs-comment"># frontend</span>
+    allow_credentials=<span class="hljs-literal">True</span>,
+    allow_methods=[<span class="hljs-string">"*"</span>],
+    allow_headers=[<span class="hljs-string">"*"</span>],
+)
+</div></code></pre>
+<h3 id="%F0%9F%A7%A0-why">🧠 Why?</h3>
+<p>Without this, browsers block cross-origin AJAX calls due to <strong>same-origin policy</strong>.</p>
+<hr>
+<h2 id="%F0%9F%A7%A0-summary-cheat-sheet">🧠 Summary Cheat Sheet</h2>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Class/Function</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Return JSON</td>
+<td>default</td>
+<td>JSON APIs</td>
+</tr>
+<tr>
+<td>HTML response</td>
+<td><code>Response(..., &quot;text/html&quot;)</code></td>
+<td>Web rendering</td>
+</tr>
+<tr>
+<td>Custom headers</td>
+<td><code>Response.headers[...]</code></td>
+<td>Add metadata</td>
+</tr>
+<tr>
+<td>Read headers</td>
+<td><code>Header(...)</code></td>
+<td>Accept client headers</td>
+</tr>
+<tr>
+<td>Set cookies</td>
+<td><code>response.set_cookie()</code></td>
+<td>Store info on client</td>
+</tr>
+<tr>
+<td>Read cookies</td>
+<td><code>Cookie(...)</code></td>
+<td>Access client-side cookies</td>
+</tr>
+<tr>
+<td>Form data</td>
+<td><code>Form(...)</code></td>
+<td>Read HTML form input</td>
+</tr>
+<tr>
+<td>CORS</td>
+<td><code>CORSMiddleware</code></td>
+<td>Allow frontend-backend bridge</td>
+</tr>
+</tbody>
+</table>
+<hr>
+
+</body>
+</html>

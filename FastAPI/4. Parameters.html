@@ -1,0 +1,1188 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>4. Parameters.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h1 id="%F0%9F%A7%A0-fastapi-parameters--request-body-%E2%80%93-full-deep-dive-%F0%9F%9A%80">🧠 FastAPI Parameters &amp; Request Body – Full Deep Dive 🚀</h1>
+<p>FastAPI makes parameter handling intuitive, type-safe, and well-documented. Let's break down everything!</p>
+<hr>
+<h2 id="%F0%9F%94%B8-1-path--query-parameters">🔸 1. Path &amp; Query Parameters</h2>
+<h3 id="%E2%9C%85-path-parameters">✅ Path Parameters</h3>
+<p>Defined in the URL path like <code>/items/{item_id}</code>.</p>
+<pre class="hljs"><code><div><span class="hljs-meta">@app.get("/items/{item_id}")</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">read_item</span><span class="hljs-params">(item_id: int)</span>:</span>
+    <span class="hljs-keyword">return</span> {<span class="hljs-string">"item_id"</span>: item_id}
+</div></code></pre>
+<ul>
+<li><code>item_id</code> is <strong>mandatory</strong></li>
+<li>Automatically converted to <code>int</code></li>
+</ul>
+<hr>
+<h3 id="%E2%9C%85-query-parameters">✅ Query Parameters</h3>
+<p>Passed via the URL like <code>/items?name=phone</code>.</p>
+<pre class="hljs"><code><div><span class="hljs-meta">@app.get("/items/")</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">read_item</span><span class="hljs-params">(name: str, price: float = <span class="hljs-number">0.0</span>)</span>:</span>
+    <span class="hljs-keyword">return</span> {<span class="hljs-string">"name"</span>: name, <span class="hljs-string">"price"</span>: price}
+</div></code></pre>
+<ul>
+<li><strong>Optional</strong> if default value is provided</li>
+<li>FastAPI infers types and validates them</li>
+</ul>
+<hr>
+<h2 id="%F0%9F%94%B8-2-request-body-%F0%9F%A7%BE">🔸 2. Request Body 🧾</h2>
+<p>Used to send JSON, Form data, etc.</p>
+<h3 id="%E2%9C%85-example-with-pydantic-model">✅ Example with Pydantic Model:</h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> pydantic <span class="hljs-keyword">import</span> BaseModel
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Item</span><span class="hljs-params">(BaseModel)</span>:</span>
+    name: str
+    price: float
+    in_stock: bool
+
+<span class="hljs-meta">@app.post("/items/")</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">create_item</span><span class="hljs-params">(item: Item)</span>:</span>
+    <span class="hljs-keyword">return</span> {<span class="hljs-string">"received"</span>: item}
+</div></code></pre>
+<ul>
+<li>
+<p>Sends JSON like:</p>
+<pre class="hljs"><code><div>{
+  <span class="hljs-attr">"name"</span>: <span class="hljs-string">"Phone"</span>,
+  <span class="hljs-attr">"price"</span>: <span class="hljs-number">299.99</span>,
+  <span class="hljs-attr">"in_stock"</span>: <span class="hljs-literal">true</span>
+}
+</div></code></pre>
+</li>
+<li>
+<p>Automatic validation + documentation</p>
+</li>
+</ul>
+<hr>
+<h2 id="%F0%9F%94%B8-3-parameter-metadata-%F0%9F%8F%B7%EF%B8%8F">🔸 3. Parameter Metadata 🏷️</h2>
+<p>Use <code>Query()</code>, <code>Path()</code>, and <code>Body()</code> to add <strong>validation and metadata</strong>.</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> fastapi <span class="hljs-keyword">import</span> Query, Path
+
+<span class="hljs-meta">@app.get("/products/{product_id}")</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_product</span><span class="hljs-params">(
+    product_id: int = Path<span class="hljs-params">(..., title=<span class="hljs-string">"The ID of the product"</span>, gt=<span class="hljs-number">0</span>)</span>,
+    name: str = Query<span class="hljs-params">(None, max_length=<span class="hljs-number">50</span>)</span>
+)</span>:</span>
+    <span class="hljs-keyword">return</span> {<span class="hljs-string">"product_id"</span>: product_id, <span class="hljs-string">"name"</span>: name}
+</div></code></pre>
+<h3 id="%F0%9F%94%96-common-metadata-options">🔖 Common metadata options:</h3>
+<ul>
+<li><code>title</code>: Adds a title in Swagger UI</li>
+<li><code>description</code>: Tooltip in docs</li>
+<li><code>alias</code>: Alternate key</li>
+<li><code>deprecated=True</code>: Warns in docs</li>
+<li><code>example</code>: Shown as input sample</li>
+</ul>
+<hr>
+<h2 id="%F0%9F%94%B8-4-validators-%F0%9F%9B%A1%EF%B8%8F">🔸 4. Validators 🛡️</h2>
+<p>Validation happens <strong>automatically</strong> via:</p>
+<ul>
+<li>Type hints (<code>str</code>, <code>int</code>)</li>
+<li><code>Pydantic</code> models</li>
+<li><code>Query</code>, <code>Path</code>, <code>Body</code> metadata</li>
+</ul>
+<p>You can also <strong>custom validate</strong> inside models:</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> pydantic <span class="hljs-keyword">import</span> BaseModel, validator
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Product</span><span class="hljs-params">(BaseModel)</span>:</span>
+    name: str
+    price: float
+
+<span class="hljs-meta">    @validator("price")</span>
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">price_positive</span><span class="hljs-params">(cls, value)</span>:</span>
+        <span class="hljs-keyword">if</span> value &lt;= <span class="hljs-number">0</span>:
+            <span class="hljs-keyword">raise</span> ValueError(<span class="hljs-string">"Price must be positive"</span>)
+        <span class="hljs-keyword">return</span> value
+</div></code></pre>
+<hr>
+<h2 id="%F0%9F%94%B8-5-multiple-values-%F0%9F%93%9A">🔸 5. Multiple Values 📚</h2>
+<p>Query parameters can accept multiple values (like a list):</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> typing <span class="hljs-keyword">import</span> List
+
+<span class="hljs-meta">@app.get("/search/")</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">search_items</span><span class="hljs-params">(tags: List[str] = Query<span class="hljs-params">([])</span>)</span>:</span>
+    <span class="hljs-keyword">return</span> {<span class="hljs-string">"tags"</span>: tags}
+</div></code></pre>
+<p>👉 Accessed via <code>/search?tags=tech&amp;tags=fastapi</code></p>
+<hr>
+<h2 id="%F0%9F%94%B8-6-number-validators-%F0%9F%94%A2">🔸 6. Number Validators 🔢</h2>
+<p>Use built-in constraints for validation:</p>
+<pre class="hljs"><code><div><span class="hljs-meta">@app.get("/range/")</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_range</span><span class="hljs-params">(
+    num: int = Query<span class="hljs-params">(..., gt=<span class="hljs-number">10</span>, lt=<span class="hljs-number">100</span>)</span>
+)</span>:</span>
+    <span class="hljs-keyword">return</span> {<span class="hljs-string">"num"</span>: num}
+</div></code></pre>
+<h3 id="%F0%9F%94%A2-available">🔢 Available:</h3>
+<ul>
+<li><code>gt</code> / <code>ge</code>: Greater than / Greater or equal</li>
+<li><code>lt</code> / <code>le</code>: Less than / Less or equal</li>
+<li><code>multiple_of</code>: Must be divisible</li>
+</ul>
+<hr>
+<h2 id="%F0%9F%94%B8-7-complex-subtypes-%F0%9F%A7%AC">🔸 7. Complex Subtypes 🧬</h2>
+<p>Nested models, deeply structured request bodies:</p>
+<pre class="hljs"><code><div><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Features</span><span class="hljs-params">(BaseModel)</span>:</span>
+    size: str
+    color: str
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Product</span><span class="hljs-params">(BaseModel)</span>:</span>
+    name: str
+    price: float
+    features: Features
+
+<span class="hljs-meta">@app.post("/products/")</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">create_product</span><span class="hljs-params">(product: Product)</span>:</span>
+    <span class="hljs-keyword">return</span> {<span class="hljs-string">"product"</span>: product}
+</div></code></pre>
+<p>✅ Swagger UI automatically nests the structure.</p>
+<hr>
+<h2 id="%E2%9C%85-bonus-mixing-all-three-%E2%80%93-path-query-and-body">✅ Bonus: Mixing All Three – Path, Query, and Body</h2>
+<pre class="hljs"><code><div><span class="hljs-meta">@app.put("/products/{product_id}")</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">update_product</span><span class="hljs-params">(
+    product_id: int = Path<span class="hljs-params">(...)</span>,
+    available: bool = Query<span class="hljs-params">(...)</span>,
+    product: Product = Body<span class="hljs-params">(...)</span>
+)</span>:</span>
+    <span class="hljs-keyword">return</span> {
+        <span class="hljs-string">"id"</span>: product_id,
+        <span class="hljs-string">"available"</span>: available,
+        <span class="hljs-string">"details"</span>: product
+    }
+</div></code></pre>
+<hr>
+<h2 id="%F0%9F%A7%A0-summary-table">🧠 Summary Table</h2>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Example</th>
+<th>Tool Used</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Path Param</td>
+<td><code>/items/{id}</code></td>
+<td><code>Path()</code></td>
+</tr>
+<tr>
+<td>Query Param</td>
+<td><code>/items?name=x</code></td>
+<td><code>Query()</code></td>
+</tr>
+<tr>
+<td>Request Body</td>
+<td>JSON payload</td>
+<td><code>Body()</code>, Model</td>
+</tr>
+<tr>
+<td>Metadata</td>
+<td>Titles, defaults, constraints</td>
+<td><code>Path()</code>, <code>Query()</code></td>
+</tr>
+<tr>
+<td>List Values</td>
+<td><code>/tags?tag=x&amp;tag=y</code></td>
+<td><code>List[str]</code></td>
+</tr>
+<tr>
+<td>Validators</td>
+<td>price &gt; 0, name length, etc.</td>
+<td><code>Pydantic</code>, <code>Query()</code></td>
+</tr>
+<tr>
+<td>Number Constraints</td>
+<td>gt, lt, multiple_of</td>
+<td><code>Query()</code>, <code>Path()</code></td>
+</tr>
+<tr>
+<td>Nested Structures</td>
+<td>Models inside Models</td>
+<td>Pydantic</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="%F0%9F%94%A5-pro-tips">🔥 Pro Tips</h2>
+<ul>
+<li>Use <code>Optional[]</code> or default <code>None</code> to make parameters optional.</li>
+<li>Use <code>Body(embed=True)</code> if you want request body as a single object like: <code>{ &quot;item&quot;: { ... } }</code></li>
+<li>Use <code>Enum</code> for fixed choices in query/path params.</li>
+<li>Use <code>response_model=YourModel</code> to enforce response types.</li>
+</ul>
+<hr>
+<h1 id="%F0%9F%93%98-fastapi-parameter-metadata-deep-dive">📘 FastAPI: Parameter Metadata Deep Dive</h1>
+<p>FastAPI allows you to <strong>add metadata</strong> to your endpoint parameters using special helper functions:</p>
+<ul>
+<li><code>Query()</code> – for query parameters</li>
+<li><code>Path()</code> – for path parameters</li>
+<li><code>Body()</code> – for request bodies</li>
+</ul>
+<p>This metadata:</p>
+<ul>
+<li>Adds <strong>validation rules</strong></li>
+<li>Enhances the <strong>Swagger docs</strong></li>
+<li>Helps set <strong>default values</strong>, <strong>examples</strong>, <strong>constraints</strong>, and more</li>
+</ul>
+<hr>
+<h2 id="1%EF%B8%8F%E2%83%A3-using-query-%E2%80%93-for-query-parameters">1️⃣ Using <code>Query()</code> – For Query Parameters</h2>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> fastapi <span class="hljs-keyword">import</span> Query
+
+<span class="hljs-meta">@app.get("/items/")</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">read_items</span><span class="hljs-params">(
+    q: str = Query<span class="hljs-params">(
+        default=<span class="hljs-string">"test"</span>,
+        title=<span class="hljs-string">"Query string"</span>,
+        description=<span class="hljs-string">"Search string for the items"</span>,
+        min_length=<span class="hljs-number">3</span>,
+        max_length=<span class="hljs-number">50</span>,
+        example=<span class="hljs-string">"mobile"</span>
+    )</span>
+)</span>:</span>
+    <span class="hljs-keyword">return</span> {<span class="hljs-string">"q"</span>: q}
+</div></code></pre>
+<h3 id="%E2%9C%85-what-it-does">✅ What it does:</h3>
+<ul>
+<li><code>q</code> is a <strong>query param</strong>: <code>/items?q=mobile</code></li>
+<li>Metadata like <code>title</code>, <code>description</code>, etc., appear in the <strong>Swagger UI</strong></li>
+<li>Validates string length (<code>min_length</code>, <code>max_length</code>)</li>
+<li>Sets default to <code>&quot;test&quot;</code> if not provided</li>
+</ul>
+<hr>
+<h2 id="2%EF%B8%8F%E2%83%A3-using-path-%E2%80%93-for-path-parameters">2️⃣ Using <code>Path()</code> – For Path Parameters</h2>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> fastapi <span class="hljs-keyword">import</span> Path
+
+<span class="hljs-meta">@app.get("/products/{product_id}")</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_product</span><span class="hljs-params">(
+    product_id: int = Path<span class="hljs-params">(
+        ...,  <span class="hljs-comment"># Required</span>
+        title=<span class="hljs-string">"Product ID"</span>,
+        description=<span class="hljs-string">"The ID of the product to retrieve"</span>,
+        gt=<span class="hljs-number">0</span>,  <span class="hljs-comment"># must be &gt; 0</span>
+        example=<span class="hljs-number">100</span>
+    )</span>
+)</span>:</span>
+    <span class="hljs-keyword">return</span> {<span class="hljs-string">"product_id"</span>: product_id}
+</div></code></pre>
+<h3 id="%E2%9C%85-notes">✅ Notes:</h3>
+<ul>
+<li><code>...</code> = required (no default)</li>
+<li>Adds <strong>validation</strong> (<code>gt=0</code>)</li>
+<li><code>example</code> is shown in Swagger</li>
+</ul>
+<hr>
+<h2 id="3%EF%B8%8F%E2%83%A3-using-body-%E2%80%93-for-request-body-parameters">3️⃣ Using <code>Body()</code> – For Request Body Parameters</h2>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> fastapi <span class="hljs-keyword">import</span> Body
+<span class="hljs-keyword">from</span> pydantic <span class="hljs-keyword">import</span> BaseModel
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Blog</span><span class="hljs-params">(BaseModel)</span>:</span>
+    title: str
+    content: str
+
+<span class="hljs-meta">@app.post("/blogs/")</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">create_blog</span><span class="hljs-params">(
+    blog: Blog = Body<span class="hljs-params">(
+        ...,
+        title=<span class="hljs-string">"Blog Body"</span>,
+        description=<span class="hljs-string">"The body of the blog post"</span>,
+        example={
+            <span class="hljs-string">"title"</span>: <span class="hljs-string">"FastAPI Metadata"</span>,
+            <span class="hljs-string">"content"</span>: <span class="hljs-string">"Understanding parameter documentation."</span>
+        }
+    )</span>
+)</span>:</span>
+    <span class="hljs-keyword">return</span> {<span class="hljs-string">"blog"</span>: blog}
+</div></code></pre>
+<h3 id="%E2%9C%85-whats-happening">✅ What’s happening:</h3>
+<ul>
+<li><code>Body(...)</code> accepts a <strong>Pydantic model</strong></li>
+<li>Adds a <strong>rich example</strong> directly in docs</li>
+<li>Helps front-end users understand the expected JSON structure</li>
+</ul>
+<hr>
+<h2 id="%F0%9F%A7%A0-default-values">🧠 Default Values</h2>
+<table>
+<thead>
+<tr>
+<th>Parameter Type</th>
+<th>Syntax Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Query</strong></td>
+<td><code>q: str = Query(&quot;default&quot;)</code></td>
+</tr>
+<tr>
+<td><strong>Path</strong></td>
+<td><code>id: int = Path(..., gt=0)</code></td>
+</tr>
+<tr>
+<td><strong>Body</strong></td>
+<td><code>item: Item = Body(...)</code></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="%F0%9F%93%8A-all-common-metadata-options">📊 All Common Metadata Options</h2>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>default</code></td>
+<td>Default value for optional params</td>
+</tr>
+<tr>
+<td><code>title</code></td>
+<td>Shows in Swagger field title</td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td>Tooltip in Swagger</td>
+</tr>
+<tr>
+<td><code>example</code></td>
+<td>Example input for that param</td>
+</tr>
+<tr>
+<td><code>min_length</code></td>
+<td>Min length for strings</td>
+</tr>
+<tr>
+<td><code>max_length</code></td>
+<td>Max length for strings</td>
+</tr>
+<tr>
+<td><code>gt</code>, <code>ge</code></td>
+<td>Greater than / Greater or equal (numbers)</td>
+</tr>
+<tr>
+<td><code>lt</code>, <code>le</code></td>
+<td>Less than / Less or equal (numbers)</td>
+</tr>
+<tr>
+<td><code>regex</code></td>
+<td>Regular expression pattern (for strings)</td>
+</tr>
+<tr>
+<td><code>deprecated</code></td>
+<td>Marks param as deprecated in Swagger UI</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="%F0%9F%93%8C-summary-example-all-together">📌 Summary Example (All Together)</h2>
+<pre class="hljs"><code><div><span class="hljs-meta">@app.get("/search/{id}")</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">search_item</span><span class="hljs-params">(
+    id: int = Path<span class="hljs-params">(..., title=<span class="hljs-string">"Item ID"</span>, gt=<span class="hljs-number">0</span>, example=<span class="hljs-number">123</span>)</span>,
+    q: str = Query<span class="hljs-params">(<span class="hljs-string">"default"</span>, min_length=<span class="hljs-number">3</span>, max_length=<span class="hljs-number">20</span>, example=<span class="hljs-string">"phone"</span>)</span>,
+    page: int = Query<span class="hljs-params">(<span class="hljs-number">1</span>, ge=<span class="hljs-number">1</span>, le=<span class="hljs-number">100</span>, description=<span class="hljs-string">"Page number"</span>)</span>,
+)</span>:</span>
+    <span class="hljs-keyword">return</span> {<span class="hljs-string">"id"</span>: id, <span class="hljs-string">"q"</span>: q, <span class="hljs-string">"page"</span>: page}
+</div></code></pre>
+<hr>
+<h2 id="%F0%9F%8E%AF-swagger-ui-output">🎯 Swagger UI Output</h2>
+<ul>
+<li>Clear field titles</li>
+<li>Default values pre-filled</li>
+<li>Example values shown for guidance</li>
+<li>Auto-validation if user enters bad input</li>
+</ul>
+<hr>
+<h2 id="%E2%9C%85-summary">✅ Summary</h2>
+<table>
+<thead>
+<tr>
+<th>Import Used</th>
+<th>When to Use</th>
+<th>Use Case Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Query</code></td>
+<td>Query string parameters</td>
+<td><code>/items?q=shoes</code></td>
+</tr>
+<tr>
+<td><code>Path</code></td>
+<td>URL parameters</td>
+<td><code>/items/45</code></td>
+</tr>
+<tr>
+<td><code>Body</code></td>
+<td>JSON body (usually a Pydantic model)</td>
+<td><code>{ &quot;title&quot;: &quot;X&quot; }</code></td>
+</tr>
+</tbody>
+</table>
+<p>---x</p>
+<h2 id="%F0%9F%A7%A0-what-does-this-mean">🧠 What Does This Mean?</h2>
+<table>
+<thead>
+<tr>
+<th><strong>Parameter Type</strong></th>
+<th><strong>Syntax Example in FastAPI</strong></th>
+<th><strong>Explanation</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Query</code></td>
+<td><code>q: str = Query(&quot;default&quot;)</code></td>
+<td>A <strong>query string parameter</strong> (e.g., <code>/items?q=test</code>). <code>&quot;default&quot;</code> is the fallback value if the client doesn't pass it.</td>
+</tr>
+<tr>
+<td><code>Path</code></td>
+<td><code>id: int = Path(..., gt=0)</code></td>
+<td>A <strong>path parameter</strong> (e.g., <code>/items/42</code>). <code>...</code> means <strong>required</strong>, <code>gt=0</code> means it must be greater than 0.</td>
+</tr>
+<tr>
+<td><code>Body</code></td>
+<td><code>post: PostModel = Body(...)</code></td>
+<td>A <strong>JSON body payload</strong> (used in POST/PUT), usually validated using a <strong>Pydantic model</strong>.</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="%F0%9F%93%A6-fastapi-vs-mern-stack-parameter-concepts">📦 FastAPI vs MERN Stack Parameter Concepts</h2>
+<p>Let’s map these concepts to how you do things in <strong>MERN (MongoDB, Express, React, Node.js)</strong>:</p>
+<table>
+<thead>
+<tr>
+<th><strong>Concept</strong></th>
+<th><strong>FastAPI (Python)</strong></th>
+<th><strong>MERN Stack (Node.js + Express)</strong></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Path Params</strong></td>
+<td><code>@app.get(&quot;/items/{id}&quot;)</code><br><code>id: int = Path(...)</code></td>
+<td><code>router.get('/items/:id', (req, res) =&gt; { const id = req.params.id })</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Query Params</strong></td>
+<td><code>q: str = Query(&quot;default&quot;)</code></td>
+<td><code>req.query.q</code> → from URL like <code>/items?q=test</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Request Body (JSON)</strong></td>
+<td><code>post: PostModel = Body(...)</code></td>
+<td><code>req.body</code> → used with <code>body-parser</code> / <code>express.json()</code> middleware</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Validation</strong></td>
+<td><code>gt=0</code>, <code>min_length</code>, <code>regex</code>, via <code>Pydantic</code></td>
+<td><code>express-validator</code>, <code>joi</code>, or manual <code>if (!req.body.title)</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Automatic Docs (OpenAPI)</strong></td>
+<td>Built-in with Swagger UI</td>
+<td>Needs manual Swagger integration using <code>swagger-jsdoc</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Default Values</strong></td>
+<td><code>Query(&quot;default&quot;)</code>, <code>Path(..., gt=0)</code></td>
+<td>Set in route logic: `req.query.q</td>
+<td></td>
+<td>'default'`</td>
+</tr>
+<tr>
+<td><strong>Type Safety</strong></td>
+<td>Fully typed via function signatures + Pydantic</td>
+<td>Not typed unless you use <strong>TypeScript</strong> or <strong>JSDoc annotations</strong></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="%F0%9F%94%81-example-same-endpoint-in-both">🔁 Example: Same Endpoint in Both</h2>
+<h3 id="%E2%9C%85-fastapi">✅ FastAPI:</h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> fastapi <span class="hljs-keyword">import</span> FastAPI, Query, Path
+app = FastAPI()
+
+<span class="hljs-meta">@app.get("/items/{id}")</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_item</span><span class="hljs-params">(
+    id: int = Path<span class="hljs-params">(..., gt=<span class="hljs-number">0</span>)</span>,
+    search: str = Query<span class="hljs-params">(<span class="hljs-string">"default"</span>)</span>
+)</span>:</span>
+    <span class="hljs-keyword">return</span> {<span class="hljs-string">"id"</span>: id, <span class="hljs-string">"search"</span>: search}
+</div></code></pre>
+<h3 id="%E2%9C%85-expressjs-mern">✅ Express.js (MERN):</h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">const</span> express = <span class="hljs-built_in">require</span>(<span class="hljs-string">"express"</span>);
+<span class="hljs-keyword">const</span> router = express.Router();
+
+router.get(<span class="hljs-string">"/items/:id"</span>, (req, res) =&gt; {
+    <span class="hljs-keyword">const</span> id = <span class="hljs-built_in">parseInt</span>(req.params.id);
+    <span class="hljs-keyword">const</span> search = req.query.search || <span class="hljs-string">"default"</span>;
+
+    <span class="hljs-keyword">if</span> (id &lt;= <span class="hljs-number">0</span>) <span class="hljs-keyword">return</span> res.status(<span class="hljs-number">400</span>).json({ <span class="hljs-attr">error</span>: <span class="hljs-string">"Invalid ID"</span> });
+
+    res.json({ id, search });
+});
+</div></code></pre>
+<hr>
+<h2 id="%F0%9F%9A%80-key-differences">🚀 Key Differences</h2>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>FastAPI</th>
+<th>MERN (Express)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Validation</strong></td>
+<td>Auto with types + constraints</td>
+<td>Manual or with middleware</td>
+</tr>
+<tr>
+<td><strong>Docs</strong></td>
+<td>Auto-generated (Swagger UI)</td>
+<td>Manual with Swagger setup</td>
+</tr>
+<tr>
+<td><strong>Type Checking</strong></td>
+<td>Native in Python</td>
+<td>Use TypeScript or external tools</td>
+</tr>
+<tr>
+<td><strong>Default values &amp; metadata</strong></td>
+<td>Built-in (<code>Query</code>, <code>Path</code>)</td>
+<td>Manual using JS logic</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="%F0%9F%94%8E-summary">🔎 Summary</h2>
+<table>
+<thead>
+<tr>
+<th>FastAPI</th>
+<th>Express (Node.js)</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Path(...)</code></td>
+<td><code>req.params</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>Query(...)</code></td>
+<td><code>req.query</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>Body(...)</code></td>
+<td><code>req.body</code></td>
+<td></td>
+</tr>
+<tr>
+<td>Pydantic Models</td>
+<td><code>Joi</code>, <code>Yup</code>, <code>zod</code></td>
+<td></td>
+</tr>
+<tr>
+<td>Auto Docs</td>
+<td>Swagger (built-in)</td>
+<td><code>swagger-jsdoc</code>, <code>swagger-ui-express</code></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h1 id="how-to-pass-multiple-values">how to pass multiple values</h1>
+<h2 id="%E2%9C%85-1-query-parameter-recap">✅ 1. <strong>Query Parameter (recap)</strong></h2>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> typing <span class="hljs-keyword">import</span> List, Optional
+<span class="hljs-keyword">from</span> fastapi <span class="hljs-keyword">import</span> FastAPI, Query
+
+app = FastAPI()
+
+<span class="hljs-meta">@app.get("/items/")</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_items</span><span class="hljs-params">(v: Optional[List[str]] = Query<span class="hljs-params">(None)</span>)</span>:</span>
+    <span class="hljs-keyword">return</span> {<span class="hljs-string">"query_values"</span>: v}
+</div></code></pre>
+<p><strong>Try URL:</strong></p>
+<pre class="hljs"><code><div>http://localhost:8000/items/?v=1&amp;v=2&amp;v=3
+</div></code></pre>
+<hr>
+<h2 id="%E2%9C%85-2-path-parameters-with-multiple-values">✅ 2. <strong>Path Parameters with Multiple Values</strong></h2>
+<p>🔴 <strong>Path parameters do not natively support multiple values</strong> like query params do (e.g., you can't do <code>/items/1,2,3</code> and get a <code>List[int]</code> directly).</p>
+<p>📦 But you can <strong>split the string manually</strong>:</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> fastapi <span class="hljs-keyword">import</span> FastAPI
+<span class="hljs-keyword">from</span> typing <span class="hljs-keyword">import</span> List
+
+app = FastAPI()
+
+<span class="hljs-meta">@app.get("/items/{values}")</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_items</span><span class="hljs-params">(values: str)</span>:</span>
+    <span class="hljs-comment"># Split by comma</span>
+    value_list = values.split(<span class="hljs-string">","</span>)
+    <span class="hljs-keyword">return</span> {<span class="hljs-string">"path_values"</span>: value_list}
+</div></code></pre>
+<p><strong>Try URL:</strong></p>
+<pre class="hljs"><code><div>http://localhost:8000/items/10,20,30
+</div></code></pre>
+<p>📤 Output:</p>
+<pre class="hljs"><code><div>{
+  <span class="hljs-attr">"path_values"</span>: [<span class="hljs-string">"10"</span>, <span class="hljs-string">"20"</span>, <span class="hljs-string">"30"</span>]
+}
+</div></code></pre>
+<p>🔧 You can convert to <code>int</code> if needed:</p>
+<pre class="hljs"><code><div>value_list = [int(i) <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> values.split(<span class="hljs-string">","</span>)]
+</div></code></pre>
+<hr>
+<h2 id="%E2%9C%85-3-body-parameters-with-multiple-values">✅ 3. <strong>Body Parameters with Multiple Values</strong></h2>
+<p>For <strong>POST</strong> requests, you can send multiple values in the <strong>request body</strong> (JSON), like this:</p>
+<h3 id="%F0%9F%A7%A9-example-request-body">🧩 Example Request Body:</h3>
+<pre class="hljs"><code><div>{
+  <span class="hljs-attr">"values"</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>]
+}
+</div></code></pre>
+<h3 id="%E2%9C%85-code">✅ Code:</h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> fastapi <span class="hljs-keyword">import</span> FastAPI
+<span class="hljs-keyword">from</span> pydantic <span class="hljs-keyword">import</span> BaseModel
+<span class="hljs-keyword">from</span> typing <span class="hljs-keyword">import</span> List
+
+app = FastAPI()
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Item</span><span class="hljs-params">(BaseModel)</span>:</span>
+    values: List[int]
+
+<span class="hljs-meta">@app.post("/items/")</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">post_items</span><span class="hljs-params">(item: Item)</span>:</span>
+    <span class="hljs-keyword">return</span> {<span class="hljs-string">"body_values"</span>: item.values}
+</div></code></pre>
+<p><strong>POST to:</strong> <code>/items/</code>
+With body:</p>
+<pre class="hljs"><code><div>{
+  <span class="hljs-attr">"values"</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>]
+}
+</div></code></pre>
+<p>📤 Response:</p>
+<pre class="hljs"><code><div>{
+  <span class="hljs-attr">"body_values"</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>]
+}
+</div></code></pre>
+<hr>
+<h2 id="%F0%9F%94%84-summary-table">🔄 Summary Table</h2>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Input Type</th>
+<th>FastAPI Handling</th>
+<th>URL/Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Query</td>
+<td>List[str]</td>
+<td><code>Query(None)</code> or <code>Query(...)</code></td>
+<td><code>/items?v=1&amp;v=2&amp;v=3</code></td>
+</tr>
+<tr>
+<td>Path</td>
+<td>str (parsed)</td>
+<td><code>values: str</code> → <code>split(&quot;,&quot;)</code></td>
+<td><code>/items/1,2,3</code></td>
+</tr>
+<tr>
+<td>Body (POST)</td>
+<td>List[int]</td>
+<td>Use <code>Pydantic</code> model with <code>List[...]</code></td>
+<td><code>{ &quot;values&quot;: [1, 2, 3] }</code></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="%F0%9F%A7%A9-scenario-combine-all-three">🧩 <strong>Scenario: Combine All Three</strong></h2>
+<p>You want an endpoint like this:</p>
+<pre class="hljs"><code><div>POST /items/123?v=10&amp;v=20
+</div></code></pre>
+<p>With a JSON body:</p>
+<pre class="hljs"><code><div>{
+  <span class="hljs-attr">"tags"</span>: [<span class="hljs-string">"electronics"</span>, <span class="hljs-string">"gadget"</span>]
+}
+</div></code></pre>
+<h3 id="%E2%9C%85-goal">✅ Goal:</h3>
+<ul>
+<li><code>123</code> is a <strong>Path parameter</strong> (item ID)</li>
+<li><code>v=10&amp;v=20</code> are <strong>Query parameters</strong> (version list)</li>
+<li><code>tags</code> is a <strong>Body parameter</strong> (list of tags)</li>
+</ul>
+<hr>
+<h2 id="%E2%9C%85-full-fastapi-example">✅ Full FastAPI Example</h2>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> fastapi <span class="hljs-keyword">import</span> FastAPI, Query, Path
+<span class="hljs-keyword">from</span> pydantic <span class="hljs-keyword">import</span> BaseModel
+<span class="hljs-keyword">from</span> typing <span class="hljs-keyword">import</span> List, Optional
+
+app = FastAPI()
+
+<span class="hljs-comment"># Body Model</span>
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ItemData</span><span class="hljs-params">(BaseModel)</span>:</span>
+    tags: List[str]
+
+<span class="hljs-meta">@app.post("/items/{item_id}")</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">combined_params</span><span class="hljs-params">(
+    item_id: int = Path<span class="hljs-params">(..., description=<span class="hljs-string">"Item ID from path"</span>)</span>,
+    versions: Optional[List[int]] = Query<span class="hljs-params">(None, description=<span class="hljs-string">"List of version numbers"</span>)</span>,
+    item: ItemData = ...
+)</span>:</span>
+    <span class="hljs-keyword">return</span> {
+        <span class="hljs-string">"item_id"</span>: item_id,
+        <span class="hljs-string">"versions"</span>: versions,
+        <span class="hljs-string">"tags"</span>: item.tags
+    }
+</div></code></pre>
+<hr>
+<h3 id="%F0%9F%A7%AA-example-request">🧪 Example Request</h3>
+<p><strong>URL:</strong></p>
+<pre class="hljs"><code><div>POST http://localhost:8000/items/123?v=10&amp;v=20
+</div></code></pre>
+<p><strong>Body:</strong></p>
+<pre class="hljs"><code><div>{
+  <span class="hljs-attr">"tags"</span>: [<span class="hljs-string">"electronics"</span>, <span class="hljs-string">"gadget"</span>]
+}
+</div></code></pre>
+<hr>
+<h3 id="%E2%9C%85-response">✅ Response</h3>
+<pre class="hljs"><code><div>{
+  <span class="hljs-attr">"item_id"</span>: <span class="hljs-number">123</span>,
+  <span class="hljs-attr">"versions"</span>: [<span class="hljs-number">10</span>, <span class="hljs-number">20</span>],
+  <span class="hljs-attr">"tags"</span>: [<span class="hljs-string">"electronics"</span>, <span class="hljs-string">"gadget"</span>]
+}
+</div></code></pre>
+<hr>
+<h2 id="%F0%9F%94%8D-breakdown">🔍 Breakdown:</h2>
+<table>
+<thead>
+<tr>
+<th>Parameter Type</th>
+<th>Variable</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Path</td>
+<td><code>item_id</code></td>
+<td><code>int</code></td>
+<td>Extracted from <code>/items/{item_id}</code></td>
+</tr>
+<tr>
+<td>Query</td>
+<td><code>versions</code></td>
+<td><code>List[int]</code></td>
+<td>Supports multiple: <code>v=1&amp;v=2&amp;v=3</code></td>
+</tr>
+<tr>
+<td>Body (JSON)</td>
+<td><code>item</code></td>
+<td><code>ItemData</code> model</td>
+<td>Parsed from the request body (POST)</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="%F0%9F%9B%A0-bonus-tip-%E2%80%93-make-body-optional-too">🛠 Bonus Tip – Make Body Optional Too:</h2>
+<p>If body is optional, modify:</p>
+<pre class="hljs"><code><div>item: Optional[ItemData] = <span class="hljs-literal">None</span>
+</div></code></pre>
+<p>Then access:</p>
+<pre class="hljs"><code><div>tags = item.tags <span class="hljs-keyword">if</span> item <span class="hljs-keyword">else</span> []
+</div></code></pre>
+<hr>
+
+</body>
+</html>

@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>10. Working With File.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h1 id="%F0%9F%93%81-fastapi-file-handling">📁 FastAPI File Handling</h1>
+<h2 id="%F0%9F%9A%80-overview">🚀 Overview</h2>
+<p>FastAPI provides powerful and flexible file handling capabilities that allow developers to upload, download, and serve files efficiently. This documentation covers all aspects of file management with detailed code explanations, flow diagrams, and best practices.</p>
+<h2 id="%F0%9F%93%A4-1-uploading-files-in-fastapi">📤 1. Uploading Files in FastAPI</h2>
+<p>FastAPI offers <strong>two primary approaches</strong> for handling file uploads, each suited for different use cases:</p>
+<h3 id="%E2%9C%85-option-1-using-bytes">✅ <strong>Option 1: Using <code>bytes</code></strong></h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> fastapi <span class="hljs-keyword">import</span> FastAPI, File
+<span class="hljs-keyword">from</span> typing <span class="hljs-keyword">import</span> List
+
+app = FastAPI()
+
+<span class="hljs-meta">@app.post("/upload-bytes/")</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">upload_bytes</span><span class="hljs-params">(file: bytes = File<span class="hljs-params">(...)</span>)</span>:</span>
+    <span class="hljs-string">"""
+    📝 Handle file upload using bytes
+    
+    Args:
+        file (bytes): Raw file content as bytes object
+        
+    Returns:
+        dict: Processed file content split into lines
+    """</span>
+    <span class="hljs-keyword">try</span>:
+        <span class="hljs-comment"># 🔄 Decode bytes to UTF-8 string</span>
+        content = file.decode(<span class="hljs-string">'utf-8'</span>)
+        
+        <span class="hljs-comment"># ✂️ Split content into individual lines</span>
+        lines = content.split(<span class="hljs-string">'\n'</span>)
+        
+        <span class="hljs-comment"># 📊 Return processed data</span>
+        <span class="hljs-keyword">return</span> {
+            <span class="hljs-string">"status"</span>: <span class="hljs-string">"success"</span>,
+            <span class="hljs-string">"total_lines"</span>: len(lines),
+            <span class="hljs-string">"lines"</span>: lines,
+            <span class="hljs-string">"file_size_bytes"</span>: len(file)
+        }
+    <span class="hljs-keyword">except</span> UnicodeDecodeError:
+        <span class="hljs-comment"># ⚠️ Handle encoding errors gracefully</span>
+        <span class="hljs-keyword">return</span> {
+            <span class="hljs-string">"status"</span>: <span class="hljs-string">"error"</span>,
+            <span class="hljs-string">"message"</span>: <span class="hljs-string">"File encoding not supported. Please upload UTF-8 encoded files."</span>
+        }
+</div></code></pre>
+<h4 id="%F0%9F%94%8D-characteristics-of-bytes-approach">🔍 <strong>Characteristics of <code>bytes</code> approach:</strong></h4>
+<ul>
+<li>🧠 <strong>Memory Storage</strong>: Entire file loaded into RAM</li>
+<li>⚡ <strong>Performance</strong>: Fast for small files (&lt; 1MB)</li>
+<li>🎯 <strong>Use Cases</strong>: Configuration files, small CSVs, JSON files</li>
+<li>⚠️ <strong>Limitations</strong>: Can cause memory overflow with large files</li>
+<li>📊 <strong>File Object</strong>: Raw <code>bytes</code> object (not a file-like object)</li>
+</ul>
+<h3 id="%E2%9C%85-option-2-using-uploadfile">✅ <strong>Option 2: Using <code>UploadFile</code></strong></h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> fastapi <span class="hljs-keyword">import</span> FastAPI, UploadFile, File, HTTPException
+<span class="hljs-keyword">import</span> aiofiles
+<span class="hljs-keyword">import</span> os
+<span class="hljs-keyword">from</span> typing <span class="hljs-keyword">import</span> Dict, Any
+
+app = FastAPI()
+
+<span class="hljs-meta">@app.post("/upload-file/")</span>
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">upload_file</span><span class="hljs-params">(upload_file: UploadFile = File<span class="hljs-params">(...)</span>)</span> -&gt; Dict[str, Any]:</span>
+    <span class="hljs-string">"""
+    📁 Handle file upload using UploadFile object
+    
+    Args:
+        upload_file (UploadFile): File-like object with metadata
+        
+    Returns:
+        dict: Comprehensive file information and processed content
+    """</span>
+    <span class="hljs-comment"># ✅ Validate file type</span>
+    allowed_types = [<span class="hljs-string">'text/plain'</span>, <span class="hljs-string">'text/csv'</span>, <span class="hljs-string">'application/json'</span>]
+    <span class="hljs-keyword">if</span> upload_file.content_type <span class="hljs-keyword">not</span> <span class="hljs-keyword">in</span> allowed_types:
+        <span class="hljs-keyword">raise</span> HTTPException(
+            status_code=<span class="hljs-number">400</span>, 
+            detail=<span class="hljs-string">f"File type <span class="hljs-subst">{upload_file.content_type}</span> not supported. Allowed: <span class="hljs-subst">{allowed_types}</span>"</span>
+        )
+    
+    <span class="hljs-keyword">try</span>:
+        <span class="hljs-comment"># 📖 Read file content asynchronously</span>
+        content = <span class="hljs-keyword">await</span> upload_file.read()
+        
+        <span class="hljs-comment"># 🔄 Decode and process content</span>
+        text_content = content.decode(<span class="hljs-string">'utf-8'</span>)
+        lines = text_content.split(<span class="hljs-string">'\n'</span>)
+        
+        <span class="hljs-comment"># 📊 Generate comprehensive response</span>
+        <span class="hljs-keyword">return</span> {
+            <span class="hljs-string">"status"</span>: <span class="hljs-string">"success"</span>,
+            <span class="hljs-string">"file_info"</span>: {
+                <span class="hljs-string">"filename"</span>: upload_file.filename,
+                <span class="hljs-string">"content_type"</span>: upload_file.content_type,
+                <span class="hljs-string">"size_bytes"</span>: len(content),
+                <span class="hljs-string">"size_kb"</span>: round(len(content) / <span class="hljs-number">1024</span>, <span class="hljs-number">2</span>)
+            },
+            <span class="hljs-string">"content_analysis"</span>: {
+                <span class="hljs-string">"total_lines"</span>: len(lines),
+                <span class="hljs-string">"non_empty_lines"</span>: len([line <span class="hljs-keyword">for</span> line <span class="hljs-keyword">in</span> lines <span class="hljs-keyword">if</span> line.strip()]),
+                <span class="hljs-string">"first_few_lines"</span>: lines[:<span class="hljs-number">5</span>] <span class="hljs-keyword">if</span> lines <span class="hljs-keyword">else</span> []
+            }
+        }
+        
+    <span class="hljs-keyword">except</span> UnicodeDecodeError:
+        <span class="hljs-keyword">raise</span> HTTPException(
+            status_code=<span class="hljs-number">400</span>,
+            detail=<span class="hljs-string">"File encoding not supported. Please upload UTF-8 encoded files."</span>
+        )
+    <span class="hljs-keyword">except</span> Exception <span class="hljs-keyword">as</span> e:
+        <span class="hljs-keyword">raise</span> HTTPException(
+            status_code=<span class="hljs-number">500</span>,
+            detail=<span class="hljs-string">f"Error processing file: <span class="hljs-subst">{str(e)}</span>"</span>
+        )
+    <span class="hljs-keyword">finally</span>:
+        <span class="hljs-comment"># 🧹 Reset file pointer for potential reuse</span>
+        <span class="hljs-keyword">await</span> upload_file.seek(<span class="hljs-number">0</span>)
+</div></code></pre>
+<h4 id="%F0%9F%8C%9F-benefits-of-uploadfile">🌟 <strong>Benefits of <code>UploadFile</code>:</strong></h4>
+<ul>
+<li>💾 <strong>Smart Storage</strong>: Memory up to threshold, then temporary disk storage</li>
+<li>📁 <strong>File-like Methods</strong>: <code>.read()</code>, <code>.write()</code>, <code>.seek()</code>, <code>.close()</code></li>
+<li>📋 <strong>Rich Metadata</strong>: Access to filename, content type, size</li>
+<li>🔄 <strong>Async Support</strong>: Non-blocking file operations</li>
+<li>🛡️ <strong>Memory Efficient</strong>: Suitable for large files</li>
+</ul>
+<h3 id="%F0%9F%8E%AF-comparison-table-when-to-use-which">🎯 <strong>Comparison Table: When to Use Which?</strong></h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Criteria</th>
+<th style="text-align:left"><code>bytes</code></th>
+<th style="text-align:left"><code>UploadFile</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>File Size</strong></td>
+<td style="text-align:left">&lt; 1MB ✅</td>
+<td style="text-align:left">Any size ✅</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Memory Usage</strong></td>
+<td style="text-align:left">High ⚠️</td>
+<td style="text-align:left">Optimized ✅</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Metadata Access</strong></td>
+<td style="text-align:left">No ❌</td>
+<td style="text-align:left">Yes ✅</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>File Operations</strong></td>
+<td style="text-align:left">Limited ❌</td>
+<td style="text-align:left">Full support ✅</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Async Support</strong></td>
+<td style="text-align:left">No ❌</td>
+<td style="text-align:left">Yes ✅</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Best For</strong></td>
+<td style="text-align:left">Config files</td>
+<td style="text-align:left">Media, documents</td>
+</tr>
+</tbody>
+</table>
+<h2 id="%F0%9F%92%BE-2-save-uploaded-file-to-disk">💾 2. Save Uploaded File to Disk</h2>
+<pre class="hljs"><code><div><span class="hljs-keyword">import</span> aiofiles
+<span class="hljs-keyword">import</span> uuid
+<span class="hljs-keyword">from</span> pathlib <span class="hljs-keyword">import</span> Path
+<span class="hljs-keyword">from</span> datetime <span class="hljs-keyword">import</span> datetime
+
+<span class="hljs-meta">@app.post("/save-file/")</span>
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">save_file</span><span class="hljs-params">(upload_file: UploadFile = File<span class="hljs-params">(...)</span>)</span>:</span>
+    <span class="hljs-string">"""
+    💾 Save uploaded file to disk with enhanced error handling
+    
+    Args:
+        upload_file (UploadFile): The file to be saved
+        
+    Returns:
+        dict: Save operation result with file details
+    """</span>
+    <span class="hljs-comment"># 📁 Define upload directory</span>
+    upload_dir = Path(<span class="hljs-string">"uploaded"</span>)
+    upload_dir.mkdir(exist_ok=<span class="hljs-literal">True</span>)  <span class="hljs-comment"># Create directory if it doesn't exist</span>
+    
+    <span class="hljs-comment"># 🔒 Generate unique filename to prevent conflicts</span>
+    file_extension = Path(upload_file.filename).suffix
+    unique_filename = <span class="hljs-string">f"<span class="hljs-subst">{uuid.uuid4()}</span><span class="hljs-subst">{file_extension}</span>"</span>
+    file_path = upload_dir / unique_filename
+    
+    <span class="hljs-keyword">try</span>:
+        <span class="hljs-comment"># 📝 Save file using aiofiles for async I/O</span>
+        <span class="hljs-keyword">async</span> <span class="hljs-keyword">with</span> aiofiles.open(file_path, <span class="hljs-string">'wb'</span>) <span class="hljs-keyword">as</span> f:
+            <span class="hljs-comment"># 📖 Read file content</span>
+            content = <span class="hljs-keyword">await</span> upload_file.read()
+            <span class="hljs-comment"># ✍️ Write content to disk</span>
+            <span class="hljs-keyword">await</span> f.write(content)
+        
+        <span class="hljs-comment"># 📊 Generate file statistics</span>
+        file_stats = file_path.stat()
+        
+        <span class="hljs-keyword">return</span> {
+            <span class="hljs-string">"status"</span>: <span class="hljs-string">"success"</span>,
+            <span class="hljs-string">"message"</span>: <span class="hljs-string">f"File saved successfully"</span>,
+            <span class="hljs-string">"file_details"</span>: {
+                <span class="hljs-string">"original_filename"</span>: upload_file.filename,
+                <span class="hljs-string">"saved_filename"</span>: unique_filename,
+                <span class="hljs-string">"file_path"</span>: str(file_path),
+                <span class="hljs-string">"size_bytes"</span>: file_stats.st_size,
+                <span class="hljs-string">"saved_at"</span>: datetime.now().isoformat(),
+                <span class="hljs-string">"content_type"</span>: upload_file.content_type
+            }
+        }
+        
+    <span class="hljs-keyword">except</span> Exception <span class="hljs-keyword">as</span> e:
+        <span class="hljs-comment"># 🧹 Clean up partial file if error occurs</span>
+        <span class="hljs-keyword">if</span> file_path.exists():
+            file_path.unlink()
+            
+        <span class="hljs-keyword">raise</span> HTTPException(
+            status_code=<span class="hljs-number">500</span>,
+            detail=<span class="hljs-string">f"Failed to save file: <span class="hljs-subst">{str(e)}</span>"</span>
+        )
+</div></code></pre>
+<h2 id="%F0%9F%94%92-3-download-file-authentication-protected">🔒 3. Download File (Authentication Protected)</h2>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> fastapi.responses <span class="hljs-keyword">import</span> FileResponse
+<span class="hljs-keyword">from</span> fastapi <span class="hljs-keyword">import</span> Depends, HTTPException, status
+<span class="hljs-keyword">from</span> auth.oauth <span class="hljs-keyword">import</span> get_current_user  <span class="hljs-comment"># Assuming OAuth implementation</span>
+<span class="hljs-keyword">import</span> mimetypes
+
+<span class="hljs-meta">@app.get("/download/{file_name}")</span>
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">download_file_protected</span><span class="hljs-params">(
+    file_name: str, 
+    current_user: dict = Depends<span class="hljs-params">(get_current_user)</span>
+)</span>:</span>
+    <span class="hljs-string">"""
+    🔒 Download file with authentication protection
+    
+    Args:
+        file_name (str): Name of the file to download
+        current_user (dict): Authenticated user information
+        
+    Returns:
+        FileResponse: The requested file or error response
+    """</span>
+    <span class="hljs-comment"># 🛡️ Additional authorization check (optional)</span>
+    <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> current_user.get(<span class="hljs-string">"can_download_files"</span>, <span class="hljs-literal">True</span>):
+        <span class="hljs-keyword">raise</span> HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail=<span class="hljs-string">"User does not have permission to download files"</span>
+        )
+    
+    <span class="hljs-comment"># 📁 Construct secure file path</span>
+    upload_dir = Path(<span class="hljs-string">"uploaded"</span>)
+    file_path = upload_dir / file_name
+    
+    <span class="hljs-comment"># 🔍 Security check: Prevent path traversal attacks</span>
+    <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> str(file_path.resolve()).startswith(str(upload_dir.resolve())):
+        <span class="hljs-keyword">raise</span> HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=<span class="hljs-string">"Invalid file path"</span>
+        )
+    
+    <span class="hljs-comment"># ✅ Check file existence</span>
+    <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> file_path.exists():
+        <span class="hljs-keyword">raise</span> HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=<span class="hljs-string">f"File '<span class="hljs-subst">{file_name}</span>' not found"</span>
+        )
+    
+    <span class="hljs-comment"># 🎯 Determine appropriate MIME type</span>
+    content_type, _ = mimetypes.guess_type(str(file_path))
+    <span class="hljs-keyword">if</span> content_type <span class="hljs-keyword">is</span> <span class="hljs-literal">None</span>:
+        content_type = <span class="hljs-string">'application/octet-stream'</span>
+    
+    <span class="hljs-comment"># 📊 Log download activity (optional)</span>
+    print(<span class="hljs-string">f"📥 User <span class="hljs-subst">{current_user.get(<span class="hljs-string">'username'</span>)}</span> downloaded <span class="hljs-subst">{file_name}</span>"</span>)
+    
+    <span class="hljs-comment"># 📤 Return file response</span>
+    <span class="hljs-keyword">return</span> FileResponse(
+        path=str(file_path),
+        filename=file_name,
+        media_type=content_type,
+        headers={
+            <span class="hljs-string">"Cache-Control"</span>: <span class="hljs-string">"no-cache"</span>,
+            <span class="hljs-string">"X-Downloaded-By"</span>: current_user.get(<span class="hljs-string">"username"</span>, <span class="hljs-string">"unknown"</span>)
+        }
+    )
+</div></code></pre>
+<h2 id="%F0%9F%8C%90-4-serve-static-files">🌐 4. Serve Static Files</h2>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> fastapi.staticfiles <span class="hljs-keyword">import</span> StaticFiles
+<span class="hljs-keyword">from</span> fastapi <span class="hljs-keyword">import</span> HTTPException
+
+<span class="hljs-comment"># 📁 Mount static files directory</span>
+app.mount(<span class="hljs-string">"/static"</span>, StaticFiles(directory=<span class="hljs-string">"static"</span>), name=<span class="hljs-string">"static"</span>)
+
+<span class="hljs-comment"># 📊 Optional: Custom static file handler with logging</span>
+<span class="hljs-meta">@app.get("/files/{file_path:path}")</span>
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">serve_static_file</span><span class="hljs-params">(file_path: str)</span>:</span>
+    <span class="hljs-string">"""
+    🌐 Custom static file server with enhanced features
+    
+    Args:
+        file_path (str): Relative path to the static file
+        
+    Returns:
+        FileResponse: The requested static file
+    """</span>
+    static_dir = Path(<span class="hljs-string">"static"</span>)
+    full_path = static_dir / file_path
+    
+    <span class="hljs-comment"># 🔒 Security validation</span>
+    <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> str(full_path.resolve()).startswith(str(static_dir.resolve())):
+        <span class="hljs-keyword">raise</span> HTTPException(status_code=<span class="hljs-number">400</span>, detail=<span class="hljs-string">"Invalid file path"</span>)
+    
+    <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> full_path.exists():
+        <span class="hljs-keyword">raise</span> HTTPException(status_code=<span class="hljs-number">404</span>, detail=<span class="hljs-string">"File not found"</span>)
+    
+    <span class="hljs-comment"># 📊 Log access (optional)</span>
+    print(<span class="hljs-string">f"🌐 Static file accessed: <span class="hljs-subst">{file_path}</span>"</span>)
+    
+    <span class="hljs-keyword">return</span> FileResponse(full_path)
+</div></code></pre>
+<p><strong>📝 Static Files Configuration:</strong></p>
+<ul>
+<li>📂 Place files in <code>static/</code> directory</li>
+<li>🌐 Access via: <code>http://localhost:8000/static/filename.ext</code></li>
+<li>⚡ Automatically served by FastAPI</li>
+<li>🎯 Perfect for: CSS, JS, images, documents</li>
+</ul>
+<h2 id="%F0%9F%94%84-5-flow-diagrams">🔄 5. Flow Diagrams</h2>
+<h3 id="%F0%9F%93%A4-file-upload-flow">📤 <strong>File Upload Flow</strong></h3>
+<pre><code class="language-mermaid"><div class="mermaid">flowchart TD
+    A[👤 Client] --> B[📤 POST /upload-file/]
+    B --> C{📋 Validate File Type}
+    C -->|✅ Valid| D[📖 Read File Content]
+    C -->|❌ Invalid| E[⚠️ Return 400 Error]
+    D --> F[🔄 Process Content]
+    F --> G[📊 Generate Response]
+    G --> H[📤 Return Results]
+    
+    style A fill:#e1f5fe
+    style B fill:#fff3e0
+    style C fill:#f3e5f5
+    style D fill:#e8f5e8
+    style F fill:#e8f5e8
+    style G fill:#e8f5e8
+    style H fill:#e1f5fe
+    style E fill:#ffebee
+</div></code></pre>
+<h3 id="%F0%9F%92%BE-save-to-disk-flow">💾 <strong>Save to Disk Flow</strong></h3>
+<pre><code class="language-mermaid"><div class="mermaid">flowchart TD
+    A[👤 Client] --> B[📤 POST /save-file/]
+    B --> C[📁 Create Upload Directory]
+    C --> D[🆔 Generate Unique Filename]
+    D --> E[💾 Write File to Disk]
+    E --> F{✅ Success?}
+    F -->|Yes| G[📊 Return File Details]
+    F -->|No| H[🧹 Cleanup & Error]
+    
+    style A fill:#e1f5fe
+    style B fill:#fff3e0
+    style C fill:#e8f5e8
+    style D fill:#e8f5e8
+    style E fill:#e8f5e8
+    style G fill:#e1f5fe
+    style H fill:#ffebee
+</div></code></pre>
+<h3 id="%F0%9F%94%92-protected-download-flow">🔒 <strong>Protected Download Flow</strong></h3>
+<pre><code class="language-mermaid"><div class="mermaid">flowchart TD
+    A[👤 Client with Token] --> B[📥 GET /download/filename]
+    B --> C[🔐 Validate OAuth Token]
+    C -->|❌ Invalid| D[🚫 Return 401 Unauthorized]
+    C -->|✅ Valid| E[🛡️ Check Permissions]
+    E -->|❌ No Permission| F[🚫 Return 403 Forbidden]
+    E -->|✅ Authorized| G[📁 Check File Exists]
+    G -->|❌ Not Found| H[❌ Return 404 Not Found]
+    G -->|✅ Exists| I[🔒 Validate File Path]
+    I -->|❌ Invalid| J[⚠️ Return 400 Bad Request]
+    I -->|✅ Valid| K[📤 Return File]
+    
+    style A fill:#e1f5fe
+    style B fill:#fff3e0
+    style C fill:#f3e5f5
+    style E fill:#f3e5f5
+    style G fill:#e8f5e8
+    style I fill:#e8f5e8
+    style K fill:#e1f5fe
+    style D fill:#ffebee
+    style F fill:#ffebee
+    style H fill:#ffebee
+    style J fill:#ffebee
+</div></code></pre>
+<h2 id="%F0%9F%A7%AA-complete-testing-guide">🧪 Complete Testing Guide</h2>
+<h3 id="%F0%9F%94%A7-setup-test-environment">🔧 <strong>Setup Test Environment</strong></h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">import</span> pytest
+<span class="hljs-keyword">from</span> fastapi.testclient <span class="hljs-keyword">import</span> TestClient
+<span class="hljs-keyword">from</span> io <span class="hljs-keyword">import</span> BytesIO
+
+client = TestClient(app)
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">test_upload_bytes</span><span class="hljs-params">()</span>:</span>
+    <span class="hljs-string">"""🧪 Test bytes upload functionality"""</span>
+    test_content = <span class="hljs-string">"Hello\nWorld\nTest"</span>
+    response = client.post(
+        <span class="hljs-string">"/upload-bytes/"</span>,
+        files={<span class="hljs-string">"file"</span>: (<span class="hljs-string">"test.txt"</span>, test_content.encode(), <span class="hljs-string">"text/plain"</span>)}
+    )
+    <span class="hljs-keyword">assert</span> response.status_code == <span class="hljs-number">200</span>
+    data = response.json()
+    <span class="hljs-keyword">assert</span> data[<span class="hljs-string">"status"</span>] == <span class="hljs-string">"success"</span>
+    <span class="hljs-keyword">assert</span> data[<span class="hljs-string">"total_lines"</span>] == <span class="hljs-number">3</span>
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">test_upload_file</span><span class="hljs-params">()</span>:</span>
+    <span class="hljs-string">"""🧪 Test UploadFile functionality"""</span>
+    test_content = <span class="hljs-string">"Line 1\nLine 2\nLine 3"</span>
+    response = client.post(
+        <span class="hljs-string">"/upload-file/"</span>,
+        files={<span class="hljs-string">"upload_file"</span>: (<span class="hljs-string">"test.txt"</span>, test_content.encode(), <span class="hljs-string">"text/plain"</span>)}
+    )
+    <span class="hljs-keyword">assert</span> response.status_code == <span class="hljs-number">200</span>
+    data = response.json()
+    <span class="hljs-keyword">assert</span> data[<span class="hljs-string">"file_info"</span>][<span class="hljs-string">"filename"</span>] == <span class="hljs-string">"test.txt"</span>
+    <span class="hljs-keyword">assert</span> data[<span class="hljs-string">"content_analysis"</span>][<span class="hljs-string">"total_lines"</span>] == <span class="hljs-number">3</span>
+</div></code></pre>
+<h3 id="%F0%9F%93%8B-testing-in-swagger-ui">📋 <strong>Testing in Swagger UI</strong></h3>
+<ol>
+<li><strong>🚀 Start your FastAPI server</strong>: <code>uvicorn main:app --reload</code></li>
+<li><strong>🌐 Open Swagger UI</strong>: Navigate to <code>http://localhost:8000/docs</code></li>
+<li><strong>📤 Test Upload</strong>:
+<ul>
+<li>Click on <code>/upload-file/</code> endpoint</li>
+<li>Click &quot;Try it out&quot;</li>
+<li>Select a small text file</li>
+<li>Execute and review response</li>
+</ul>
+</li>
+<li><strong>🔐 Get Authentication Token</strong>:
+<ul>
+<li>Use <code>/user/token</code> endpoint to login</li>
+<li>Copy the access token from response</li>
+</ul>
+</li>
+<li><strong>🔒 Authorize Downloads</strong>:
+<ul>
+<li>Click <strong>Authorize</strong> button in Swagger UI</li>
+<li>Paste token in format: <code>Bearer your-token-here</code></li>
+</ul>
+</li>
+<li><strong>📥 Test Download</strong>: Use <code>/download/{file_name}</code> with saved file name</li>
+</ol>
+<h2 id="%F0%9F%93%8A-complete-feature-matrix">📊 Complete Feature Matrix</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Feature</th>
+<th style="text-align:left">Endpoint</th>
+<th style="text-align:left">Method</th>
+<th style="text-align:left">Auth Required</th>
+<th style="text-align:left">File Size Limit</th>
+<th style="text-align:left">Use Case</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>Upload (Bytes)</strong></td>
+<td style="text-align:left"><code>/upload-bytes/</code></td>
+<td style="text-align:left">POST</td>
+<td style="text-align:left">❌ No</td>
+<td style="text-align:left">Small (&lt; 1MB)</td>
+<td style="text-align:left">Config files 📄</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Upload (File)</strong></td>
+<td style="text-align:left"><code>/upload-file/</code></td>
+<td style="text-align:left">POST</td>
+<td style="text-align:left">❌ No</td>
+<td style="text-align:left">Large (Any)</td>
+<td style="text-align:left">Documents 📁</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Save to Disk</strong></td>
+<td style="text-align:left"><code>/save-file/</code></td>
+<td style="text-align:left">POST</td>
+<td style="text-align:left">❌ No</td>
+<td style="text-align:left">Large (Any)</td>
+<td style="text-align:left">File storage 💾</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Protected Download</strong></td>
+<td style="text-align:left"><code>/download/{name}</code></td>
+<td style="text-align:left">GET</td>
+<td style="text-align:left">✅ Yes</td>
+<td style="text-align:left">Any</td>
+<td style="text-align:left">Secure access 🔒</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Static Files</strong></td>
+<td style="text-align:left"><code>/static/{path}</code></td>
+<td style="text-align:left">GET</td>
+<td style="text-align:left">❌ No</td>
+<td style="text-align:left">Any</td>
+<td style="text-align:left">Public assets 🌐</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Custom Static</strong></td>
+<td style="text-align:left"><code>/files/{path}</code></td>
+<td style="text-align:left">GET</td>
+<td style="text-align:left">❌ No</td>
+<td style="text-align:left">Any</td>
+<td style="text-align:left">Logged access 📊</td>
+</tr>
+</tbody>
+</table>
+<h2 id="%F0%9F%92%A1-real-world-implementation-examples">💡 Real-World Implementation Examples</h2>
+<h3 id="%F0%9F%96%BC%EF%B8%8F-profile-picture-upload">🖼️ <strong>Profile Picture Upload</strong></h3>
+<pre class="hljs"><code><div><span class="hljs-meta">@app.post("/users/profile-picture/")</span>
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">upload_profile_picture</span><span class="hljs-params">(
+    file: UploadFile = File<span class="hljs-params">(...)</span>,
+    current_user: dict = Depends<span class="hljs-params">(get_current_user)</span>
+)</span>:</span>
+    <span class="hljs-string">"""🖼️ Upload and process user profile picture"""</span>
+    
+    <span class="hljs-comment"># ✅ Validate image file</span>
+    allowed_types = [<span class="hljs-string">'image/jpeg'</span>, <span class="hljs-string">'image/png'</span>, <span class="hljs-string">'image/webp'</span>]
+    <span class="hljs-keyword">if</span> file.content_type <span class="hljs-keyword">not</span> <span class="hljs-keyword">in</span> allowed_types:
+        <span class="hljs-keyword">raise</span> HTTPException(<span class="hljs-number">400</span>, <span class="hljs-string">"Only JPEG, PNG, and WebP images allowed"</span>)
+    
+    <span class="hljs-comment"># 📏 Check file size (max 5MB)</span>
+    content = <span class="hljs-keyword">await</span> file.read()
+    <span class="hljs-keyword">if</span> len(content) &gt; <span class="hljs-number">5</span> * <span class="hljs-number">1024</span> * <span class="hljs-number">1024</span>:
+        <span class="hljs-keyword">raise</span> HTTPException(<span class="hljs-number">400</span>, <span class="hljs-string">"File size must be less than 5MB"</span>)
+    
+    <span class="hljs-comment"># 💾 Save with user-specific naming</span>
+    filename = <span class="hljs-string">f"profile_<span class="hljs-subst">{current_user[<span class="hljs-string">'user_id'</span>]}</span>.<span class="hljs-subst">{file.filename.split(<span class="hljs-string">'.'</span>)[<span class="hljs-number">-1</span>]}</span>"</span>
+    file_path = Path(<span class="hljs-string">"static/profiles"</span>) / filename
+    
+    <span class="hljs-comment"># Ensure directory exists</span>
+    file_path.parent.mkdir(parents=<span class="hljs-literal">True</span>, exist_ok=<span class="hljs-literal">True</span>)
+    
+    <span class="hljs-comment"># Save file</span>
+    <span class="hljs-keyword">async</span> <span class="hljs-keyword">with</span> aiofiles.open(file_path, <span class="hljs-string">'wb'</span>) <span class="hljs-keyword">as</span> f:
+        <span class="hljs-keyword">await</span> f.write(content)
+    
+    <span class="hljs-keyword">return</span> {
+        <span class="hljs-string">"message"</span>: <span class="hljs-string">"Profile picture updated successfully"</span>,
+        <span class="hljs-string">"image_url"</span>: <span class="hljs-string">f"/static/profiles/<span class="hljs-subst">{filename}</span>"</span>
+    }
+</div></code></pre>
+<h3 id="%F0%9F%93%8A-csv-data-processing">📊 <strong>CSV Data Processing</strong></h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">import</span> pandas <span class="hljs-keyword">as</span> pd
+<span class="hljs-keyword">from</span> io <span class="hljs-keyword">import</span> StringIO
+
+<span class="hljs-meta">@app.post("/analyze-csv/")</span>
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">analyze_csv</span><span class="hljs-params">(file: UploadFile = File<span class="hljs-params">(...)</span>)</span>:</span>
+    <span class="hljs-string">"""📊 Process and analyze CSV file"""</span>
+    
+    <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> file.filename.endswith(<span class="hljs-string">'.csv'</span>):
+        <span class="hljs-keyword">raise</span> HTTPException(<span class="hljs-number">400</span>, <span class="hljs-string">"Only CSV files are allowed"</span>)
+    
+    <span class="hljs-keyword">try</span>:
+        <span class="hljs-comment"># 📖 Read CSV content</span>
+        content = <span class="hljs-keyword">await</span> file.read()
+        csv_string = content.decode(<span class="hljs-string">'utf-8'</span>)
+        
+        <span class="hljs-comment"># 🐼 Create pandas DataFrame</span>
+        df = pd.read_csv(StringIO(csv_string))
+        
+        <span class="hljs-comment"># 📊 Generate analysis</span>
+        analysis = {
+            <span class="hljs-string">"rows"</span>: len(df),
+            <span class="hljs-string">"columns"</span>: len(df.columns),
+            <span class="hljs-string">"column_names"</span>: df.columns.tolist(),
+            <span class="hljs-string">"data_types"</span>: df.dtypes.to_dict(),
+            <span class="hljs-string">"missing_values"</span>: df.isnull().sum().to_dict(),
+            <span class="hljs-string">"sample_data"</span>: df.head().to_dict(<span class="hljs-string">'records'</span>)
+        }
+        
+        <span class="hljs-keyword">return</span> {<span class="hljs-string">"analysis"</span>: analysis}
+        
+    <span class="hljs-keyword">except</span> Exception <span class="hljs-keyword">as</span> e:
+        <span class="hljs-keyword">raise</span> HTTPException(<span class="hljs-number">500</span>, <span class="hljs-string">f"CSV processing error: <span class="hljs-subst">{str(e)}</span>"</span>)
+</div></code></pre>
+<h2 id="%F0%9F%9B%A1%EF%B8%8F-advanced-security-implementation">🛡️ Advanced Security Implementation</h2>
+<h3 id="%F0%9F%94%90-file-type-validation">🔐 <strong>File Type Validation</strong></h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">import</span> magic
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">validate_file_type</span><span class="hljs-params">(file_content: bytes, expected_types: list)</span> -&gt; bool:</span>
+    <span class="hljs-string">"""🔍 Validate file type using magic numbers"""</span>
+    mime_type = magic.from_buffer(file_content, mime=<span class="hljs-literal">True</span>)
+    <span class="hljs-keyword">return</span> mime_type <span class="hljs-keyword">in</span> expected_types
+
+<span class="hljs-meta">@app.post("/secure-upload/")</span>
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">secure_upload</span><span class="hljs-params">(file: UploadFile = File<span class="hljs-params">(...)</span>)</span>:</span>
+    <span class="hljs-string">"""🛡️ Upload with comprehensive security checks"""</span>
+    
+    <span class="hljs-comment"># 📖 Read file content</span>
+    content = <span class="hljs-keyword">await</span> file.read()
+    
+    <span class="hljs-comment"># 🔍 Validate file type using magic numbers</span>
+    allowed_types = [<span class="hljs-string">'image/jpeg'</span>, <span class="hljs-string">'image/png'</span>, <span class="hljs-string">'text/plain'</span>]
+    <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> validate_file_type(content, allowed_types):
+        <span class="hljs-keyword">raise</span> HTTPException(<span class="hljs-number">400</span>, <span class="hljs-string">"File type not allowed"</span>)
+    
+    <span class="hljs-comment"># 🦠 Basic malware check (content scanning)</span>
+    suspicious_patterns = [<span class="hljs-string">b'&lt;script'</span>, <span class="hljs-string">b'javascript:'</span>, <span class="hljs-string">b'&lt;?php'</span>]
+    <span class="hljs-keyword">for</span> pattern <span class="hljs-keyword">in</span> suspicious_patterns:
+        <span class="hljs-keyword">if</span> pattern <span class="hljs-keyword">in</span> content:
+            <span class="hljs-keyword">raise</span> HTTPException(<span class="hljs-number">400</span>, <span class="hljs-string">"Suspicious content detected"</span>)
+    
+    <span class="hljs-comment"># 📏 Size validation</span>
+    max_size = <span class="hljs-number">10</span> * <span class="hljs-number">1024</span> * <span class="hljs-number">1024</span>  <span class="hljs-comment"># 10MB</span>
+    <span class="hljs-keyword">if</span> len(content) &gt; max_size:
+        <span class="hljs-keyword">raise</span> HTTPException(<span class="hljs-number">400</span>, <span class="hljs-string">"File too large"</span>)
+    
+    <span class="hljs-comment"># ✅ File is safe to process</span>
+    <span class="hljs-keyword">return</span> {<span class="hljs-string">"status"</span>: <span class="hljs-string">"File validated successfully"</span>}
+</div></code></pre>
+<h2 id="%F0%9F%93%9A-additional-resources--references">📚 Additional Resources &amp; References</h2>
+<h3 id="%F0%9F%94%97-official-documentation">🔗 <strong>Official Documentation</strong></h3>
+<ul>
+<li><a href="https://fastapi.tiangolo.com/tutorial/request-files/">FastAPI File Uploads</a></li>
+<li><a href="https://fastapi.tiangolo.com/tutorial/static-files/">FastAPI Static Files</a></li>
+<li><a href="https://fastapi.tiangolo.com/tutorial/security/">FastAPI Security</a></li>
+</ul>
+<h3 id="%F0%9F%93%96-related-topics">📖 <strong>Related Topics</strong></h3>
+<ul>
+<li><a href="./9.%20OAuth.md">OAuth2 &amp; JWT Implementation</a></li>
+<li><a href="./database.md">Database Integration</a></li>
+<li><a href="./testing.md">API Testing</a></li>
+</ul>
+<h3 id="%F0%9F%9B%A0%EF%B8%8F-required-dependencies">🛠️ <strong>Required Dependencies</strong></h3>
+<pre class="hljs"><code><div><span class="hljs-comment"># 📦 Core dependencies</span>
+pip install fastapi uvicorn python-multipart
+
+<span class="hljs-comment"># 🔒 Security &amp; validation</span>
+pip install python-magic python-jose[cryptography]
+
+<span class="hljs-comment"># 📊 Data processing</span>
+pip install pandas aiofiles
+
+<span class="hljs-comment"># 🧪 Testing</span>
+pip install pytest httpx
+</div></code></pre>
+<h2 id="%E2%9A%A1-performance-optimization-tips">⚡ Performance Optimization Tips</h2>
+<h3 id="%F0%9F%9A%80-memory-management">🚀 <strong>Memory Management</strong></h3>
+<ul>
+<li>Use <code>UploadFile</code> for files &gt; 1MB</li>
+<li>Implement file streaming for very large files</li>
+<li>Set appropriate timeout values</li>
+<li>Use async file operations with <code>aiofiles</code></li>
+</ul>
+<h3 id="%F0%9F%93%8A-monitoring--logging">📊 <strong>Monitoring &amp; Logging</strong></h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">import</span> logging
+<span class="hljs-keyword">import</span> time
+
+logger = logging.getLogger(__name__)
+
+<span class="hljs-meta">@app.post("/upload-monitored/")</span>
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">upload_with_monitoring</span><span class="hljs-params">(file: UploadFile = File<span class="hljs-params">(...)</span>)</span>:</span>
+    <span class="hljs-string">"""📊 File upload with performance monitoring"""</span>
+    start_time = time.time()
+    
+    <span class="hljs-keyword">try</span>:
+        <span class="hljs-comment"># Process file</span>
+        content = <span class="hljs-keyword">await</span> file.read()
+        
+        <span class="hljs-comment"># Log metrics</span>
+        processing_time = time.time() - start_time
+        logger.info(<span class="hljs-string">f"File processed: <span class="hljs-subst">{file.filename}</span>, Size: <span class="hljs-subst">{len(content)}</span>, Time: <span class="hljs-subst">{processing_time:<span class="hljs-number">.2</span>f}</span>s"</span>)
+        
+        <span class="hljs-keyword">return</span> {<span class="hljs-string">"status"</span>: <span class="hljs-string">"success"</span>, <span class="hljs-string">"processing_time"</span>: processing_time}
+        
+    <span class="hljs-keyword">except</span> Exception <span class="hljs-keyword">as</span> e:
+        logger.error(<span class="hljs-string">f"File processing failed: <span class="hljs-subst">{str(e)}</span>"</span>)
+        <span class="hljs-keyword">raise</span>
+</div></code></pre>
+<hr>
+
+</body>
+</html>

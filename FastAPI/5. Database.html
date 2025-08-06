@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>5. Database.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h2 id="%E2%9A%99%EF%B8%8F-complete-createuser-flow-in-fastapi">⚙️ <strong>Complete <code>create_user</code> Flow in FastAPI</strong></h2>
+<h3 id="%E2%9C%85-1-schemaspy--request--response-models">✅ 1. <code>schemas.py</code> — Request &amp; Response Models</h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> pydantic <span class="hljs-keyword">import</span> BaseModel, EmailStr
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">UserCreate</span><span class="hljs-params">(BaseModel)</span>:</span>
+    name: str
+    email: EmailStr
+    password: str
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">UserResponse</span><span class="hljs-params">(BaseModel)</span>:</span>
+    id: int
+    name: str
+    email: EmailStr
+
+    <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Config</span>:</span>
+        orm_mode = <span class="hljs-literal">True</span>  <span class="hljs-comment"># important to work with ORM objects</span>
+</div></code></pre>
+<hr>
+<h3 id="%E2%9C%85-2-modelspy--sqlalchemy-user-model">✅ 2. <code>models.py</code> — SQLAlchemy User Model</h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> sqlalchemy <span class="hljs-keyword">import</span> Column, Integer, String
+<span class="hljs-keyword">from</span> database <span class="hljs-keyword">import</span> Base
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">User</span><span class="hljs-params">(Base)</span>:</span>
+    __tablename__ = <span class="hljs-string">"users"</span>
+
+    id = Column(Integer, primary_key=<span class="hljs-literal">True</span>, index=<span class="hljs-literal">True</span>)
+    name = Column(String, nullable=<span class="hljs-literal">False</span>)
+    email = Column(String, unique=<span class="hljs-literal">True</span>, index=<span class="hljs-literal">True</span>)
+    password = Column(String, nullable=<span class="hljs-literal">False</span>)  <span class="hljs-comment"># store hashed password</span>
+</div></code></pre>
+<hr>
+<h3 id="%E2%9C%85-3-databasepy--db-setup--dependency">✅ 3. <code>database.py</code> — DB Setup + Dependency</h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> sqlalchemy <span class="hljs-keyword">import</span> create_engine
+<span class="hljs-keyword">from</span> sqlalchemy.ext.declarative <span class="hljs-keyword">import</span> declarative_base
+<span class="hljs-keyword">from</span> sqlalchemy.orm <span class="hljs-keyword">import</span> sessionmaker
+
+DATABASE_URL = <span class="hljs-string">"sqlite:///./test.db"</span>  <span class="hljs-comment"># or PostgreSQL, MySQL etc.</span>
+
+engine = create_engine(DATABASE_URL, connect_args={<span class="hljs-string">"check_same_thread"</span>: <span class="hljs-literal">False</span>})
+SessionLocal = sessionmaker(autocommit=<span class="hljs-literal">False</span>, autoflush=<span class="hljs-literal">False</span>, bind=engine)
+Base = declarative_base()
+
+<span class="hljs-comment"># Dependency to use in routes</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_db</span><span class="hljs-params">()</span>:</span>
+    db = SessionLocal()
+    <span class="hljs-keyword">try</span>:
+        <span class="hljs-keyword">yield</span> db
+    <span class="hljs-keyword">finally</span>:
+        db.close()
+</div></code></pre>
+<hr>
+<h3 id="%E2%9C%85-4-crudpy--business-logic-service-layer">✅ 4. <code>crud.py</code> — Business Logic (Service Layer)</h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> sqlalchemy.orm <span class="hljs-keyword">import</span> Session
+<span class="hljs-keyword">from</span> models <span class="hljs-keyword">import</span> User
+<span class="hljs-keyword">from</span> schemas <span class="hljs-keyword">import</span> UserCreate
+<span class="hljs-keyword">from</span> utils <span class="hljs-keyword">import</span> hash_password  <span class="hljs-comment"># if using hashing</span>
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">create_user</span><span class="hljs-params">(db: Session, user: UserCreate)</span>:</span>
+    db_user = User(
+        name=user.name,
+        email=user.email,
+        password=hash_password(user.password)  <span class="hljs-comment"># optional hashing</span>
+    )
+    db.add(db_user)
+    db.commit()
+    db.refresh(db_user)
+    <span class="hljs-keyword">return</span> db_user
+</div></code></pre>
+<hr>
+<h3 id="%E2%9C%85-5-utilspy--optional-password-hashing">✅ 5. <code>utils.py</code> — (Optional) Password Hashing</h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> passlib.context <span class="hljs-keyword">import</span> CryptContext
+
+pwd_context = CryptContext(schemes=[<span class="hljs-string">"bcrypt"</span>], deprecated=<span class="hljs-string">"auto"</span>)
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">hash_password</span><span class="hljs-params">(password: str)</span> -&gt; str:</span>
+    <span class="hljs-keyword">return</span> pwd_context.hash(password)
+</div></code></pre>
+<hr>
+<h3 id="%E2%9C%85-6-mainpy--fastapi-route-using-dependency">✅ 6. <code>main.py</code> — FastAPI Route Using Dependency</h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> fastapi <span class="hljs-keyword">import</span> FastAPI, Depends, HTTPException
+<span class="hljs-keyword">from</span> sqlalchemy.orm <span class="hljs-keyword">import</span> Session
+<span class="hljs-keyword">import</span> models, schemas, crud
+<span class="hljs-keyword">from</span> database <span class="hljs-keyword">import</span> engine, get_db
+
+models.Base.metadata.create_all(bind=engine)
+
+app = FastAPI()
+
+<span class="hljs-meta">@app.post("/users/", response_model=schemas.UserResponse)</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">create_user</span><span class="hljs-params">(user: schemas.UserCreate, db: Session = Depends<span class="hljs-params">(get_db)</span>)</span>:</span>
+    db_user = crud.create_user(db, user)
+    <span class="hljs-keyword">return</span> db_user
+</div></code></pre>
+<hr>
+<h2 id="%F0%9F%94%81-full-request%E2%80%93response-flow">🔁 Full Request–Response Flow</h2>
+<ol>
+<li>
+<p>🌐 <strong>Request:</strong></p>
+<pre class="hljs"><code><div>POST /users/
+{
+  <span class="hljs-attr">"name"</span>: <span class="hljs-string">"Darshan"</span>,
+  <span class="hljs-attr">"email"</span>: <span class="hljs-string">"darshan@example.com"</span>,
+  <span class="hljs-attr">"password"</span>: <span class="hljs-string">"secret123"</span>
+}
+</div></code></pre>
+</li>
+<li>
+<p>🎯 <strong>FastAPI Route:</strong></p>
+<ul>
+<li>Validates using <code>UserCreate</code></li>
+<li>Injects <code>db</code> session via <code>Depends(get_db)</code></li>
+</ul>
+</li>
+<li>
+<p>⚙️ <strong>Business Logic (CRUD Layer):</strong></p>
+<ul>
+<li>Calls <code>create_user(db, user)</code></li>
+<li>Hashes password (optional)</li>
+<li>Adds user to DB</li>
+</ul>
+</li>
+<li>
+<p>🧱 <strong>SQLAlchemy Model:</strong></p>
+<ul>
+<li>Maps to <code>users</code> table</li>
+</ul>
+</li>
+<li>
+<p>📤 <strong>Response:</strong>
+Returns <code>UserResponse</code> model (hides password!)</p>
+</li>
+</ol>
+<hr>
+<h2 id="%F0%9F%A7%A0-bonus-folder-structure">🧠 Bonus: Folder Structure</h2>
+<pre class="hljs"><code><div>project/
+│
+├── main.py
+├── models.py
+├── schemas.py
+├── crud.py
+├── database.py
+├── utils.py
+└── requirements.txt
+</div></code></pre>
+<hr>
+<h2 id="%E2%9C%85-features-used">✅ Features Used</h2>
+<table>
+<thead>
+<tr>
+<th>Concept</th>
+<th>Usage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>🧩 Pydantic Models</td>
+<td><code>UserCreate</code>, <code>UserResponse</code></td>
+</tr>
+<tr>
+<td>🛢 SQLAlchemy ORM</td>
+<td><code>User</code> model in <code>models.py</code></td>
+</tr>
+<tr>
+<td>🧬 Dependency Injection</td>
+<td><code>Depends(get_db)</code> in route</td>
+</tr>
+<tr>
+<td>🔄 DB Abstraction</td>
+<td><code>crud.create_user(db, user)</code></td>
+</tr>
+<tr>
+<td>🔐 Optional Security</td>
+<td><code>hash_password</code> via <code>passlib</code></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h1 id="%F0%9F%94%84-1-fastapi-createuser-flow-%E2%80%93-arrow-diagram--explanation">🔄 <strong>1. FastAPI <code>create_user</code> Flow – Arrow Diagram &amp; Explanation</strong></h1>
+<pre class="hljs"><code><div>CLIENT (e.g., Postman, React) sends JSON payload
+    |
+    V
+POST /users/         🔸 Request: { &quot;name&quot;: &quot;Darshan&quot;, &quot;email&quot;: &quot;...&quot;, &quot;password&quot;: &quot;1234&quot; }
+    |
+    V
+@app.post(&quot;/users/&quot;)
+def create_user(user: UserCreate, db: Session = Depends(get_db)):
+    |
+    ├── Validates body using → 🧩 Pydantic `UserCreate`
+    └── Injects DB session → 🧬 Depends(get_db)
+        |
+        V
+    Calls ➝ crud.create_user(db, user)
+               |
+               └── Creates new User ORM object
+               └── Hashes password (optional)
+               └── db.add(), db.commit(), db.refresh()
+        |
+        V
+    Returns ➝ UserResponse (without password)
+    |
+    V
+Client receives JSON:
+{
+  &quot;id&quot;: 1,
+  &quot;name&quot;: &quot;Darshan&quot;,
+  &quot;email&quot;: &quot;darshan@example.com&quot;
+}
+</div></code></pre>
+<hr>
+<h2 id="%F0%9F%93%A6-data-flow-breakdown">📦 Data Flow Breakdown:</h2>
+<ul>
+<li><strong>Pydantic Schema</strong>: Input validated (<code>UserCreate</code>)</li>
+<li><strong>Dependency Injection</strong>: <code>get_db</code> provides a DB session</li>
+<li><strong>Business Logic (CRUD)</strong>: <code>create_user</code> interacts with DB</li>
+<li><strong>ORM (SQLAlchemy)</strong>: Handles table &amp; row management</li>
+<li><strong>Response Model</strong>: Returns only <code>id</code>, <code>name</code>, <code>email</code></li>
+</ul>
+<hr>
+<h1 id="%F0%9F%94%90-2-jwt-authentication-flow-in-fastapi">🔐 <strong>2. JWT Authentication Flow in FastAPI</strong></h1>
+<p>Let’s now explore how <strong>JWT Login works</strong> using password validation, token generation, and protection of private routes.</p>
+<hr>
+<h2 id="%F0%9F%94%81-jwt-flow-%E2%80%93-arrow-diagram">🔁 JWT Flow – Arrow Diagram</h2>
+<pre class="hljs"><code><div>CLIENT sends login credentials:
+POST /login
+{ &quot;username&quot;: &quot;darshan&quot;, &quot;password&quot;: &quot;1234&quot; }
+    |
+    V
+@app.post(&quot;/login&quot;)
+    |
+    ├── Verifies username in DB
+    ├── Validates password using hash check
+    └── If valid:
+          |
+          V
+       Generate JWT using PyJWT
+       Return token → { &quot;access_token&quot;: &quot;&lt;JWT&gt;&quot;, &quot;token_type&quot;: &quot;bearer&quot; }
+
+Then, on protected routes:
+
+CLIENT calls:
+GET /profile with Header: Authorization: Bearer &lt;JWT&gt;
+    |
+    V
+Depends(get_current_user)
+    ├── Decodes JWT
+    ├── Verifies signature
+    ├── Gets user_id/email from payload
+    └── Loads user from DB
+    |
+    V
+Returns secure data
+</div></code></pre>
+<hr>
+<h2 id="%E2%9C%85-code-breakdown">✅ Code Breakdown</h2>
+<h3 id="1%EF%B8%8F%E2%83%A3-generate-token-%E2%80%93-authpy">1️⃣ Generate Token – <code>auth.py</code></h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> datetime <span class="hljs-keyword">import</span> datetime, timedelta
+<span class="hljs-keyword">from</span> jose <span class="hljs-keyword">import</span> JWTError, jwt
+
+SECRET_KEY = <span class="hljs-string">"your-secret"</span>
+ALGORITHM = <span class="hljs-string">"HS256"</span>
+ACCESS_TOKEN_EXPIRE_MINUTES = <span class="hljs-number">30</span>
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">create_access_token</span><span class="hljs-params">(data: dict)</span>:</span>
+    to_encode = data.copy()
+    expire = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    to_encode.update({<span class="hljs-string">"exp"</span>: expire})
+    <span class="hljs-keyword">return</span> jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+</div></code></pre>
+<hr>
+<h3 id="2%EF%B8%8F%E2%83%A3-login-route-%E2%80%93-routespy">2️⃣ Login Route – <code>routes.py</code></h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> fastapi <span class="hljs-keyword">import</span> APIRouter, Depends, HTTPException
+<span class="hljs-keyword">from</span> fastapi.security <span class="hljs-keyword">import</span> OAuth2PasswordRequestForm
+<span class="hljs-keyword">from</span> sqlalchemy.orm <span class="hljs-keyword">import</span> Session
+<span class="hljs-keyword">from</span> auth <span class="hljs-keyword">import</span> create_access_token
+<span class="hljs-keyword">from</span> utils <span class="hljs-keyword">import</span> verify_password
+<span class="hljs-keyword">from</span> models <span class="hljs-keyword">import</span> User
+<span class="hljs-keyword">from</span> database <span class="hljs-keyword">import</span> get_db
+
+router = APIRouter()
+
+<span class="hljs-meta">@router.post("/login")</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">login</span><span class="hljs-params">(form_data: OAuth2PasswordRequestForm = Depends<span class="hljs-params">()</span>, db: Session = Depends<span class="hljs-params">(get_db)</span>)</span>:</span>
+    user = db.query(User).filter(User.email == form_data.username).first()
+    <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> user <span class="hljs-keyword">or</span> <span class="hljs-keyword">not</span> verify_password(form_data.password, user.password):
+        <span class="hljs-keyword">raise</span> HTTPException(status_code=<span class="hljs-number">401</span>, detail=<span class="hljs-string">"Invalid credentials"</span>)
+
+    access_token = create_access_token(data={<span class="hljs-string">"sub"</span>: user.email})
+    <span class="hljs-keyword">return</span> {<span class="hljs-string">"access_token"</span>: access_token, <span class="hljs-string">"token_type"</span>: <span class="hljs-string">"bearer"</span>}
+</div></code></pre>
+<hr>
+<h3 id="3%EF%B8%8F%E2%83%A3-protected-route">3️⃣ Protected Route</h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> fastapi <span class="hljs-keyword">import</span> Depends
+<span class="hljs-keyword">from</span> fastapi.security <span class="hljs-keyword">import</span> OAuth2PasswordBearer
+<span class="hljs-keyword">from</span> jose <span class="hljs-keyword">import</span> JWTError, jwt
+<span class="hljs-keyword">from</span> sqlalchemy.orm <span class="hljs-keyword">import</span> Session
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl=<span class="hljs-string">"/login"</span>)
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_current_user</span><span class="hljs-params">(token: str = Depends<span class="hljs-params">(oauth2_scheme)</span>, db: Session = Depends<span class="hljs-params">(get_db)</span>)</span>:</span>
+    <span class="hljs-keyword">try</span>:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        email: str = payload.get(<span class="hljs-string">"sub"</span>)
+        <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> email:
+            <span class="hljs-keyword">raise</span> HTTPException(status_code=<span class="hljs-number">401</span>)
+    <span class="hljs-keyword">except</span> JWTError:
+        <span class="hljs-keyword">raise</span> HTTPException(status_code=<span class="hljs-number">401</span>)
+
+    user = db.query(User).filter(User.email == email).first()
+    <span class="hljs-keyword">return</span> user
+</div></code></pre>
+<p>Use in route:</p>
+<pre class="hljs"><code><div><span class="hljs-meta">@app.get("/me")</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">read_profile</span><span class="hljs-params">(current_user: User = Depends<span class="hljs-params">(get_current_user)</span>)</span>:</span>
+    <span class="hljs-keyword">return</span> current_user
+</div></code></pre>
+<hr>
+<h2 id="%E2%9C%85-summary-table-%E2%80%93-jwt-auth-flow">✅ Summary Table – JWT Auth Flow</h2>
+<table>
+<thead>
+<tr>
+<th>Step</th>
+<th>Action</th>
+<th>Tool Used</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>🔐 Login</td>
+<td>POST <code>/login</code> with <code>username/password</code></td>
+<td><code>OAuth2PasswordRequestForm</code></td>
+</tr>
+<tr>
+<td>✅ Validate</td>
+<td>Check password hash, issue token</td>
+<td><code>passlib</code>, <code>jose</code></td>
+</tr>
+<tr>
+<td>🔑 Token</td>
+<td>JWT with <code>sub</code> (email) and <code>exp</code></td>
+<td><code>create_access_token()</code></td>
+</tr>
+<tr>
+<td>📦 Protect</td>
+<td>Decode token in protected routes</td>
+<td><code>get_current_user()</code></td>
+</tr>
+<tr>
+<td>📤 Response</td>
+<td>Secured user data</td>
+<td>Token-based access</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h1 id="%E2%9C%85-user-creation-system-checklist">✅ <strong>USER CREATION SYSTEM CHECKLIST</strong></h1>
+<table>
+<thead>
+<tr>
+<th>✅ Step</th>
+<th>Description</th>
+<th>File</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>✔️ 1</td>
+<td>DB Engine + Session Setup</td>
+<td><code>database.py</code></td>
+</tr>
+<tr>
+<td>✔️ 2</td>
+<td>SQLAlchemy Model for User</td>
+<td><code>models.py</code></td>
+</tr>
+<tr>
+<td>✔️ 3</td>
+<td>Pydantic Request &amp; Response Schemas</td>
+<td><code>schemas.py</code></td>
+</tr>
+<tr>
+<td>✔️ 4</td>
+<td>User CRUD Logic</td>
+<td><code>db_user.py</code></td>
+</tr>
+<tr>
+<td>✔️ 5</td>
+<td>API Route for <code>/users/</code></td>
+<td><code>user.py</code></td>
+</tr>
+<tr>
+<td>✔️ 6</td>
+<td>Main App Mounting Routes</td>
+<td><code>main.py</code></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h1 id="%F0%9F%A7%B1-1-databasepy-%E2%80%93-setup-db-connection--session">🧱 <strong>1. <code>database.py</code> – Setup DB Connection &amp; Session</strong></h1>
+<pre class="hljs"><code><div><span class="hljs-comment"># database.py</span>
+<span class="hljs-keyword">from</span> sqlalchemy <span class="hljs-keyword">import</span> create_engine
+<span class="hljs-keyword">from</span> sqlalchemy.ext.declarative <span class="hljs-keyword">import</span> declarative_base
+<span class="hljs-keyword">from</span> sqlalchemy.orm <span class="hljs-keyword">import</span> sessionmaker
+
+DATABASE_URL = <span class="hljs-string">"sqlite:///./users.db"</span>
+
+engine = create_engine(
+    DATABASE_URL, connect_args={<span class="hljs-string">"check_same_thread"</span>: <span class="hljs-literal">False</span>}  <span class="hljs-comment"># SQLite specific</span>
+)
+SessionLocal = sessionmaker(autocommit=<span class="hljs-literal">False</span>, autoflush=<span class="hljs-literal">False</span>, bind=engine)
+
+Base = declarative_base()
+
+<span class="hljs-comment"># Dependency</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_db</span><span class="hljs-params">()</span>:</span>
+    db = SessionLocal()
+    <span class="hljs-keyword">try</span>:
+        <span class="hljs-keyword">yield</span> db
+    <span class="hljs-keyword">finally</span>:
+        db.close()
+</div></code></pre>
+<hr>
+<h1 id="%F0%9F%93%A6-2-modelspy-%E2%80%93-user-table-definition">📦 <strong>2. <code>models.py</code> – User Table Definition</strong></h1>
+<pre class="hljs"><code><div><span class="hljs-comment"># models.py</span>
+<span class="hljs-keyword">from</span> sqlalchemy <span class="hljs-keyword">import</span> Column, Integer, String
+<span class="hljs-keyword">from</span> database <span class="hljs-keyword">import</span> Base
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">User</span><span class="hljs-params">(Base)</span>:</span>
+    __tablename__ = <span class="hljs-string">"users"</span>
+
+    id = Column(Integer, primary_key=<span class="hljs-literal">True</span>, index=<span class="hljs-literal">True</span>)
+    name = Column(String, nullable=<span class="hljs-literal">False</span>)
+    email = Column(String, unique=<span class="hljs-literal">True</span>, index=<span class="hljs-literal">True</span>)
+    password = Column(String, nullable=<span class="hljs-literal">False</span>)
+</div></code></pre>
+<hr>
+<h1 id="%F0%9F%A7%A9-3-schemaspy-%E2%80%93-user-request--response-schemas">🧩 <strong>3. <code>schemas.py</code> – User Request &amp; Response Schemas</strong></h1>
+<pre class="hljs"><code><div><span class="hljs-comment"># schemas.py</span>
+<span class="hljs-keyword">from</span> pydantic <span class="hljs-keyword">import</span> BaseModel, EmailStr
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">UserCreate</span><span class="hljs-params">(BaseModel)</span>:</span>
+    name: str
+    email: EmailStr
+    password: str
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">UserResponse</span><span class="hljs-params">(BaseModel)</span>:</span>
+    id: int
+    name: str
+    email: EmailStr
+
+    <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Config</span>:</span>
+        orm_mode = <span class="hljs-literal">True</span>
+</div></code></pre>
+<hr>
+<h1 id="%F0%9F%A7%A0-4-dbuserpy-%E2%80%93-business-logic-layer-crud">🧠 <strong>4. <code>db_user.py</code> – Business Logic Layer (CRUD)</strong></h1>
+<pre class="hljs"><code><div><span class="hljs-comment"># db_user.py</span>
+<span class="hljs-keyword">from</span> sqlalchemy.orm <span class="hljs-keyword">import</span> Session
+<span class="hljs-keyword">from</span> models <span class="hljs-keyword">import</span> User
+<span class="hljs-keyword">from</span> schemas <span class="hljs-keyword">import</span> UserCreate
+<span class="hljs-keyword">from</span> utils <span class="hljs-keyword">import</span> hash_password
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">create_user</span><span class="hljs-params">(db: Session, user: UserCreate)</span>:</span>
+    db_user = User(
+        name=user.name,
+        email=user.email,
+        password=hash_password(user.password)
+    )
+    db.add(db_user)
+    db.commit()
+    db.refresh(db_user)
+    <span class="hljs-keyword">return</span> db_user
+</div></code></pre>
+<hr>
+<h1 id="%F0%9F%94%90-optional-utilspy-%E2%80%93-password-hashing">🔐 <strong>(Optional) <code>utils.py</code> – Password Hashing</strong></h1>
+<pre class="hljs"><code><div><span class="hljs-comment"># utils.py</span>
+<span class="hljs-keyword">from</span> passlib.context <span class="hljs-keyword">import</span> CryptContext
+
+pwd_context = CryptContext(schemes=[<span class="hljs-string">"bcrypt"</span>], deprecated=<span class="hljs-string">"auto"</span>)
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">hash_password</span><span class="hljs-params">(password: str)</span> -&gt; str:</span>
+    <span class="hljs-keyword">return</span> pwd_context.hash(password)
+</div></code></pre>
+<hr>
+<h1 id="%F0%9F%9A%80-5-userpy-%E2%80%93-route-for-creating-user">🚀 <strong>5. <code>user.py</code> – Route for Creating User</strong></h1>
+<pre class="hljs"><code><div><span class="hljs-comment"># user.py</span>
+<span class="hljs-keyword">from</span> fastapi <span class="hljs-keyword">import</span> APIRouter, Depends
+<span class="hljs-keyword">from</span> sqlalchemy.orm <span class="hljs-keyword">import</span> Session
+<span class="hljs-keyword">from</span> database <span class="hljs-keyword">import</span> get_db
+<span class="hljs-keyword">from</span> schemas <span class="hljs-keyword">import</span> UserCreate, UserResponse
+<span class="hljs-keyword">from</span> db_user <span class="hljs-keyword">import</span> create_user
+
+router = APIRouter()
+
+<span class="hljs-meta">@router.post("/users/", response_model=UserResponse)</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">register_user</span><span class="hljs-params">(user: UserCreate, db: Session = Depends<span class="hljs-params">(get_db)</span>)</span>:</span>
+    <span class="hljs-keyword">return</span> create_user(db, user)
+</div></code></pre>
+<hr>
+<h1 id="%F0%9F%A7%AD-6-mainpy-%E2%80%93-mount-routers--initialize-db">🧭 <strong>6. <code>main.py</code> – Mount Routers &amp; Initialize DB</strong></h1>
+<pre class="hljs"><code><div><span class="hljs-comment"># main.py</span>
+<span class="hljs-keyword">from</span> fastapi <span class="hljs-keyword">import</span> FastAPI
+<span class="hljs-keyword">import</span> models
+<span class="hljs-keyword">from</span> database <span class="hljs-keyword">import</span> engine
+<span class="hljs-keyword">from</span> user <span class="hljs-keyword">import</span> router <span class="hljs-keyword">as</span> user_router
+
+models.Base.metadata.create_all(bind=engine)
+
+app = FastAPI()
+
+<span class="hljs-comment"># Mount the user routes</span>
+app.include_router(user_router)
+</div></code></pre>
+<hr>
+<h1 id="%E2%9C%85-final-folder--file-structure">✅ Final Folder &amp; File Structure</h1>
+<pre class="hljs"><code><div>project/
+├── main.py
+├── models.py
+├── schemas.py
+├── db_user.py
+├── user.py
+├── database.py
+├── utils.py
+└── users.db (created on first run)
+</div></code></pre>
+<hr>
+<h1 id="%F0%9F%94%81-test-the-api">🔁 Test the API</h1>
+<p><strong>📤 POST <code>/users/</code></strong></p>
+<pre class="hljs"><code><div>{
+  <span class="hljs-attr">"name"</span>: <span class="hljs-string">"Darshan"</span>,
+  <span class="hljs-attr">"email"</span>: <span class="hljs-string">"darshan@example.com"</span>,
+  <span class="hljs-attr">"password"</span>: <span class="hljs-string">"secret123"</span>
+}
+</div></code></pre>
+<p><strong>✅ Response:</strong></p>
+<pre class="hljs"><code><div>{
+  <span class="hljs-attr">"id"</span>: <span class="hljs-number">1</span>,
+  <span class="hljs-attr">"name"</span>: <span class="hljs-string">"Darshan"</span>,
+  <span class="hljs-attr">"email"</span>: <span class="hljs-string">"darshan@example.com"</span>
+}
+</div></code></pre>
+<hr>
+
+</body>
+</html>
