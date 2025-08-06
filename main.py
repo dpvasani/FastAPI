@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from routers import blog_post, blog_get, user, file as file_router
+from routers import blog_post, blog_get, user, file as file_router, templates
 from db.database import engine
 from db import models
 from fastapi import Request
@@ -52,6 +52,7 @@ app.include_router(user.router)
 app.include_router(file_router.router)
 app.include_router(blog_post.router, prefix="/blog", tags=["Blog - Post"])
 app.include_router(blog_get.router, prefix="/blog", tags=["Blog - Get"])
+app.include_router(templates.router)
 
 @app.get("/", tags=["Root"])
 def root():
