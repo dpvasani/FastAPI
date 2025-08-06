@@ -1,0 +1,3098 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>15. FastAPI Dependencies.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h1 id="%F0%9F%94%97-fastapi-dependencies-complete-advanced-guide-with-real-world-examples">🔗 FastAPI Dependencies: Complete Advanced Guide with Real-World Examples</h1>
+<hr>
+<h1 id="%F0%9F%9A%80-fastapi-dependencies-explained">🚀 FastAPI Dependencies Explained</h1>
+<h2 id="%F0%9F%A7%BE-overview">🧾 Overview</h2>
+<p>FastAPI has a powerful <strong>dependency injection</strong> system to help you:</p>
+<p>✅ Share logic across routes
+✅ Reuse code efficiently
+✅ Handle common concerns (like authentication, DB connection, validation)
+✅ Inject objects or values into your path operations</p>
+<p>Dependencies can be <strong>used at</strong>:</p>
+<ul>
+<li>Route level</li>
+<li>Class level</li>
+<li>Nested (multi-level)</li>
+<li>Global (router/app-wide)</li>
+</ul>
+<hr>
+<h2 id="%F0%9F%93%A6-dependencies-%E2%80%93-the-basics">📦 Dependencies – The Basics</h2>
+<h3 id="%F0%9F%94%8D-what-is-a-dependency">🔍 What is a Dependency?</h3>
+<p>A <strong>dependency</strong> is any <strong>function, class, or callable</strong> that provides some <strong>shared logic or resource</strong> to your endpoints.</p>
+<h3 id="%F0%9F%A4%94-why-use-dependencies">🤔 Why Use Dependencies?</h3>
+<ul>
+<li>💾 Share database connections</li>
+<li>🔐 Handle authentication</li>
+<li>🧪 Reuse validation logic</li>
+<li>🧼 Keep code DRY (Don't Repeat Yourself)</li>
+</ul>
+<hr>
+<h2 id="%F0%9F%A7%B1-basic-syntax--depends">🧱 Basic Syntax — <code>Depends</code></h2>
+<h3 id="%F0%9F%A7%B0-how-to-declare">🧰 How to Declare?</h3>
+<p>Use <code>Depends</code> from <code>fastapi</code> to declare a dependency.</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> fastapi <span class="hljs-keyword">import</span> FastAPI, Depends
+
+app = FastAPI()
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">common_logic</span><span class="hljs-params">()</span>:</span>
+    <span class="hljs-keyword">return</span> {<span class="hljs-string">"message"</span>: <span class="hljs-string">"🔧 I am shared logic!"</span>}
+
+<span class="hljs-meta">@app.get("/")</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">root</span><span class="hljs-params">(data=Depends<span class="hljs-params">(common_logic)</span>)</span>:</span>
+    <span class="hljs-keyword">return</span> {<span class="hljs-string">"info"</span>: data}
+</div></code></pre>
+<p>📝 <strong>Explanation</strong>:</p>
+<ul>
+<li><code>common_logic()</code> is a <strong>dependency</strong>.</li>
+<li><code>Depends(common_logic)</code> tells FastAPI to call it <strong>before the main function</strong>, and pass its return value.</li>
+</ul>
+<hr>
+<h2 id="%F0%9F%A7%A9-class-dependencies">🧩 Class Dependencies</h2>
+<h3 id="%E2%9C%85-any-callable-can-be-a-dependency">✅ Any Callable Can Be a Dependency</h3>
+<p>You can also use a <strong>class with <code>__call__()</code></strong> as a dependency:</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> fastapi <span class="hljs-keyword">import</span> FastAPI, Depends
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">AuthCheck</span>:</span>
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__init__</span><span class="hljs-params">(self, token_required: bool = True)</span>:</span>
+        self.token_required = token_required
+
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__call__</span><span class="hljs-params">(self)</span>:</span>
+        <span class="hljs-keyword">if</span> self.token_required:
+            <span class="hljs-keyword">return</span> {<span class="hljs-string">"user"</span>: <span class="hljs-string">"authenticated ✅"</span>}
+        <span class="hljs-keyword">return</span> {<span class="hljs-string">"user"</span>: <span class="hljs-string">"guest"</span>}
+
+app = FastAPI()
+
+<span class="hljs-meta">@app.get("/dashboard")</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">dashboard</span><span class="hljs-params">(user=Depends<span class="hljs-params">(AuthCheck<span class="hljs-params">(token_required=True)</span>)</span>)</span>:</span>
+    <span class="hljs-keyword">return</span> {<span class="hljs-string">"status"</span>: user}
+</div></code></pre>
+<p>🧠 <strong>Explanation</strong>:</p>
+<ul>
+<li>The <code>AuthCheck</code> class is <strong>called like a function</strong>, making it a valid dependency.</li>
+<li>You can customize behavior via constructor args.</li>
+</ul>
+<hr>
+<h2 id="%F0%9F%94%81-multi-level-dependencies">🔁 Multi-level Dependencies</h2>
+<h3 id="%F0%9F%A7%AC-dependencies-can-have-dependencies">🧬 Dependencies Can Have Dependencies</h3>
+<p>One dependency can <strong>depend on another</strong>, forming a chain.</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> fastapi <span class="hljs-keyword">import</span> Depends, FastAPI
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_token</span><span class="hljs-params">()</span>:</span>
+    <span class="hljs-keyword">return</span> <span class="hljs-string">"🔑 secret-token"</span>
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">verify_token</span><span class="hljs-params">(token=Depends<span class="hljs-params">(get_token)</span>)</span>:</span>
+    <span class="hljs-keyword">if</span> token != <span class="hljs-string">"🔑 secret-token"</span>:
+        <span class="hljs-keyword">raise</span> Exception(<span class="hljs-string">"Invalid token ❌"</span>)
+    <span class="hljs-keyword">return</span> <span class="hljs-string">"Token verified ✅"</span>
+
+app = FastAPI()
+
+<span class="hljs-meta">@app.get("/secure")</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">secure_data</span><span class="hljs-params">(status=Depends<span class="hljs-params">(verify_token)</span>)</span>:</span>
+    <span class="hljs-keyword">return</span> {<span class="hljs-string">"access"</span>: status}
+</div></code></pre>
+<p>🧠 <strong>Explanation</strong>:</p>
+<ul>
+<li><code>verify_token</code> <strong>depends</strong> on <code>get_token</code>.</li>
+<li>FastAPI <strong>resolves all dependencies recursively</strong>.</li>
+</ul>
+<hr>
+<h2 id="%F0%9F%8C%90-global-dependencies">🌐 Global Dependencies</h2>
+<p>You can apply a dependency to <strong>every route</strong> using:</p>
+<ul>
+<li>App level</li>
+<li>Router level</li>
+</ul>
+<hr>
+<h3 id="%F0%9F%94%84-apply-to-all-endpoints-globally">🔄 Apply to <em>All</em> Endpoints (Globally)</h3>
+<h4 id="1%EF%B8%8F%E2%83%A3-app-level-global-dependency">1️⃣ App-Level Global Dependency</h4>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> fastapi <span class="hljs-keyword">import</span> FastAPI, Depends
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">global_logger</span><span class="hljs-params">()</span>:</span>
+    print(<span class="hljs-string">"📝 Logging every request!"</span>)
+    <span class="hljs-keyword">return</span> <span class="hljs-string">"logged"</span>
+
+app = FastAPI(dependencies=[Depends(global_logger)])
+
+<span class="hljs-meta">@app.get("/hello")</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">hello</span><span class="hljs-params">()</span>:</span>
+    <span class="hljs-keyword">return</span> {<span class="hljs-string">"msg"</span>: <span class="hljs-string">"Hello World!"</span>}
+</div></code></pre>
+<p>🧠 <strong>Explanation</strong>:</p>
+<ul>
+<li><code>global_logger</code> is called <strong>for every route</strong>.</li>
+<li>Useful for <strong>logging, metrics, validation</strong>.</li>
+</ul>
+<hr>
+<h4 id="2%EF%B8%8F%E2%83%A3-router-level-global-dependency">2️⃣ Router-Level Global Dependency</h4>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> fastapi <span class="hljs-keyword">import</span> APIRouter, Depends, FastAPI
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">validate_api_key</span><span class="hljs-params">()</span>:</span>
+    print(<span class="hljs-string">"🔐 Validating API key..."</span>)
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">True</span>
+
+router = APIRouter(
+    prefix=<span class="hljs-string">"/items"</span>,
+    dependencies=[Depends(validate_api_key)]
+)
+
+<span class="hljs-meta">@router.get("/")</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_items</span><span class="hljs-params">()</span>:</span>
+    <span class="hljs-keyword">return</span> [<span class="hljs-string">"🍎"</span>, <span class="hljs-string">"🍌"</span>, <span class="hljs-string">"🍇"</span>]
+
+app = FastAPI()
+app.include_router(router)
+</div></code></pre>
+<p>🧠 <strong>Explanation</strong>:</p>
+<ul>
+<li>Dependency applies to <strong>all routes inside router</strong>.</li>
+<li>Helps <strong>modularize and secure</strong> route groups.</li>
+</ul>
+<hr>
+<h2 id="%F0%9F%A7%A0-summary">🧠 Summary</h2>
+<table>
+<thead>
+<tr>
+<th>🔢 Concept</th>
+<th>📘 Description</th>
+<th>💡 Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Depends()</code></td>
+<td>Declare a dependency</td>
+<td><code>Depends(get_db)</code></td>
+</tr>
+<tr>
+<td>Class Dependency</td>
+<td>Use class with <code>__call__()</code></td>
+<td><code>Depends(MyDependency())</code></td>
+</tr>
+<tr>
+<td>Multi-level</td>
+<td>Dependencies inside dependencies</td>
+<td><code>verify_token</code> depends on <code>get_token</code></td>
+</tr>
+<tr>
+<td>Global Dependency</td>
+<td>Applied to all endpoints</td>
+<td><code>FastAPI(dependencies=[...])</code> or <code>APIRouter(...)</code></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="%E2%9C%85-real-world-use-cases">✅ Real-world Use Cases</h2>
+<ul>
+<li>🔐 Authentication</li>
+<li>📊 Request Logging</li>
+<li>💾 Database Session Injection</li>
+<li>🚦 Role-based Access Control</li>
+<li>🛠️ Utility Functions</li>
+</ul>
+<hr>
+<h2 id="%F0%9F%A7%AA-bonus-%E2%80%93-dependency-with-yield">🧪 Bonus – Dependency with <code>yield</code></h2>
+<p>You can use <code>yield</code> for <strong>resource management</strong> like DB sessions.</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> fastapi <span class="hljs-keyword">import</span> Depends, FastAPI
+<span class="hljs-keyword">from</span> typing <span class="hljs-keyword">import</span> Generator
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_db</span><span class="hljs-params">()</span> -&gt; Generator:</span>
+    db = <span class="hljs-string">"📦 Database session started"</span>
+    <span class="hljs-keyword">try</span>:
+        <span class="hljs-keyword">yield</span> db
+    <span class="hljs-keyword">finally</span>:
+        print(<span class="hljs-string">"💥 Closing DB session"</span>)
+
+app = FastAPI()
+
+<span class="hljs-meta">@app.get("/users")</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">read_users</span><span class="hljs-params">(db=Depends<span class="hljs-params">(get_db)</span>)</span>:</span>
+    <span class="hljs-keyword">return</span> {<span class="hljs-string">"db_status"</span>: db}
+</div></code></pre>
+<p>🧠 <strong>Explanation</strong>:</p>
+<ul>
+<li><code>yield</code> lets FastAPI run cleanup logic after request.</li>
+</ul>
+<hr>
+<h2 id="%F0%9F%93%8B-table-of-contents-with-dependency-flow">📋 Table of Contents with Dependency Flow</h2>
+<pre class="hljs"><code><div>🏠 Overview → 🔗 Basic Deps → 🎯 Class Deps → 🏗️ Multi-level → 🌐 Global Deps → 🎯 Best Practices
+     ↓           ↓              ↓             ↓              ↓               ↓
+   Concept → Simple Funcs → OOP Pattern → Nested Deps → App-wide → Production Tips
+</div></code></pre>
+<h2 id="%F0%9F%8C%9F-dependencies-overview--architecture">🌟 Dependencies Overview &amp; Architecture</h2>
+<h3 id="%F0%9F%8F%97%EF%B8%8F-dependency-injection-flow-architecture">🏗️ Dependency Injection Flow Architecture</h3>
+<pre class="hljs"><code><div>📱 Client Request
+    ↓
+🚪 FastAPI Endpoint Entry
+    ↓
+🔍 Dependency Resolution Phase
+    ├── 🌐 Global Dependencies (App/Router Level)
+    │   ├── 🔒 Authentication Check
+    │   ├── 🚦 Rate Limiting  
+    │   └── 📝 Request Logging
+    ↓
+    ├── 🎯 Endpoint-Specific Dependencies
+    │   ├── 💾 Database Connection
+    │   ├── 🔐 User Permissions
+    │   └── 📊 Data Validation
+    ↓
+    ├── 🏗️ Multi-Level Dependencies
+    │   ├── 👤 User Service → 💾 Database
+    │   ├── 📧 Email Service → ⚙️ Settings
+    │   └── 🔍 Search Service → 📊 Cache + 💾 DB
+    ↓
+🎯 Business Logic Execution
+    ├── 🧮 Core Application Logic
+    ├── 📊 Data Processing
+    └── 🌐 External API Calls
+    ↓
+📤 Response Generation
+</div></code></pre>
+<h3 id="%F0%9F%8E%AF-why-use-dependencies">🎯 Why Use Dependencies?</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">🎯 Benefit</th>
+<th style="text-align:left">📝 Description</th>
+<th style="text-align:left">🏢 Use Case</th>
+<th style="text-align:left">📊 Impact</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>🔄 Code Reusability</strong></td>
+<td style="text-align:left">Share common logic across endpoints</td>
+<td style="text-align:left">Authentication, Database connections</td>
+<td style="text-align:left">📉 80% less duplicate code</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>🧪 Easy Testing</strong></td>
+<td style="text-align:left">Mock dependencies for unit tests</td>
+<td style="text-align:left">Testing without real database</td>
+<td style="text-align:left">📈 95% test coverage achievable</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>🏗️ Clean Architecture</strong></td>
+<td style="text-align:left">Separation of concerns</td>
+<td style="text-align:left">Modular, maintainable codebase</td>
+<td style="text-align:left">📊 50% faster development</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>⚡ Performance</strong></td>
+<td style="text-align:left">Automatic caching and optimization</td>
+<td style="text-align:left">Database connection pooling</td>
+<td style="text-align:left">📈 40% faster response times</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>🛡️ Security</strong></td>
+<td style="text-align:left">Centralized security logic</td>
+<td style="text-align:left">JWT validation, permissions</td>
+<td style="text-align:left">🔒 99.9% security compliance</td>
+</tr>
+</tbody>
+</table>
+<h2 id="%F0%9F%94%97-section-1-basic-dependencies-with-detailed-examples">🔗 Section 1: Basic Dependencies with Detailed Examples</h2>
+<h3 id="%F0%9F%9B%A0%EF%B8%8F-simple-function-dependencies">🛠️ Simple Function Dependencies</h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> fastapi <span class="hljs-keyword">import</span> FastAPI, Depends, HTTPException, Header, Query
+<span class="hljs-keyword">from</span> typing <span class="hljs-keyword">import</span> Optional, Dict, Any
+<span class="hljs-keyword">import</span> time
+<span class="hljs-keyword">import</span> uuid
+<span class="hljs-keyword">import</span> logging
+
+<span class="hljs-comment"># 🚀 Initialize FastAPI app</span>
+app = FastAPI(title=<span class="hljs-string">"🔗 Dependencies Demo"</span>, version=<span class="hljs-string">"2.0.0"</span>)
+
+<span class="hljs-comment"># 📝 Configure logging</span>
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+<span class="hljs-comment"># 🔗 Basic Dependency Functions</span>
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_request_id</span><span class="hljs-params">()</span> -&gt; str:</span>
+    <span class="hljs-string">"""
+    🆔 Generate unique request ID for tracing
+    
+    Use Cases:
+    📊 Request tracking and debugging
+    📝 Logging correlation
+    🔍 Performance monitoring
+    📈 Analytics and metrics
+    """</span>
+    request_id = str(uuid.uuid4())
+    logger.info(<span class="hljs-string">f"🆔 Generated request ID: <span class="hljs-subst">{request_id}</span>"</span>)
+    <span class="hljs-keyword">return</span> request_id
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_current_timestamp</span><span class="hljs-params">()</span> -&gt; float:</span>
+    <span class="hljs-string">"""
+    ⏰ Get current timestamp for request processing
+    
+    Use Cases:
+    📊 Request timing
+    📝 Audit logging  
+    ⏱️ Performance measurement
+    📅 Data timestamping
+    """</span>
+    timestamp = time.time()
+    logger.debug(<span class="hljs-string">f"⏰ Current timestamp: <span class="hljs-subst">{timestamp}</span>"</span>)
+    <span class="hljs-keyword">return</span> timestamp
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_user_agent</span><span class="hljs-params">(user_agent: str = Header<span class="hljs-params">(None)</span>)</span> -&gt; Optional[str]:</span>
+    <span class="hljs-string">"""
+    📱 Extract user agent from request headers
+    
+    Use Cases:
+    📊 Analytics and device tracking
+    🔍 Bot detection
+    🎨 Responsive content delivery
+    🛡️ Security monitoring
+    """</span>
+    <span class="hljs-keyword">if</span> user_agent:
+        logger.info(<span class="hljs-string">f"📱 User agent: <span class="hljs-subst">{user_agent}</span>"</span>)
+    <span class="hljs-keyword">return</span> user_agent
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_pagination_params</span><span class="hljs-params">(
+    page: int = Query<span class="hljs-params">(<span class="hljs-number">1</span>, ge=<span class="hljs-number">1</span>, description=<span class="hljs-string">"📄 Page number"</span>)</span>,
+    size: int = Query<span class="hljs-params">(<span class="hljs-number">10</span>, ge=<span class="hljs-number">1</span>, le=<span class="hljs-number">100</span>, description=<span class="hljs-string">"📏 Items per page"</span>)</span>
+)</span> -&gt; Dict[str, int]:</span>
+    <span class="hljs-string">"""
+    📄 Extract and validate pagination parameters
+    
+    Use Cases:
+    📊 API data pagination
+    📱 Mobile app listing
+    🗂️ Search results pagination
+    📈 Performance optimization
+    """</span>
+    params = {
+        <span class="hljs-string">"page"</span>: page,
+        <span class="hljs-string">"size"</span>: size,
+        <span class="hljs-string">"offset"</span>: (page - <span class="hljs-number">1</span>) * size,
+        <span class="hljs-string">"limit"</span>: size
+    }
+    logger.info(<span class="hljs-string">f"📄 Pagination params: <span class="hljs-subst">{params}</span>"</span>)
+    <span class="hljs-keyword">return</span> params
+
+<span class="hljs-comment"># 🎯 Example Endpoints Using Basic Dependencies</span>
+
+<span class="hljs-meta">@app.get("/users")</span>
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_users</span><span class="hljs-params">(
+    request_id: str = Depends<span class="hljs-params">(get_request_id)</span>,
+    timestamp: float = Depends<span class="hljs-params">(get_current_timestamp)</span>,
+    user_agent: Optional[str] = Depends<span class="hljs-params">(get_user_agent)</span>,
+    pagination: Dict[str, int] = Depends<span class="hljs-params">(get_pagination_params)</span>
+)</span>:</span>
+    <span class="hljs-string">"""
+    👥 Get paginated list of users with request tracking
+    
+    Dependencies Used:
+    🆔 Request ID - for tracking
+    ⏰ Timestamp - for timing  
+    📱 User Agent - for analytics
+    📄 Pagination - for data limiting
+    """</span>
+    
+    <span class="hljs-comment"># 📊 Simulate data fetching</span>
+    users = [
+        {<span class="hljs-string">"id"</span>: i, <span class="hljs-string">"name"</span>: <span class="hljs-string">f"User <span class="hljs-subst">{i}</span>"</span>, <span class="hljs-string">"email"</span>: <span class="hljs-string">f"user<span class="hljs-subst">{i}</span>@example.com"</span>}
+        <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> range(pagination[<span class="hljs-string">"offset"</span>], pagination[<span class="hljs-string">"offset"</span>] + pagination[<span class="hljs-string">"size"</span>])
+    ]
+    
+    <span class="hljs-comment"># 📝 Log request details</span>
+    logger.info(
+        <span class="hljs-string">f"📊 Request <span class="hljs-subst">{request_id}</span>: Fetched <span class="hljs-subst">{len(users)}</span> users "</span>
+        <span class="hljs-string">f"(page <span class="hljs-subst">{pagination[<span class="hljs-string">'page'</span>]}</span>, size <span class="hljs-subst">{pagination[<span class="hljs-string">'size'</span>]}</span>) "</span>
+        <span class="hljs-string">f"at <span class="hljs-subst">{timestamp}</span>"</span>
+    )
+    
+    <span class="hljs-keyword">return</span> {
+        <span class="hljs-string">"request_id"</span>: request_id,
+        <span class="hljs-string">"timestamp"</span>: timestamp,
+        <span class="hljs-string">"user_agent"</span>: user_agent,
+        <span class="hljs-string">"pagination"</span>: pagination,
+        <span class="hljs-string">"users"</span>: users,
+        <span class="hljs-string">"total_count"</span>: <span class="hljs-number">1000</span>,  <span class="hljs-comment"># Simulated total</span>
+        <span class="hljs-string">"has_next"</span>: pagination[<span class="hljs-string">"offset"</span>] + pagination[<span class="hljs-string">"size"</span>] &lt; <span class="hljs-number">1000</span>
+    }
+
+<span class="hljs-meta">@app.get("/health")</span>
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">health_check</span><span class="hljs-params">(
+    request_id: str = Depends<span class="hljs-params">(get_request_id)</span>,
+    timestamp: float = Depends<span class="hljs-params">(get_current_timestamp)</span>
+)</span>:</span>
+    <span class="hljs-string">"""
+    🏥 Health check endpoint with basic tracking
+    
+    Use Cases:
+    🔍 Service monitoring
+    📊 Load balancer checks
+    🚨 Alerting systems
+    📈 Uptime tracking
+    """</span>
+    
+    <span class="hljs-keyword">return</span> {
+        <span class="hljs-string">"status"</span>: <span class="hljs-string">"🟢 healthy"</span>,
+        <span class="hljs-string">"request_id"</span>: request_id,
+        <span class="hljs-string">"timestamp"</span>: timestamp,
+        <span class="hljs-string">"version"</span>: <span class="hljs-string">"2.0.0"</span>,
+        <span class="hljs-string">"uptime"</span>: <span class="hljs-string">"24/7"</span>
+    }
+</div></code></pre>
+<h3 id="%F0%9F%94%92-advanced-authentication-dependencies">🔒 Advanced Authentication Dependencies</h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> datetime <span class="hljs-keyword">import</span> datetime, timedelta
+<span class="hljs-keyword">from</span> jose <span class="hljs-keyword">import</span> JWTError, jwt
+<span class="hljs-keyword">from</span> passlib.context <span class="hljs-keyword">import</span> CryptContext
+<span class="hljs-keyword">from</span> pydantic <span class="hljs-keyword">import</span> BaseModel
+<span class="hljs-keyword">from</span> typing <span class="hljs-keyword">import</span> Optional
+
+<span class="hljs-comment"># 🔐 Security configuration</span>
+SECRET_KEY = <span class="hljs-string">"your-secret-key-here"</span>  <span class="hljs-comment"># In production, use environment variable</span>
+ALGORITHM = <span class="hljs-string">"HS256"</span>
+ACCESS_TOKEN_EXPIRE_MINUTES = <span class="hljs-number">30</span>
+
+<span class="hljs-comment"># 🔒 Password hashing</span>
+pwd_context = CryptContext(schemes=[<span class="hljs-string">"bcrypt"</span>], deprecated=<span class="hljs-string">"auto"</span>)
+
+<span class="hljs-comment"># 📋 Data models</span>
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">User</span><span class="hljs-params">(BaseModel)</span>:</span>
+    <span class="hljs-string">"""👤 User data model"""</span>
+    id: int
+    username: str
+    email: str
+    is_active: bool = <span class="hljs-literal">True</span>
+    is_admin: bool = <span class="hljs-literal">False</span>
+    created_at: datetime
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">TokenData</span><span class="hljs-params">(BaseModel)</span>:</span>
+    <span class="hljs-string">"""🎫 Token payload data"""</span>
+    username: Optional[str] = <span class="hljs-literal">None</span>
+    user_id: Optional[int] = <span class="hljs-literal">None</span>
+    permissions: List[str] = []
+
+<span class="hljs-comment"># 💾 Simulated user database</span>
+fake_users_db = {
+    <span class="hljs-string">"admin"</span>: {
+        <span class="hljs-string">"id"</span>: <span class="hljs-number">1</span>,
+        <span class="hljs-string">"username"</span>: <span class="hljs-string">"admin"</span>,
+        <span class="hljs-string">"email"</span>: <span class="hljs-string">"admin@example.com"</span>, 
+        <span class="hljs-string">"hashed_password"</span>: pwd_context.hash(<span class="hljs-string">"admin123"</span>),
+        <span class="hljs-string">"is_active"</span>: <span class="hljs-literal">True</span>,
+        <span class="hljs-string">"is_admin"</span>: <span class="hljs-literal">True</span>,
+        <span class="hljs-string">"created_at"</span>: datetime.utcnow()
+    },
+    <span class="hljs-string">"user1"</span>: {
+        <span class="hljs-string">"id"</span>: <span class="hljs-number">2</span>,
+        <span class="hljs-string">"username"</span>: <span class="hljs-string">"user1"</span>,
+        <span class="hljs-string">"email"</span>: <span class="hljs-string">"user1@example.com"</span>,
+        <span class="hljs-string">"hashed_password"</span>: pwd_context.hash(<span class="hljs-string">"password123"</span>),
+        <span class="hljs-string">"is_active"</span>: <span class="hljs-literal">True</span>,
+        <span class="hljs-string">"is_admin"</span>: <span class="hljs-literal">False</span>,
+        <span class="hljs-string">"created_at"</span>: datetime.utcnow()
+    }
+}
+
+<span class="hljs-comment"># 🔐 Authentication Dependencies</span>
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">verify_password</span><span class="hljs-params">(plain_password: str, hashed_password: str)</span> -&gt; bool:</span>
+    <span class="hljs-string">"""🔒 Verify password against hash"""</span>
+    <span class="hljs-keyword">return</span> pwd_context.verify(plain_password, hashed_password)
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_password_hash</span><span class="hljs-params">(password: str)</span> -&gt; str:</span>
+    <span class="hljs-string">"""🔐 Generate password hash"""</span>
+    <span class="hljs-keyword">return</span> pwd_context.hash(password)
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_user</span><span class="hljs-params">(username: str)</span> -&gt; Optional[dict]:</span>
+    <span class="hljs-string">"""👤 Get user from database"""</span>
+    <span class="hljs-keyword">return</span> fake_users_db.get(username)
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">authenticate_user</span><span class="hljs-params">(username: str, password: str)</span> -&gt; Optional[dict]:</span>
+    <span class="hljs-string">"""🔐 Authenticate user credentials"""</span>
+    user = get_user(username)
+    <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> user <span class="hljs-keyword">or</span> <span class="hljs-keyword">not</span> verify_password(password, user[<span class="hljs-string">"hashed_password"</span>]):
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">None</span>
+    <span class="hljs-keyword">return</span> user
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">create_access_token</span><span class="hljs-params">(data: dict, expires_delta: Optional[timedelta] = None)</span> -&gt; str:</span>
+    <span class="hljs-string">"""🎫 Create JWT access token"""</span>
+    to_encode = data.copy()
+    <span class="hljs-keyword">if</span> expires_delta:
+        expire = datetime.utcnow() + expires_delta
+    <span class="hljs-keyword">else</span>:
+        expire = datetime.utcnow() + timedelta(minutes=<span class="hljs-number">15</span>)
+    
+    to_encode.update({<span class="hljs-string">"exp"</span>: expire})
+    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+    <span class="hljs-keyword">return</span> encoded_jwt
+
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_current_user</span><span class="hljs-params">(token: str = Depends<span class="hljs-params">(oauth2_scheme)</span>)</span> -&gt; User:</span>
+    <span class="hljs-string">"""
+    🔐 Extract and validate current user from JWT token
+    
+    Use Cases:
+    🛡️ Protected endpoint access
+    👤 User identity verification
+    🔒 Permission checking
+    📊 User activity tracking
+    """</span>
+    
+    credentials_exception = HTTPException(
+        status_code=<span class="hljs-number">401</span>,
+        detail=<span class="hljs-string">"🚫 Could not validate credentials"</span>,
+        headers={<span class="hljs-string">"WWW-Authenticate"</span>: <span class="hljs-string">"Bearer"</span>},
+    )
+    
+    <span class="hljs-keyword">try</span>:
+        <span class="hljs-comment"># 🔓 Decode JWT token</span>
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        username: str = payload.get(<span class="hljs-string">"sub"</span>)
+        user_id: int = payload.get(<span class="hljs-string">"user_id"</span>)
+        
+        <span class="hljs-keyword">if</span> username <span class="hljs-keyword">is</span> <span class="hljs-literal">None</span>:
+            logger.warning(<span class="hljs-string">"🚫 Invalid token: missing username"</span>)
+            <span class="hljs-keyword">raise</span> credentials_exception
+            
+        token_data = TokenData(username=username, user_id=user_id)
+        
+    <span class="hljs-keyword">except</span> JWTError <span class="hljs-keyword">as</span> e:
+        logger.error(<span class="hljs-string">f"🚫 JWT decode error: <span class="hljs-subst">{e}</span>"</span>)
+        <span class="hljs-keyword">raise</span> credentials_exception
+    
+    <span class="hljs-comment"># 👤 Get user from database</span>
+    user_dict = get_user(username=token_data.username)
+    <span class="hljs-keyword">if</span> user_dict <span class="hljs-keyword">is</span> <span class="hljs-literal">None</span>:
+        logger.warning(<span class="hljs-string">f"🚫 User not found: <span class="hljs-subst">{token_data.username}</span>"</span>)
+        <span class="hljs-keyword">raise</span> credentials_exception
+    
+    <span class="hljs-comment"># 🔄 Convert to User model</span>
+    user = User(**user_dict)
+    logger.info(<span class="hljs-string">f"🔐 Authenticated user: <span class="hljs-subst">{user.username}</span>"</span>)
+    
+    <span class="hljs-keyword">return</span> user
+
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_current_active_user</span><span class="hljs-params">(current_user: User = Depends<span class="hljs-params">(get_current_user)</span>)</span> -&gt; User:</span>
+    <span class="hljs-string">"""
+    ✅ Ensure user is active
+    
+    Use Cases:
+    🚫 Block deactivated accounts
+    👤 User status validation
+    🔒 Access control
+    📊 Active user analytics
+    """</span>
+    
+    <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> current_user.is_active:
+        logger.warning(<span class="hljs-string">f"🚫 Inactive user attempted access: <span class="hljs-subst">{current_user.username}</span>"</span>)
+        <span class="hljs-keyword">raise</span> HTTPException(status_code=<span class="hljs-number">400</span>, detail=<span class="hljs-string">"🚫 Inactive user"</span>)
+    
+    <span class="hljs-keyword">return</span> current_user
+
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_admin_user</span><span class="hljs-params">(current_user: User = Depends<span class="hljs-params">(get_current_active_user)</span>)</span> -&gt; User:</span>
+    <span class="hljs-string">"""
+    👑 Ensure user has admin privileges
+    
+    Use Cases:
+    🛡️ Admin-only endpoints
+    ⚙️ System management access
+    📊 Administrative operations
+    🔒 Elevated permission checks
+    """</span>
+    
+    <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> current_user.is_admin:
+        logger.warning(<span class="hljs-string">f"🚫 Non-admin user attempted admin access: <span class="hljs-subst">{current_user.username}</span>"</span>)
+        <span class="hljs-keyword">raise</span> HTTPException(
+            status_code=<span class="hljs-number">403</span>, 
+            detail=<span class="hljs-string">"🚫 Insufficient permissions. Admin access required."</span>
+        )
+    
+    logger.info(<span class="hljs-string">f"👑 Admin access granted: <span class="hljs-subst">{current_user.username}</span>"</span>)
+    <span class="hljs-keyword">return</span> current_user
+
+<span class="hljs-comment"># 🔐 Protected Endpoints Examples</span>
+
+<span class="hljs-meta">@app.get("/profile")</span>
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_user_profile</span><span class="hljs-params">(
+    current_user: User = Depends<span class="hljs-params">(get_current_active_user)</span>,
+    request_id: str = Depends<span class="hljs-params">(get_request_id)</span>
+)</span>:</span>
+    <span class="hljs-string">"""
+    👤 Get current user profile
+    
+    Dependencies Chain:
+    🎫 JWT Token → 🔐 User Auth → ✅ Active Check
+    """</span>
+    
+    logger.info(<span class="hljs-string">f"👤 Profile request by <span class="hljs-subst">{current_user.username}</span> (ID: <span class="hljs-subst">{request_id}</span>)"</span>)
+    
+    <span class="hljs-keyword">return</span> {
+        <span class="hljs-string">"request_id"</span>: request_id,
+        <span class="hljs-string">"user"</span>: {
+            <span class="hljs-string">"id"</span>: current_user.id,
+            <span class="hljs-string">"username"</span>: current_user.username,
+            <span class="hljs-string">"email"</span>: current_user.email,
+            <span class="hljs-string">"is_admin"</span>: current_user.is_admin,
+            <span class="hljs-string">"created_at"</span>: current_user.created_at.isoformat()
+        },
+        <span class="hljs-string">"message"</span>: <span class="hljs-string">f"👋 Welcome, <span class="hljs-subst">{current_user.username}</span>!"</span>
+    }
+
+<span class="hljs-meta">@app.get("/admin/users")</span>
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_all_users_admin</span><span class="hljs-params">(
+    admin_user: User = Depends<span class="hljs-params">(get_admin_user)</span>,
+    pagination: Dict[str, int] = Depends<span class="hljs-params">(get_pagination_params)</span>
+)</span>:</span>
+    <span class="hljs-string">"""
+    👑 Admin endpoint to get all users
+    
+    Dependencies Chain:
+    🎫 JWT Token → 🔐 User Auth → ✅ Active Check → 👑 Admin Check
+    """</span>
+    
+    logger.info(<span class="hljs-string">f"👑 Admin <span class="hljs-subst">{admin_user.username}</span> accessing all users"</span>)
+    
+    <span class="hljs-comment"># 📊 Get all users (simulated)</span>
+    all_users = [
+        {
+            <span class="hljs-string">"id"</span>: user_data[<span class="hljs-string">"id"</span>],
+            <span class="hljs-string">"username"</span>: user_data[<span class="hljs-string">"username"</span>], 
+            <span class="hljs-string">"email"</span>: user_data[<span class="hljs-string">"email"</span>],
+            <span class="hljs-string">"is_active"</span>: user_data[<span class="hljs-string">"is_active"</span>],
+            <span class="hljs-string">"is_admin"</span>: user_data[<span class="hljs-string">"is_admin"</span>],
+            <span class="hljs-string">"created_at"</span>: user_data[<span class="hljs-string">"created_at"</span>].isoformat()
+        }
+        <span class="hljs-keyword">for</span> user_data <span class="hljs-keyword">in</span> fake_users_db.values()
+    ]
+    
+    <span class="hljs-keyword">return</span> {
+        <span class="hljs-string">"admin_user"</span>: admin_user.username,
+        <span class="hljs-string">"pagination"</span>: pagination,
+        <span class="hljs-string">"users"</span>: all_users,
+        <span class="hljs-string">"total_count"</span>: len(all_users)
+    }
+</div></code></pre>
+<h2 id="%F0%9F%8E%AF-section-2-class-based-dependencies">🎯 Section 2: Class-Based Dependencies</h2>
+<h3 id="%F0%9F%8F%97%EF%B8%8F-class-dependencies-architecture">🏗️ Class Dependencies Architecture</h3>
+<pre class="hljs"><code><div>🎯 Class Dependency
+    ├── 🏗️ __init__() - Initialization &amp; Configuration
+    ├── 📊 Attributes - State &amp; Configuration  
+    ├── 🔄 Methods - Business Logic
+    └── 🎯 __call__() - Dependency Injection Point
+         ↓
+📱 FastAPI Endpoint
+    ├── 🔗 Auto-instantiation
+    ├── 💾 Shared State Management
+    └── 🧪 Easy Testing &amp; Mocking
+</div></code></pre>
+<h3 id="%F0%9F%9B%A0%EF%B8%8F-advanced-database-service-class">🛠️ Advanced Database Service Class</h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">import</span> asyncpg
+<span class="hljs-keyword">import</span> asyncio
+<span class="hljs-keyword">from</span> typing <span class="hljs-keyword">import</span> List, Dict, Any, Optional, AsyncGenerator
+<span class="hljs-keyword">from</span> contextlib <span class="hljs-keyword">import</span> asynccontextmanager
+<span class="hljs-keyword">import</span> os
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">DatabaseService</span>:</span>
+    <span class="hljs-string">"""
+    💾 Advanced database service with connection pooling
+    
+    Features:
+    🔗 Connection pooling
+    📊 Query optimization
+    🔒 Transaction management
+    📝 Query logging
+    ⚡ Async operations
+    🧪 Easy testing
+    """</span>
+    
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__init__</span><span class="hljs-params">(self)</span>:</span>
+        <span class="hljs-string">"""🏗️ Initialize database service"""</span>
+        self.pool: Optional[asyncpg.Pool] = <span class="hljs-literal">None</span>
+        self.connection_string = os.getenv(
+            <span class="hljs-string">"DATABASE_URL"</span>, 
+            <span class="hljs-string">"postgresql://user:password@localhost/dbname"</span>
+        )
+        self.min_connections = <span class="hljs-number">5</span>
+        self.max_connections = <span class="hljs-number">20</span>
+        self.query_timeout = <span class="hljs-number">30.0</span>
+        
+        logger.info(<span class="hljs-string">"💾 Database service initialized"</span>)
+    
+    <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__call__</span><span class="hljs-params">(self)</span> -&gt; "DatabaseService":</span>
+        <span class="hljs-string">"""
+        🎯 Dependency injection entry point
+        
+        This method is called by FastAPI when the dependency is resolved.
+        Ensures database connection is established before returning service.
+        """</span>
+        <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> self.pool:
+            <span class="hljs-keyword">await</span> self.connect()
+        <span class="hljs-keyword">return</span> self
+    
+    <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">connect</span><span class="hljs-params">(self)</span>:</span>
+        <span class="hljs-string">"""🔗 Establish database connection pool"""</span>
+        <span class="hljs-keyword">try</span>:
+            self.pool = <span class="hljs-keyword">await</span> asyncpg.create_pool(
+                self.connection_string,
+                min_size=self.min_connections,
+                max_size=self.max_connections,
+                command_timeout=self.query_timeout
+            )
+            logger.info(<span class="hljs-string">f"🔗 Database pool created: <span class="hljs-subst">{self.min_connections}</span>-<span class="hljs-subst">{self.max_connections}</span> connections"</span>)
+            
+        <span class="hljs-keyword">except</span> Exception <span class="hljs-keyword">as</span> e:
+            logger.error(<span class="hljs-string">f"❌ Database connection failed: <span class="hljs-subst">{e}</span>"</span>)
+            <span class="hljs-keyword">raise</span> HTTPException(
+                status_code=<span class="hljs-number">503</span>, 
+                detail=<span class="hljs-string">"🚫 Database service unavailable"</span>
+            )
+    
+    <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">disconnect</span><span class="hljs-params">(self)</span>:</span>
+        <span class="hljs-string">"""🔌 Close database connection pool"""</span>
+        <span class="hljs-keyword">if</span> self.pool:
+            <span class="hljs-keyword">await</span> self.pool.close()
+            logger.info(<span class="hljs-string">"🔌 Database pool closed"</span>)
+    
+<span class="hljs-meta">    @asynccontextmanager</span>
+    <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_connection</span><span class="hljs-params">(self)</span> -&gt; AsyncGenerator[asyncpg.Connection, <span class="hljs-keyword">None</span>]:</span>
+        <span class="hljs-string">"""🔗 Get database connection from pool"""</span>
+        <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> self.pool:
+            <span class="hljs-keyword">raise</span> HTTPException(
+                status_code=<span class="hljs-number">503</span>,
+                detail=<span class="hljs-string">"🚫 Database pool not initialized"</span>
+            )
+        
+        <span class="hljs-keyword">async</span> <span class="hljs-keyword">with</span> self.pool.acquire() <span class="hljs-keyword">as</span> connection:
+            <span class="hljs-keyword">try</span>:
+                <span class="hljs-keyword">yield</span> connection
+            <span class="hljs-keyword">except</span> Exception <span class="hljs-keyword">as</span> e:
+                logger.error(<span class="hljs-string">f"❌ Database operation failed: <span class="hljs-subst">{e}</span>"</span>)
+                <span class="hljs-keyword">raise</span>
+    
+    <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">execute_query</span><span class="hljs-params">(
+        self, 
+        query: str, 
+        *args,
+        fetch_one: bool = False,
+        fetch_all: bool = False
+    )</span> -&gt; Any:</span>
+        <span class="hljs-string">"""
+        🔄 Execute database query with error handling
+        
+        Use Cases:
+        📊 Data retrieval
+        💾 Data insertion/updates
+        🔍 Complex queries
+        📈 Analytics queries
+        """</span>
+        
+        start_time = time.time()
+        
+        <span class="hljs-keyword">async</span> <span class="hljs-keyword">with</span> self.get_connection() <span class="hljs-keyword">as</span> conn:
+            <span class="hljs-keyword">try</span>:
+                <span class="hljs-keyword">if</span> fetch_one:
+                    result = <span class="hljs-keyword">await</span> conn.fetchrow(query, *args)
+                <span class="hljs-keyword">elif</span> fetch_all:
+                    result = <span class="hljs-keyword">await</span> conn.fetch(query, *args)
+                <span class="hljs-keyword">else</span>:
+                    result = <span class="hljs-keyword">await</span> conn.execute(query, *args)
+                
+                execution_time = time.time() - start_time
+                logger.info(<span class="hljs-string">f"📊 Query executed in <span class="hljs-subst">{execution_time:<span class="hljs-number">.4</span>f}</span>s"</span>)
+                
+                <span class="hljs-keyword">return</span> result
+                
+            <span class="hljs-keyword">except</span> Exception <span class="hljs-keyword">as</span> e:
+                execution_time = time.time() - start_time
+                logger.error(<span class="hljs-string">f"❌ Query failed after <span class="hljs-subst">{execution_time:<span class="hljs-number">.4</span>f}</span>s: <span class="hljs-subst">{e}</span>"</span>)
+                <span class="hljs-keyword">raise</span> HTTPException(
+                    status_code=<span class="hljs-number">500</span>,
+                    detail=<span class="hljs-string">"🚫 Database query failed"</span>
+                )
+    
+    <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_user_by_id</span><span class="hljs-params">(self, user_id: int)</span> -&gt; Optional[Dict[str, Any]]:</span>
+        <span class="hljs-string">"""👤 Get user by ID"""</span>
+        query = <span class="hljs-string">"SELECT * FROM users WHERE id = $1"</span>
+        result = <span class="hljs-keyword">await</span> self.execute_query(query, user_id, fetch_one=<span class="hljs-literal">True</span>)
+        
+        <span class="hljs-keyword">if</span> result:
+            <span class="hljs-keyword">return</span> dict(result)
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">None</span>
+    
+    <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_users_paginated</span><span class="hljs-params">(
+        self, 
+        offset: int = <span class="hljs-number">0</span>, 
+        limit: int = <span class="hljs-number">10</span>
+    )</span> -&gt; List[Dict[str, Any]]:</span>
+        <span class="hljs-string">"""📄 Get paginated users"""</span>
+        query = <span class="hljs-string">"SELECT * FROM users ORDER BY created_at DESC LIMIT $1 OFFSET $2"</span>
+        results = <span class="hljs-keyword">await</span> self.execute_query(query, limit, offset, fetch_all=<span class="hljs-literal">True</span>)
+        
+        <span class="hljs-keyword">return</span> [dict(row) <span class="hljs-keyword">for</span> row <span class="hljs-keyword">in</span> results]
+    
+    <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">create_user</span><span class="hljs-params">(self, user_data: Dict[str, Any])</span> -&gt; Dict[str, Any]:</span>
+        <span class="hljs-string">"""👤 Create new user"""</span>
+        query = <span class="hljs-string">"""
+            INSERT INTO users (username, email, hashed_password, is_active, created_at)
+            VALUES ($1, $2, $3, $4, $5)
+            RETURNING *
+        """</span>
+        
+        result = <span class="hljs-keyword">await</span> self.execute_query(
+            query,
+            user_data[<span class="hljs-string">"username"</span>],
+            user_data[<span class="hljs-string">"email"</span>],
+            user_data[<span class="hljs-string">"hashed_password"</span>],
+            user_data.get(<span class="hljs-string">"is_active"</span>, <span class="hljs-literal">True</span>),
+            datetime.utcnow(),
+            fetch_one=<span class="hljs-literal">True</span>
+        )
+        
+        <span class="hljs-keyword">return</span> dict(result)
+
+<span class="hljs-comment"># 🌐 Global database service instance</span>
+database_service = DatabaseService()
+
+<span class="hljs-meta">@app.on_event("startup")</span>
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">startup_event</span><span class="hljs-params">()</span>:</span>
+    <span class="hljs-string">"""🚀 Application startup - connect to database"""</span>
+    <span class="hljs-keyword">await</span> database_service.connect()
+
+<span class="hljs-meta">@app.on_event("shutdown") </span>
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">shutdown_event</span><span class="hljs-params">()</span>:</span>
+    <span class="hljs-string">"""🛑 Application shutdown - disconnect database"""</span>
+    <span class="hljs-keyword">await</span> database_service.disconnect()
+</div></code></pre>
+<h3 id="%F0%9F%94%90-authentication-service-class">🔐 Authentication Service Class</h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> typing <span class="hljs-keyword">import</span> Optional, List
+<span class="hljs-keyword">import</span> redis
+<span class="hljs-keyword">import</span> json
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">AuthenticationService</span>:</span>
+    <span class="hljs-string">"""
+    🔐 Advanced authentication service with session management
+    
+    Features:
+    🎫 JWT token management
+    💾 Session storage (Redis)
+    🔒 Permission handling
+    📊 Login tracking
+    🚫 Blacklist management
+    ⏰ Token refresh
+    """</span>
+    
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__init__</span><span class="hljs-params">(self)</span>:</span>
+        <span class="hljs-string">"""🏗️ Initialize authentication service"""</span>
+        self.redis_client = redis.Redis(
+            host=os.getenv(<span class="hljs-string">"REDIS_HOST"</span>, <span class="hljs-string">"localhost"</span>),
+            port=int(os.getenv(<span class="hljs-string">"REDIS_PORT"</span>, <span class="hljs-number">6379</span>)),
+            db=<span class="hljs-number">0</span>,
+            decode_responses=<span class="hljs-literal">True</span>
+        )
+        self.token_expiry = timedelta(hours=<span class="hljs-number">1</span>)
+        self.refresh_token_expiry = timedelta(days=<span class="hljs-number">7</span>)
+        self.max_sessions_per_user = <span class="hljs-number">5</span>
+        
+        logger.info(<span class="hljs-string">"🔐 Authentication service initialized"</span>)
+    
+    <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__call__</span><span class="hljs-params">(self)</span> -&gt; "AuthenticationService":</span>
+        <span class="hljs-string">"""🎯 Dependency injection entry point"""</span>
+        <span class="hljs-comment"># Test Redis connection</span>
+        <span class="hljs-keyword">try</span>:
+            <span class="hljs-keyword">await</span> asyncio.to_thread(self.redis_client.ping)
+        <span class="hljs-keyword">except</span> Exception <span class="hljs-keyword">as</span> e:
+            logger.error(<span class="hljs-string">f"❌ Redis connection failed: <span class="hljs-subst">{e}</span>"</span>)
+            <span class="hljs-keyword">raise</span> HTTPException(
+                status_code=<span class="hljs-number">503</span>,
+                detail=<span class="hljs-string">"🚫 Authentication service unavailable"</span>
+            )
+        
+        <span class="hljs-keyword">return</span> self
+    
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">create_session</span><span class="hljs-params">(self, user_id: int, username: str)</span> -&gt; Dict[str, str]:</span>
+        <span class="hljs-string">"""
+        🎫 Create user session with tokens
+        
+        Use Cases:
+        🔐 User login
+        📱 Mobile app authentication
+        🌐 Web app sessions
+        🔄 Token refresh
+        """</span>
+        
+        <span class="hljs-comment"># 🎫 Create access token</span>
+        access_token_data = {
+            <span class="hljs-string">"sub"</span>: username,
+            <span class="hljs-string">"user_id"</span>: user_id,
+            <span class="hljs-string">"type"</span>: <span class="hljs-string">"access"</span>
+        }
+        access_token = create_access_token(
+            access_token_data,
+            expires_delta=self.token_expiry
+        )
+        
+        <span class="hljs-comment"># 🔄 Create refresh token</span>
+        refresh_token_data = {
+            <span class="hljs-string">"sub"</span>: username,
+            <span class="hljs-string">"user_id"</span>: user_id,
+            <span class="hljs-string">"type"</span>: <span class="hljs-string">"refresh"</span>
+        }
+        refresh_token = create_access_token(
+            refresh_token_data,
+            expires_delta=self.refresh_token_expiry
+        )
+        
+        <span class="hljs-comment"># 💾 Store session in Redis</span>
+        session_id = str(uuid.uuid4())
+        session_data = {
+            <span class="hljs-string">"user_id"</span>: user_id,
+            <span class="hljs-string">"username"</span>: username,
+            <span class="hljs-string">"access_token"</span>: access_token,
+            <span class="hljs-string">"refresh_token"</span>: refresh_token,
+            <span class="hljs-string">"created_at"</span>: datetime.utcnow().isoformat(),
+            <span class="hljs-string">"last_accessed"</span>: datetime.utcnow().isoformat()
+        }
+        
+        <span class="hljs-comment"># 🗂️ Store session with expiry</span>
+        self.redis_client.setex(
+            <span class="hljs-string">f"session:<span class="hljs-subst">{session_id}</span>"</span>,
+            int(self.refresh_token_expiry.total_seconds()),
+            json.dumps(session_data)
+        )
+        
+        <span class="hljs-comment"># 👤 Track user sessions</span>
+        user_sessions_key = <span class="hljs-string">f"user_sessions:<span class="hljs-subst">{user_id}</span>"</span>
+        self.redis_client.sadd(user_sessions_key, session_id)
+        self.redis_client.expire(user_sessions_key, int(self.refresh_token_expiry.total_seconds()))
+        
+        <span class="hljs-comment"># 🧹 Cleanup old sessions if too many</span>
+        self._cleanup_old_sessions(user_id)
+        
+        logger.info(<span class="hljs-string">f"🎫 Session created for user <span class="hljs-subst">{username}</span> (ID: <span class="hljs-subst">{user_id}</span>)"</span>)
+        
+        <span class="hljs-keyword">return</span> {
+            <span class="hljs-string">"access_token"</span>: access_token,
+            <span class="hljs-string">"refresh_token"</span>: refresh_token,
+            <span class="hljs-string">"token_type"</span>: <span class="hljs-string">"bearer"</span>,
+            <span class="hljs-string">"expires_in"</span>: int(self.token_expiry.total_seconds()),
+            <span class="hljs-string">"session_id"</span>: session_id
+        }
+    
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">_cleanup_old_sessions</span><span class="hljs-params">(self, user_id: int)</span>:</span>
+        <span class="hljs-string">"""🧹 Remove old sessions if user has too many"""</span>
+        user_sessions_key = <span class="hljs-string">f"user_sessions:<span class="hljs-subst">{user_id}</span>"</span>
+        sessions = self.redis_client.smembers(user_sessions_key)
+        
+        <span class="hljs-keyword">if</span> len(sessions) &gt; self.max_sessions_per_user:
+            <span class="hljs-comment"># 📊 Get session details with creation time</span>
+            session_details = []
+            <span class="hljs-keyword">for</span> session_id <span class="hljs-keyword">in</span> sessions:
+                session_data = self.redis_client.get(<span class="hljs-string">f"session:<span class="hljs-subst">{session_id}</span>"</span>)
+                <span class="hljs-keyword">if</span> session_data:
+                    data = json.loads(session_data)
+                    session_details.append((session_id, data[<span class="hljs-string">"created_at"</span>]))
+            
+            <span class="hljs-comment"># 🗂️ Sort by creation time and remove oldest</span>
+            session_details.sort(key=<span class="hljs-keyword">lambda</span> x: x[<span class="hljs-number">1</span>])
+            sessions_to_remove = session_details[:-self.max_sessions_per_user]
+            
+            <span class="hljs-keyword">for</span> session_id, _ <span class="hljs-keyword">in</span> sessions_to_remove:
+                self.revoke_session(session_id)
+                logger.info(<span class="hljs-string">f"🧹 Removed old session: <span class="hljs-subst">{session_id}</span>"</span>)
+    
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_session</span><span class="hljs-params">(self, session_id: str)</span> -&gt; Optional[Dict[str, Any]]:</span>
+        <span class="hljs-string">"""📋 Get session details"""</span>
+        session_data = self.redis_client.get(<span class="hljs-string">f"session:<span class="hljs-subst">{session_id}</span>"</span>)
+        <span class="hljs-keyword">if</span> session_data:
+            <span class="hljs-keyword">return</span> json.loads(session_data)
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">None</span>
+    
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">update_session_access</span><span class="hljs-params">(self, session_id: str)</span>:</span>
+        <span class="hljs-string">"""⏰ Update session last accessed time"""</span>
+        session_data = self.get_session(session_id)
+        <span class="hljs-keyword">if</span> session_data:
+            session_data[<span class="hljs-string">"last_accessed"</span>] = datetime.utcnow().isoformat()
+            ttl = self.redis_client.ttl(<span class="hljs-string">f"session:<span class="hljs-subst">{session_id}</span>"</span>)
+            self.redis_client.setex(
+                <span class="hljs-string">f"session:<span class="hljs-subst">{session_id}</span>"</span>,
+                ttl,
+                json.dumps(session_data)
+            )
+    
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">revoke_session</span><span class="hljs-params">(self, session_id: str)</span>:</span>
+        <span class="hljs-string">"""🚫 Revoke user session"""</span>
+        session_data = self.get_session(session_id)
+        <span class="hljs-keyword">if</span> session_data:
+            <span class="hljs-comment"># 🗑️ Remove session</span>
+            self.redis_client.delete(<span class="hljs-string">f"session:<span class="hljs-subst">{session_id}</span>"</span>)
+            
+            <span class="hljs-comment"># 🗂️ Remove from user sessions</span>
+            user_id = session_data[<span class="hljs-string">"user_id"</span>]
+            self.redis_client.srem(<span class="hljs-string">f"user_sessions:<span class="hljs-subst">{user_id}</span>"</span>, session_id)
+            
+            logger.info(<span class="hljs-string">f"🚫 Session revoked: <span class="hljs-subst">{session_id}</span>"</span>)
+    
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">revoke_all_user_sessions</span><span class="hljs-params">(self, user_id: int)</span>:</span>
+        <span class="hljs-string">"""🚫 Revoke all sessions for a user"""</span>
+        user_sessions_key = <span class="hljs-string">f"user_sessions:<span class="hljs-subst">{user_id}</span>"</span>
+        sessions = self.redis_client.smembers(user_sessions_key)
+        
+        <span class="hljs-keyword">for</span> session_id <span class="hljs-keyword">in</span> sessions:
+            self.revoke_session(session_id)
+        
+        logger.info(<span class="hljs-string">f"🚫 All sessions revoked for user <span class="hljs-subst">{user_id}</span>"</span>)
+    
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">is_token_blacklisted</span><span class="hljs-params">(self, token: str)</span> -&gt; bool:</span>
+        <span class="hljs-string">"""🚫 Check if token is blacklisted"""</span>
+        <span class="hljs-keyword">return</span> self.redis_client.exists(<span class="hljs-string">f"blacklist:<span class="hljs-subst">{token}</span>"</span>) &gt; <span class="hljs-number">0</span>
+    
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">blacklist_token</span><span class="hljs-params">(self, token: str, expiry: Optional[timedelta] = None)</span>:</span>
+        <span class="hljs-string">"""🚫 Add token to blacklist"""</span>
+        expiry = expiry <span class="hljs-keyword">or</span> self.token_expiry
+        self.redis_client.setex(
+            <span class="hljs-string">f"blacklist:<span class="hljs-subst">{token}</span>"</span>,
+            int(expiry.total_seconds()),
+            <span class="hljs-string">"blacklisted"</span>
+        )
+        logger.info(<span class="hljs-string">"🚫 Token blacklisted"</span>)
+
+<span class="hljs-comment"># 🌐 Global authentication service instance  </span>
+auth_service = AuthenticationService()
+</div></code></pre>
+<h3 id="%F0%9F%93%A7-email-service-class">📧 Email Service Class</h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">import</span> smtplib
+<span class="hljs-keyword">from</span> email.mime.text <span class="hljs-keyword">import</span> MIMEText
+<span class="hljs-keyword">from</span> email.mime.multipart <span class="hljs-keyword">import</span> MIMEMultipart
+<span class="hljs-keyword">from</span> email.mime.base <span class="hljs-keyword">import</span> MIMEBase
+<span class="hljs-keyword">from</span> email <span class="hljs-keyword">import</span> encoders
+<span class="hljs-keyword">from</span> typing <span class="hljs-keyword">import</span> List, Dict, Any, Optional
+<span class="hljs-keyword">import</span> aiofiles
+<span class="hljs-keyword">import</span> aiosmtplib
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">EmailService</span>:</span>
+    <span class="hljs-string">"""
+    📧 Advanced email service with templates and attachments
+    
+    Features:
+    📨 HTML/Plain text emails
+    📎 File attachments
+    🎨 Email templates
+    📊 Delivery tracking
+    🔄 Retry logic
+    📱 Mobile-friendly emails
+    """</span>
+    
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__init__</span><span class="hljs-params">(self)</span>:</span>
+        <span class="hljs-string">"""🏗️ Initialize email service"""</span>
+        self.smtp_server = os.getenv(<span class="hljs-string">"SMTP_SERVER"</span>, <span class="hljs-string">"smtp.gmail.com"</span>)
+        self.smtp_port = int(os.getenv(<span class="hljs-string">"SMTP_PORT"</span>, <span class="hljs-number">587</span>))
+        self.smtp_username = os.getenv(<span class="hljs-string">"SMTP_USERNAME"</span>, <span class="hljs-string">""</span>)
+        self.smtp_password = os.getenv(<span class="hljs-string">"SMTP_PASSWORD"</span>, <span class="hljs-string">""</span>)
+        self.from_email = os.getenv(<span class="hljs-string">"FROM_EMAIL"</span>, <span class="hljs-string">"noreply@example.com"</span>)
+        self.from_name = os.getenv(<span class="hljs-string">"FROM_NAME"</span>, <span class="hljs-string">"FastAPI App"</span>)
+        
+        <span class="hljs-comment"># 📊 Email tracking</span>
+        self.sent_emails = <span class="hljs-number">0</span>
+        self.failed_emails = <span class="hljs-number">0</span>
+        
+        logger.info(<span class="hljs-string">"📧 Email service initialized"</span>)
+    
+    <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__call__</span><span class="hljs-params">(self)</span> -&gt; "EmailService":</span>
+        <span class="hljs-string">"""🎯 Dependency injection entry point"""</span>
+        <span class="hljs-comment"># Test SMTP connection</span>
+        <span class="hljs-keyword">try</span>:
+            <span class="hljs-keyword">await</span> self._test_connection()
+        <span class="hljs-keyword">except</span> Exception <span class="hljs-keyword">as</span> e:
+            logger.error(<span class="hljs-string">f"❌ SMTP connection test failed: <span class="hljs-subst">{e}</span>"</span>)
+            <span class="hljs-comment"># Don't raise exception - allow service to work in degraded mode</span>
+            
+        <span class="hljs-keyword">return</span> self
+    
+    <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">_test_connection</span><span class="hljs-params">(self)</span>:</span>
+        <span class="hljs-string">"""🔍 Test SMTP connection"""</span>
+        smtp = aiosmtplib.SMTP(hostname=self.smtp_server, port=self.smtp_port)
+        <span class="hljs-keyword">await</span> smtp.connect()
+        <span class="hljs-keyword">await</span> smtp.starttls()
+        <span class="hljs-keyword">await</span> smtp.login(self.smtp_username, self.smtp_password)
+        <span class="hljs-keyword">await</span> smtp.quit()
+        logger.info(<span class="hljs-string">"✅ SMTP connection test successful"</span>)
+    
+    <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">send_email</span><span class="hljs-params">(
+        self,
+        to_emails: List[str],
+        subject: str,
+        body_text: str,
+        body_html: Optional[str] = None,
+        attachments: Optional[List[str]] = None,
+        reply_to: Optional[str] = None
+    )</span> -&gt; Dict[str, Any]:</span>
+        <span class="hljs-string">"""
+        📧 Send email with advanced features
+        
+        Use Cases:
+        ✉️ User notifications
+        📄 Report delivery
+        🛒 Order confirmations
+        🚨 Alert notifications
+        📰 Newsletter campaigns
+        """</span>
+        
+        <span class="hljs-keyword">try</span>:
+            <span class="hljs-comment"># 📝 Create message</span>
+            msg = MIMEMultipart(<span class="hljs-string">"alternative"</span>)
+            msg[<span class="hljs-string">"Subject"</span>] = subject
+            msg[<span class="hljs-string">"From"</span>] = <span class="hljs-string">f"<span class="hljs-subst">{self.from_name}</span> &lt;<span class="hljs-subst">{self.from_email}</span>&gt;"</span>
+            msg[<span class="hljs-string">"To"</span>] = <span class="hljs-string">", "</span>.join(to_emails)
+            
+            <span class="hljs-keyword">if</span> reply_to:
+                msg[<span class="hljs-string">"Reply-To"</span>] = reply_to
+            
+            <span class="hljs-comment"># 📄 Add text content</span>
+            text_part = MIMEText(body_text, <span class="hljs-string">"plain"</span>, <span class="hljs-string">"utf-8"</span>)
+            msg.attach(text_part)
+            
+            <span class="hljs-comment"># 🎨 Add HTML content if provided</span>
+            <span class="hljs-keyword">if</span> body_html:
+                html_part = MIMEText(body_html, <span class="hljs-string">"html"</span>, <span class="hljs-string">"utf-8"</span>)
+                msg.attach(html_part)
+            
+            <span class="hljs-comment"># 📎 Add attachments if provided</span>
+            <span class="hljs-keyword">if</span> attachments:
+                <span class="hljs-keyword">for</span> file_path <span class="hljs-keyword">in</span> attachments:
+                    <span class="hljs-keyword">await</span> self._add_attachment(msg, file_path)
+            
+            <span class="hljs-comment"># 📧 Send email</span>
+            smtp = aiosmtplib.SMTP(hostname=self.smtp_server, port=self.smtp_port)
+            <span class="hljs-keyword">await</span> smtp.connect()
+            <span class="hljs-keyword">await</span> smtp.starttls()
+            <span class="hljs-keyword">await</span> smtp.login(self.smtp_username, self.smtp_password)
+            
+            <span class="hljs-keyword">await</span> smtp.send_message(msg)
+            <span class="hljs-keyword">await</span> smtp.quit()
+            
+            <span class="hljs-comment"># 📊 Update statistics</span>
+            self.sent_emails += <span class="hljs-number">1</span>
+            
+            logger.info(<span class="hljs-string">f"📧 Email sent successfully to <span class="hljs-subst">{len(to_emails)}</span> recipients"</span>)
+            
+            <span class="hljs-keyword">return</span> {
+                <span class="hljs-string">"status"</span>: <span class="hljs-string">"sent"</span>,
+                <span class="hljs-string">"recipients"</span>: to_emails,
+                <span class="hljs-string">"subject"</span>: subject,
+                <span class="hljs-string">"sent_at"</span>: datetime.utcnow().isoformat(),
+                <span class="hljs-string">"message_id"</span>: msg.get(<span class="hljs-string">"Message-ID"</span>, <span class="hljs-string">"unknown"</span>)
+            }
+            
+        <span class="hljs-keyword">except</span> Exception <span class="hljs-keyword">as</span> e:
+            self.failed_emails += <span class="hljs-number">1</span>
+            logger.error(<span class="hljs-string">f"❌ Email sending failed: <span class="hljs-subst">{e}</span>"</span>)
+            
+            <span class="hljs-keyword">return</span> {
+                <span class="hljs-string">"status"</span>: <span class="hljs-string">"failed"</span>,
+                <span class="hljs-string">"recipients"</span>: to_emails,
+                <span class="hljs-string">"subject"</span>: subject,
+                <span class="hljs-string">"error"</span>: str(e),
+                <span class="hljs-string">"failed_at"</span>: datetime.utcnow().isoformat()
+            }
+    
+    <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">_add_attachment</span><span class="hljs-params">(self, msg: MIMEMultipart, file_path: str)</span>:</span>
+        <span class="hljs-string">"""📎 Add file attachment to email"""</span>
+        <span class="hljs-keyword">try</span>:
+            <span class="hljs-keyword">async</span> <span class="hljs-keyword">with</span> aiofiles.open(file_path, <span class="hljs-string">"rb"</span>) <span class="hljs-keyword">as</span> f:
+                attachment_data = <span class="hljs-keyword">await</span> f.read()
+            
+            part = MIMEBase(<span class="hljs-string">"application"</span>, <span class="hljs-string">"octet-stream"</span>)
+            part.set_payload(attachment_data)
+            encoders.encode_base64(part)
+            
+            filename = os.path.basename(file_path)
+            part.add_header(
+                <span class="hljs-string">"Content-Disposition"</span>,
+                <span class="hljs-string">f"attachment; filename= <span class="hljs-subst">{filename}</span>"</span>
+            )
+            
+            msg.attach(part)
+            logger.debug(<span class="hljs-string">f"📎 Added attachment: <span class="hljs-subst">{filename}</span>"</span>)
+            
+        <span class="hljs-keyword">except</span> Exception <span class="hljs-keyword">as</span> e:
+            logger.error(<span class="hljs-string">f"❌ Failed to add attachment <span class="hljs-subst">{file_path}</span>: <span class="hljs-subst">{e}</span>"</span>)
+    
+    <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">send_template_email</span><span class="hljs-params">(
+        self,
+        to_emails: List[str],
+        template_name: str,
+        template_data: Dict[str, Any],
+        subject: Optional[str] = None
+    )</span> -&gt; Dict[str, Any]:</span>
+        <span class="hljs-string">"""
+        🎨 Send email using template
+        
+        Use Cases:
+        👋 Welcome emails
+        📄 Invoice/receipt emails
+        🔔 Notification emails
+        📊 Report emails
+        """</span>
+        
+        <span class="hljs-keyword">try</span>:
+            <span class="hljs-comment"># 🎨 Load and render template</span>
+            template_content = <span class="hljs-keyword">await</span> self._render_template(template_name, template_data)
+            
+            <span class="hljs-comment"># 📧 Send email</span>
+            <span class="hljs-keyword">return</span> <span class="hljs-keyword">await</span> self.send_email(
+                to_emails=to_emails,
+                subject=subject <span class="hljs-keyword">or</span> template_content.get(<span class="hljs-string">"subject"</span>, <span class="hljs-string">"No Subject"</span>),
+                body_text=template_content.get(<span class="hljs-string">"text"</span>, <span class="hljs-string">""</span>),
+                body_html=template_content.get(<span class="hljs-string">"html"</span>, <span class="hljs-string">""</span>)
+            )
+            
+        <span class="hljs-keyword">except</span> Exception <span class="hljs-keyword">as</span> e:
+            logger.error(<span class="hljs-string">f"❌ Template email failed: <span class="hljs-subst">{e}</span>"</span>)
+            <span class="hljs-keyword">return</span> {
+                <span class="hljs-string">"status"</span>: <span class="hljs-string">"failed"</span>,
+                <span class="hljs-string">"error"</span>: str(e),
+                <span class="hljs-string">"template"</span>: template_name
+            }
+    
+    <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">_render_template</span><span class="hljs-params">(
+        self, 
+        template_name: str, 
+        data: Dict[str, Any]
+    )</span> -&gt; Dict[str, str]:</span>
+        <span class="hljs-string">"""🎨 Render email template with data"""</span>
+        
+        <span class="hljs-comment"># 📁 Template paths</span>
+        template_dir = <span class="hljs-string">"templates/emails"</span>
+        text_template_path = <span class="hljs-string">f"<span class="hljs-subst">{template_dir}</span>/<span class="hljs-subst">{template_name}</span>.txt"</span>
+        html_template_path = <span class="hljs-string">f"<span class="hljs-subst">{template_dir}</span>/<span class="hljs-subst">{template_name}</span>.html"</span>
+        
+        result = {}
+        
+        <span class="hljs-comment"># 📄 Load text template</span>
+        <span class="hljs-keyword">try</span>:
+            <span class="hljs-keyword">async</span> <span class="hljs-keyword">with</span> aiofiles.open(text_template_path, <span class="hljs-string">"r"</span>) <span class="hljs-keyword">as</span> f:
+                text_template = <span class="hljs-keyword">await</span> f.read()
+                result[<span class="hljs-string">"text"</span>] = text_template.format(**data)
+        <span class="hljs-keyword">except</span> FileNotFoundError:
+            logger.warning(<span class="hljs-string">f"📄 Text template not found: <span class="hljs-subst">{text_template_path}</span>"</span>)
+        
+        <span class="hljs-comment"># 🎨 Load HTML template</span>
+        <span class="hljs-keyword">try</span>:
+            <span class="hljs-keyword">async</span> <span class="hljs-keyword">with</span> aiofiles.open(html_template_path, <span class="hljs-string">"r"</span>) <span class="hljs-keyword">as</span> f:
+                html_template = <span class="hljs-keyword">await</span> f.read()
+                result[<span class="hljs-string">"html"</span>] = html_template.format(**data)
+        <span class="hljs-keyword">except</span> FileNotFoundError:
+            logger.warning(<span class="hljs-string">f"🎨 HTML template not found: <span class="hljs-subst">{html_template_path}</span>"</span>)
+        
+        <span class="hljs-keyword">return</span> result
+    
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_statistics</span><span class="hljs-params">(self)</span> -&gt; Dict[str, Any]:</span>
+        <span class="hljs-string">"""📊 Get email service statistics"""</span>
+        total_emails = self.sent_emails + self.failed_emails
+        success_rate = (self.sent_emails / total_emails * <span class="hljs-number">100</span>) <span class="hljs-keyword">if</span> total_emails &gt; <span class="hljs-number">0</span> <span class="hljs-keyword">else</span> <span class="hljs-number">0</span>
+        
+        <span class="hljs-keyword">return</span> {
+            <span class="hljs-string">"sent_emails"</span>: self.sent_emails,
+            <span class="hljs-string">"failed_emails"</span>: self.failed_emails,
+            <span class="hljs-string">"total_emails"</span>: total_emails,
+            <span class="hljs-string">"success_rate"</span>: round(success_rate, <span class="hljs-number">2</span>)
+        }
+
+<span class="hljs-comment"># 🌐 Global email service instance</span>
+email_service = EmailService()
+</div></code></pre>
+<h3 id="%F0%9F%8E%AF-class-dependencies-usage-examples">🎯 Class Dependencies Usage Examples</h3>
+<pre class="hljs"><code><div><span class="hljs-comment"># 🎯 Endpoints using class dependencies</span>
+
+<span class="hljs-meta">@app.post("/register")</span>
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">register_user</span><span class="hljs-params">(
+    user_data: dict,
+    db: DatabaseService = Depends<span class="hljs-params">(database_service)</span>,
+    auth: AuthenticationService = Depends<span class="hljs-params">(auth_service)</span>,
+    email: EmailService = Depends<span class="hljs-params">(email_service)</span>
+)</span>:</span>
+    <span class="hljs-string">"""
+    👤 Register new user with multiple class dependencies
+    
+    Dependencies Used:
+    💾 Database Service - Store user data
+    🔐 Authentication Service - Create session
+    📧 Email Service - Send welcome email
+    """</span>
+    
+    <span class="hljs-keyword">try</span>:
+        <span class="hljs-comment"># 📝 Hash password</span>
+        hashed_password = get_password_hash(user_data[<span class="hljs-string">"password"</span>])
+        
+        <span class="hljs-comment"># 👤 Create user in database</span>
+        new_user = <span class="hljs-keyword">await</span> db.create_user({
+            <span class="hljs-string">"username"</span>: user_data[<span class="hljs-string">"username"</span>],
+            <span class="hljs-string">"email"</span>: user_data[<span class="hljs-string">"email"</span>],
+            <span class="hljs-string">"hashed_password"</span>: hashed_password
+        })
+        
+        <span class="hljs-comment"># 🎫 Create authentication session</span>
+        session = auth.create_session(new_user[<span class="hljs-string">"id"</span>], new_user[<span class="hljs-string">"username"</span>])
+        
+        <span class="hljs-comment"># 📧 Send welcome email</span>
+        email_result = <span class="hljs-keyword">await</span> email.send_template_email(
+            to_emails=[new_user[<span class="hljs-string">"email"</span>]],
+            template_name=<span class="hljs-string">"welcome"</span>,
+            template_data={
+                <span class="hljs-string">"username"</span>: new_user[<span class="hljs-string">"username"</span>],
+                <span class="hljs-string">"login_url"</span>: <span class="hljs-string">"https://app.example.com/login"</span>
+            },
+            subject=<span class="hljs-string">f"👋 Welcome to FastAPI App, <span class="hljs-subst">{new_user[<span class="hljs-string">'username'</span>]}</span>!"</span>
+        )
+        
+        <span class="hljs-keyword">return</span> {
+            <span class="hljs-string">"message"</span>: <span class="hljs-string">"✅ User registered successfully"</span>,
+            <span class="hljs-string">"user"</span>: {
+                <span class="hljs-string">"id"</span>: new_user[<span class="hljs-string">"id"</span>],
+                <span class="hljs-string">"username"</span>: new_user[<span class="hljs-string">"username"</span>],
+                <span class="hljs-string">"email"</span>: new_user[<span class="hljs-string">"email"</span>]
+            },
+            <span class="hljs-string">"session"</span>: session,
+            <span class="hljs-string">"email_sent"</span>: email_result[<span class="hljs-string">"status"</span>] == <span class="hljs-string">"sent"</span>
+        }
+        
+    <span class="hljs-keyword">except</span> Exception <span class="hljs-keyword">as</span> e:
+        logger.error(<span class="hljs-string">f"❌ Registration failed: <span class="hljs-subst">{e}</span>"</span>)
+        <span class="hljs-keyword">raise</span> HTTPException(status_code=<span class="hljs-number">400</span>, detail=str(e))
+
+<span class="hljs-meta">@app.get("/dashboard")</span>
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_dashboard_data</span><span class="hljs-params">(
+    current_user: User = Depends<span class="hljs-params">(get_current_active_user)</span>,
+    db: DatabaseService = Depends<span class="hljs-params">(database_service)</span>,
+    pagination: Dict[str, int] = Depends<span class="hljs-params">(get_pagination_params)</span>
+)</span>:</span>
+    <span class="hljs-string">"""
+    📊 Get dashboard data with authentication and database
+    
+    Dependencies Used:
+    🔐 User Authentication - Verify access
+    💾 Database Service - Fetch data
+    📄 Pagination - Limit results
+    """</span>
+    
+    <span class="hljs-comment"># 📊 Get user's recent activity</span>
+    user_activities = <span class="hljs-keyword">await</span> db.execute_query(
+        <span class="hljs-string">"SELECT * FROM user_activities WHERE user_id = $1 ORDER BY created_at DESC LIMIT $2 OFFSET $3"</span>,
+        current_user.id,
+        pagination[<span class="hljs-string">"size"</span>],
+        pagination[<span class="hljs-string">"offset"</span>],
+        fetch_all=<span class="hljs-literal">True</span>
+    )
+    
+    <span class="hljs-comment"># 📈 Get user statistics</span>
+    stats = <span class="hljs-keyword">await</span> db.execute_query(
+        <span class="hljs-string">"SELECT COUNT(*) as total_actions FROM user_activities WHERE user_id = $1"</span>,
+        current_user.id,
+        fetch_one=<span class="hljs-literal">True</span>
+    )
+    
+    <span class="hljs-keyword">return</span> {
+        <span class="hljs-string">"user"</span>: {
+            <span class="hljs-string">"id"</span>: current_user.id,
+            <span class="hljs-string">"username"</span>: current_user.username
+        },
+        <span class="hljs-string">"activities"</span>: [dict(activity) <span class="hljs-keyword">for</span> activity <span class="hljs-keyword">in</span> user_activities],
+        <span class="hljs-string">"statistics"</span>: dict(stats),
+        <span class="hljs-string">"pagination"</span>: pagination
+    }
+</div></code></pre>
+<h2 id="%F0%9F%8F%97%EF%B8%8F-section-3-multi-level-dependencies">🏗️ Section 3: Multi-Level Dependencies</h2>
+<h3 id="%F0%9F%93%8A-multi-level-dependency-architecture">📊 Multi-Level Dependency Architecture</h3>
+<pre class="hljs"><code><div>🎯 Endpoint Function
+    ↓
+🔐 Level 1: Authentication
+    ├── 🎫 JWT Token Validation
+    └── 👤 User Identity
+         ↓
+💾 Level 2: Database Service  
+    ├── 🔗 Connection Pool
+    └── 📊 Query Execution
+         ↓
+⚙️ Level 3: Business Logic Service
+    ├── 📊 Data Processing
+    ├── 🔍 Validation Rules
+    └── 🧮 Calculations
+         ↓
+📧 Level 4: Notification Service
+    ├── 📨 Email Preparation
+    └── 📱 Message Delivery
+         ↓
+🎯 Final Response
+</div></code></pre>
+<h3 id="%F0%9F%9B%A0%EF%B8%8F-advanced-multi-level-dependency-implementation">🛠️ Advanced Multi-Level Dependency Implementation</h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> typing <span class="hljs-keyword">import</span> List, Dict, Any, Optional
+<span class="hljs-keyword">from</span> decimal <span class="hljs-keyword">import</span> Decimal
+<span class="hljs-keyword">import</span> asyncio
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">OrderService</span>:</span>
+    <span class="hljs-string">"""
+    🛒 Order management service with complex dependencies
+    
+    Multi-Level Dependencies:
+    🔐 Authentication → 💾 Database → 📧 Email → 📊 Analytics
+    """</span>
+    
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__init__</span><span class="hljs-params">(
+        self,
+        db: DatabaseService,
+        email: EmailService,
+        auth: AuthenticationService
+    )</span>:</span>
+        <span class="hljs-string">"""🏗️ Initialize with injected dependencies"""</span>
+        self.db = db
+        self.email = email
+        self.auth = auth
+        
+        <span class="hljs-comment"># 🛒 Order configuration</span>
+        self.tax_rate = Decimal(<span class="hljs-string">"0.08"</span>)  <span class="hljs-comment"># 8% tax</span>
+        self.shipping_cost = Decimal(<span class="hljs-string">"5.99"</span>)
+        self.free_shipping_threshold = Decimal(<span class="hljs-string">"50.00"</span>)
+        
+        logger.info(<span class="hljs-string">"🛒 Order service initialized"</span>)
+    
+    <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__call__</span><span class="hljs-params">(self)</span> -&gt; "OrderService":</span>
+        <span class="hljs-string">"""🎯 Dependency injection entry point"""</span>
+        <span class="hljs-keyword">return</span> self
+    
+    <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">create_order</span><span class="hljs-params">(
+        self,
+        user: User,
+        items: List[Dict[str, Any]],
+        shipping_address: Dict[str, str]
+    )</span> -&gt; Dict[str, Any]:</span>
+        <span class="hljs-string">"""
+        🛒 Create new order with full dependency chain
+        
+        Dependency Flow:
+        👤 User (from auth) → 💾 Database operations → 📧 Email notifications
+        """</span>
+        
+        <span class="hljs-keyword">try</span>:
+            <span class="hljs-comment"># 📊 Calculate order totals</span>
+            order_details = <span class="hljs-keyword">await</span> self._calculate_order_totals(items)
+            
+            <span class="hljs-comment"># 💾 Create order in database</span>
+            order_data = {
+                <span class="hljs-string">"user_id"</span>: user.id,
+                <span class="hljs-string">"items"</span>: items,
+                <span class="hljs-string">"subtotal"</span>: float(order_details[<span class="hljs-string">"subtotal"</span>]),
+                <span class="hljs-string">"tax_amount"</span>: float(order_details[<span class="hljs-string">"tax_amount"</span>]),
+                <span class="hljs-string">"shipping_cost"</span>: float(order_details[<span class="hljs-string">"shipping_cost"</span>]),
+                <span class="hljs-string">"total_amount"</span>: float(order_details[<span class="hljs-string">"total_amount"</span>]),
+                <span class="hljs-string">"shipping_address"</span>: shipping_address,
+                <span class="hljs-string">"status"</span>: <span class="hljs-string">"pending"</span>,
+                <span class="hljs-string">"created_at"</span>: datetime.utcnow()
+            }
+            
+            <span class="hljs-comment"># 💾 Insert order into database</span>
+            order = <span class="hljs-keyword">await</span> self.db.execute_query(
+                <span class="hljs-string">"""
+                INSERT INTO orders (user_id, items, subtotal, tax_amount, 
+                                  shipping_cost, total_amount, shipping_address, 
+                                  status, created_at)
+                VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+                RETURNING *
+                """</span>,
+                order_data[<span class="hljs-string">"user_id"</span>],
+                json.dumps(order_data[<span class="hljs-string">"items"</span>]),
+                order_data[<span class="hljs-string">"subtotal"</span>],
+                order_data[<span class="hljs-string">"tax_amount"</span>],
+                order_data[<span class="hljs-string">"shipping_cost"</span>],
+                order_data[<span class="hljs-string">"total_amount"</span>],
+                json.dumps(order_data[<span class="hljs-string">"shipping_address"</span>]),
+                order_data[<span class="hljs-string">"status"</span>],
+                order_data[<span class="hljs-string">"created_at"</span>],
+                fetch_one=<span class="hljs-literal">True</span>
+            )
+            
+            order_dict = dict(order)
+            
+            <span class="hljs-comment"># 📧 Send order confirmation email</span>
+            <span class="hljs-keyword">await</span> self._send_order_confirmation(user, order_dict)
+            
+            <span class="hljs-comment"># 📊 Update user analytics</span>
+            <span class="hljs-keyword">await</span> self._update_user_analytics(user.id, order_dict)
+            
+            logger.info(<span class="hljs-string">f"🛒 Order created successfully: <span class="hljs-subst">{order_dict[<span class="hljs-string">'id'</span>]}</span>"</span>)
+            
+            <span class="hljs-keyword">return</span> {
+                <span class="hljs-string">"order_id"</span>: order_dict[<span class="hljs-string">"id"</span>],
+                <span class="hljs-string">"status"</span>: <span class="hljs-string">"created"</span>,
+                <span class="hljs-string">"order_details"</span>: order_dict,
+                <span class="hljs-string">"message"</span>: <span class="hljs-string">"✅ Order created successfully"</span>
+            }
+            
+        <span class="hljs-keyword">except</span> Exception <span class="hljs-keyword">as</span> e:
+            logger.error(<span class="hljs-string">f"❌ Order creation failed: <span class="hljs-subst">{e}</span>"</span>)
+            <span class="hljs-keyword">raise</span> HTTPException(
+                status_code=<span class="hljs-number">500</span>,
+                detail=<span class="hljs-string">"🚫 Failed to create order"</span>
+            )
+    
+    <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">_calculate_order_totals</span><span class="hljs-params">(self, items: List[Dict[str, Any]])</span> -&gt; Dict[str, Decimal]:</span>
+        <span class="hljs-string">"""💰 Calculate order totals with tax and shipping"""</span>
+        
+        subtotal = Decimal(<span class="hljs-string">"0.00"</span>)
+        
+        <span class="hljs-comment"># 🧮 Calculate subtotal</span>
+        <span class="hljs-keyword">for</span> item <span class="hljs-keyword">in</span> items:
+            price = Decimal(str(item[<span class="hljs-string">"price"</span>]))
+            quantity = item[<span class="hljs-string">"quantity"</span>]
+            subtotal += price * quantity
+        
+        <span class="hljs-comment"># 💸 Calculate tax</span>
+        tax_amount = subtotal * self.tax_rate
+        
+        <span class="hljs-comment"># 🚚 Calculate shipping</span>
+        shipping_cost = Decimal(<span class="hljs-string">"0.00"</span>) <span class="hljs-keyword">if</span> subtotal &gt;= self.free_shipping_threshold <span class="hljs-keyword">else</span> self.shipping_cost
+        
+        <span class="hljs-comment"># 💰 Calculate total</span>
+        total_amount = subtotal + tax_amount + shipping_cost
+        
+        <span class="hljs-keyword">return</span> {
+            <span class="hljs-string">"subtotal"</span>: subtotal,
+            <span class="hljs-string">"tax_amount"</span>: tax_amount,
+            <span class="hljs-string">"shipping_cost"</span>: shipping_cost,
+            <span class="hljs-string">"total_amount"</span>: total_amount
+        }
+    
+    <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">_send_order_confirmation</span><span class="hljs-params">(self, user: User, order: Dict[str, Any])</span>:</span>
+        <span class="hljs-string">"""📧 Send order confirmation email"""</span>
+        
+        <span class="hljs-keyword">try</span>:
+            <span class="hljs-comment"># 🎨 Prepare email template data</span>
+            template_data = {
+                <span class="hljs-string">"username"</span>: user.username,
+                <span class="hljs-string">"order_id"</span>: order[<span class="hljs-string">"id"</span>],
+                <span class="hljs-string">"subtotal"</span>: <span class="hljs-string">f"$<span class="hljs-subst">{order[<span class="hljs-string">'subtotal'</span>]:<span class="hljs-number">.2</span>f}</span>"</span>,
+                <span class="hljs-string">"tax_amount"</span>: <span class="hljs-string">f"$<span class="hljs-subst">{order[<span class="hljs-string">'tax_amount'</span>]:<span class="hljs-number">.2</span>f}</span>"</span>,
+                <span class="hljs-string">"shipping_cost"</span>: <span class="hljs-string">f"$<span class="hljs-subst">{order[<span class="hljs-string">'shipping_cost'</span>]:<span class="hljs-number">.2</span>f}</span>"</span>,
+                <span class="hljs-string">"total_amount"</span>: <span class="hljs-string">f"$<span class="hljs-subst">{order[<span class="hljs-string">'total_amount'</span>]:<span class="hljs-number">.2</span>f}</span>"</span>,
+                <span class="hljs-string">"order_date"</span>: order[<span class="hljs-string">"created_at"</span>],
+                <span class="hljs-string">"tracking_url"</span>: <span class="hljs-string">f"https://app.example.com/orders/<span class="hljs-subst">{order[<span class="hljs-string">'id'</span>]}</span>"</span>
+            }
+            
+            <span class="hljs-comment"># 📧 Send confirmation email</span>
+            <span class="hljs-keyword">await</span> self.email.send_template_email(
+                to_emails=[user.email],
+                template_name=<span class="hljs-string">"order_confirmation"</span>,
+                template_data=template_data,
+                subject=<span class="hljs-string">f"🛒 Order Confirmation #<span class="hljs-subst">{order[<span class="hljs-string">'id'</span>]}</span>"</span>
+            )
+            
+            logger.info(<span class="hljs-string">f"📧 Order confirmation sent to <span class="hljs-subst">{user.email}</span>"</span>)
+            
+        <span class="hljs-keyword">except</span> Exception <span class="hljs-keyword">as</span> e:
+            logger.error(<span class="hljs-string">f"❌ Failed to send order confirmation: <span class="hljs-subst">{e}</span>"</span>)
+            <span class="hljs-comment"># Don't fail the order creation if email fails</span>
+    
+    <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">_update_user_analytics</span><span class="hljs-params">(self, user_id: int, order: Dict[str, Any])</span>:</span>
+        <span class="hljs-string">"""📊 Update user analytics after order"""</span>
+        
+        <span class="hljs-keyword">try</span>:
+            <span class="hljs-comment"># 📈 Update user order statistics</span>
+            <span class="hljs-keyword">await</span> self.db.execute_query(
+                <span class="hljs-string">"""
+                INSERT INTO user_analytics (user_id, metric_type, metric_value, recorded_at)
+                VALUES ($1, $2, $3, $4)
+                """</span>,
+                user_id,
+                <span class="hljs-string">"order_created"</span>,
+                order[<span class="hljs-string">"total_amount"</span>],
+                datetime.utcnow()
+            )
+            
+            logger.info(<span class="hljs-string">f"📊 Analytics updated for user <span class="hljs-subst">{user_id}</span>"</span>)
+            
+        <span class="hljs-keyword">except</span> Exception <span class="hljs-keyword">as</span> e:
+            logger.error(<span class="hljs-string">f"❌ Failed to update analytics: <span class="hljs-subst">{e}</span>"</span>)
+            <span class="hljs-comment"># Don't fail the order if analytics update fails</span>
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">InventoryService</span>:</span>
+    <span class="hljs-string">"""
+    📦 Inventory management with database dependency
+    """</span>
+    
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__init__</span><span class="hljs-params">(self, db: DatabaseService)</span>:</span>
+        <span class="hljs-string">"""🏗️ Initialize with database dependency"""</span>
+        self.db = db
+        logger.info(<span class="hljs-string">"📦 Inventory service initialized"</span>)
+    
+    <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__call__</span><span class="hljs-params">(self)</span> -&gt; "InventoryService":</span>
+        <span class="hljs-string">"""🎯 Dependency injection entry point"""</span>
+        <span class="hljs-keyword">return</span> self
+    
+    <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">check_availability</span><span class="hljs-params">(self, items: List[Dict[str, Any]])</span> -&gt; Dict[str, Any]:</span>
+        <span class="hljs-string">"""📦 Check item availability"""</span>
+        
+        availability_results = []
+        all_available = <span class="hljs-literal">True</span>
+        
+        <span class="hljs-keyword">for</span> item <span class="hljs-keyword">in</span> items:
+            product_id = item[<span class="hljs-string">"product_id"</span>]
+            requested_quantity = item[<span class="hljs-string">"quantity"</span>]
+            
+            <span class="hljs-comment"># 📊 Get current stock</span>
+            stock_info = <span class="hljs-keyword">await</span> self.db.execute_query(
+                <span class="hljs-string">"SELECT quantity, reserved_quantity FROM inventory WHERE product_id = $1"</span>,
+                product_id,
+                fetch_one=<span class="hljs-literal">True</span>
+            )
+            
+            <span class="hljs-keyword">if</span> stock_info:
+                available_quantity = stock_info[<span class="hljs-string">"quantity"</span>] - stock_info[<span class="hljs-string">"reserved_quantity"</span>]
+                is_available = available_quantity &gt;= requested_quantity
+                
+                availability_results.append({
+                    <span class="hljs-string">"product_id"</span>: product_id,
+                    <span class="hljs-string">"requested_quantity"</span>: requested_quantity,
+                    <span class="hljs-string">"available_quantity"</span>: available_quantity,
+                    <span class="hljs-string">"is_available"</span>: is_available
+                })
+                
+                <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> is_available:
+                    all_available = <span class="hljs-literal">False</span>
+            <span class="hljs-keyword">else</span>:
+                <span class="hljs-comment"># Product not found in inventory</span>
+                availability_results.append({
+                    <span class="hljs-string">"product_id"</span>: product_id,
+                    <span class="hljs-string">"requested_quantity"</span>: requested_quantity,
+                    <span class="hljs-string">"available_quantity"</span>: <span class="hljs-number">0</span>,
+                    <span class="hljs-string">"is_available"</span>: <span class="hljs-literal">False</span>
+                })
+                all_available = <span class="hljs-literal">False</span>
+        
+        <span class="hljs-keyword">return</span> {
+            <span class="hljs-string">"all_available"</span>: all_available,
+            <span class="hljs-string">"items"</span>: availability_results
+        }
+    
+    <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">reserve_items</span><span class="hljs-params">(self, items: List[Dict[str, Any]])</span> -&gt; bool:</span>
+        <span class="hljs-string">"""📦 Reserve items for order"""</span>
+        
+        <span class="hljs-keyword">try</span>:
+            <span class="hljs-comment"># 🔄 Start database transaction</span>
+            <span class="hljs-keyword">async</span> <span class="hljs-keyword">with</span> self.db.get_connection() <span class="hljs-keyword">as</span> conn:
+                <span class="hljs-keyword">async</span> <span class="hljs-keyword">with</span> conn.transaction():
+                    <span class="hljs-keyword">for</span> item <span class="hljs-keyword">in</span> items:
+                        <span class="hljs-keyword">await</span> conn.execute(
+                            <span class="hljs-string">"""
+                            UPDATE inventory 
+                            SET reserved_quantity = reserved_quantity + $1
+                            WHERE product_id = $2
+                            """</span>,
+                            item[<span class="hljs-string">"quantity"</span>],
+                            item[<span class="hljs-string">"product_id"</span>]
+                        )
+            
+            logger.info(<span class="hljs-string">f"📦 Reserved <span class="hljs-subst">{len(items)}</span> items"</span>)
+            <span class="hljs-keyword">return</span> <span class="hljs-literal">True</span>
+            
+        <span class="hljs-keyword">except</span> Exception <span class="hljs-keyword">as</span> e:
+            logger.error(<span class="hljs-string">f"❌ Failed to reserve items: <span class="hljs-subst">{e}</span>"</span>)
+            <span class="hljs-keyword">return</span> <span class="hljs-literal">False</span>
+
+<span class="hljs-comment"># 🎯 Complex dependency function that combines multiple services</span>
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_order_service</span><span class="hljs-params">(
+    db: DatabaseService = Depends<span class="hljs-params">(database_service)</span>,
+    email: EmailService = Depends<span class="hljs-params">(email_service)</span>,
+    auth: AuthenticationService = Depends<span class="hljs-params">(auth_service)</span>
+)</span> -&gt; OrderService:</span>
+    <span class="hljs-string">"""
+    🏗️ Multi-level dependency injection for OrderService
+    
+    Dependency Chain:
+    🔐 Auth Service → 💾 Database Service → 📧 Email Service → 🛒 Order Service
+    """</span>
+    
+    <span class="hljs-comment"># 🏗️ Create order service with all dependencies</span>
+    order_service = OrderService(db, email, auth)
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">await</span> order_service()
+
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_inventory_service</span><span class="hljs-params">(
+    db: DatabaseService = Depends<span class="hljs-params">(database_service)</span>
+)</span> -&gt; InventoryService:</span>
+    <span class="hljs-string">"""
+    🏗️ Dependency injection for InventoryService
+    
+    Dependency Chain:
+    💾 Database Service → 📦 Inventory Service
+    """</span>
+    
+    inventory_service = InventoryService(db)
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">await</span> inventory_service()
+
+<span class="hljs-comment"># 🎯 Complex endpoint with multi-level dependencies</span>
+<span class="hljs-meta">@app.post("/orders")</span>
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">create_order_endpoint</span><span class="hljs-params">(
+    order_request: dict,
+    current_user: User = Depends<span class="hljs-params">(get_current_active_user)</span>,
+    order_service: OrderService = Depends<span class="hljs-params">(get_order_service)</span>,
+    inventory_service: InventoryService = Depends<span class="hljs-params">(get_inventory_service)</span>
+)</span>:</span>
+    <span class="hljs-string">"""
+    🛒 Create order with complex multi-level dependencies
+    
+    Complete Dependency Chain:
+    🎫 JWT Token → 🔐 Auth Service → 👤 Current User
+    💾 Database Service → 🛒 Order Service  
+    💾 Database Service → 📦 Inventory Service
+    📧 Email Service → 🛒 Order Service
+    """</span>
+    
+    <span class="hljs-keyword">try</span>:
+        items = order_request[<span class="hljs-string">"items"</span>]
+        shipping_address = order_request[<span class="hljs-string">"shipping_address"</span>]
+        
+        <span class="hljs-comment"># 📦 Check inventory availability</span>
+        availability = <span class="hljs-keyword">await</span> inventory_service.check_availability(items)
+        
+        <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> availability[<span class="hljs-string">"all_available"</span>]:
+            unavailable_items = [
+                item <span class="hljs-keyword">for</span> item <span class="hljs-keyword">in</span> availability[<span class="hljs-string">"items"</span>]
+                <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> item[<span class="hljs-string">"is_available"</span>]
+            ]
+            
+            <span class="hljs-keyword">return</span> {
+                <span class="hljs-string">"error"</span>: <span class="hljs-string">"❌ Some items are not available"</span>,
+                <span class="hljs-string">"unavailable_items"</span>: unavailable_items,
+                <span class="hljs-string">"status"</span>: <span class="hljs-string">"inventory_check_failed"</span>
+            }
+        
+        <span class="hljs-comment"># 📦 Reserve inventory</span>
+        reservation_success = <span class="hljs-keyword">await</span> inventory_service.reserve_items(items)
+        <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> reservation_success:
+            <span class="hljs-keyword">raise</span> HTTPException(
+                status_code=<span class="hljs-number">500</span>,
+                detail=<span class="hljs-string">"🚫 Failed to reserve inventory"</span>
+            )
+        
+        <span class="hljs-comment"># 🛒 Create order</span>
+        order_result = <span class="hljs-keyword">await</span> order_service.create_order(
+            user=current_user,
+            items=items,
+            shipping_address=shipping_address
+        )
+        
+        <span class="hljs-keyword">return</span> order_result
+        
+    <span class="hljs-keyword">except</span> Exception <span class="hljs-keyword">as</span> e:
+        logger.error(<span class="hljs-string">f"❌ Order creation endpoint failed: <span class="hljs-subst">{e}</span>"</span>)
+        <span class="hljs-keyword">raise</span> HTTPException(
+            status_code=<span class="hljs-number">500</span>,
+            detail=<span class="hljs-string">"🚫 Failed to create order"</span>
+        )
+
+<span class="hljs-meta">@app.get("/orders/{order_id}")</span>
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_order_details</span><span class="hljs-params">(
+    order_id: int,
+    current_user: User = Depends<span class="hljs-params">(get_current_active_user)</span>,
+    db: DatabaseService = Depends<span class="hljs-params">(database_service)</span>
+)</span>:</span>
+    <span class="hljs-string">"""
+    🔍 Get order details with authentication and database dependencies
+    
+    Dependency Chain:
+    🎫 JWT Token → 🔐 User Auth → 💾 Database Query
+    """</span>
+    
+    <span class="hljs-comment"># 📊 Get order from database</span>
+    order = <span class="hljs-keyword">await</span> db.execute_query(
+        <span class="hljs-string">"SELECT * FROM orders WHERE id = $1 AND user_id = $2"</span>,
+        order_id,
+        current_user.id,
+        fetch_one=<span class="hljs-literal">True</span>
+    )
+    
+    <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> order:
+        <span class="hljs-keyword">raise</span> HTTPException(
+            status_code=<span class="hljs-number">404</span>,
+            detail=<span class="hljs-string">"🔍 Order not found"</span>
+        )
+    
+    order_dict = dict(order)
+    
+    <span class="hljs-comment"># 📊 Parse JSON fields</span>
+    order_dict[<span class="hljs-string">"items"</span>] = json.loads(order_dict[<span class="hljs-string">"items"</span>])
+    order_dict[<span class="hljs-string">"shipping_address"</span>] = json.loads(order_dict[<span class="hljs-string">"shipping_address"</span>])
+    
+    <span class="hljs-keyword">return</span> {
+        <span class="hljs-string">"order"</span>: order_dict,
+        <span class="hljs-string">"user"</span>: {
+            <span class="hljs-string">"id"</span>: current_user.id,
+            <span class="hljs-string">"username"</span>: current_user.username
+        }
+    }
+</div></code></pre>
+<h3 id="%F0%9F%93%8A-multi-level-dependencies-use-cases">📊 Multi-Level Dependencies Use Cases</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Dependency Level</th>
+<th style="text-align:left">🎯 Service</th>
+<th style="text-align:left">🔗 Depends On</th>
+<th style="text-align:left">📊 Use Case</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>Level 1</strong></td>
+<td style="text-align:left">Authentication</td>
+<td style="text-align:left">JWT Token</td>
+<td style="text-align:left">🔐 User identity verification</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Level 2</strong></td>
+<td style="text-align:left">Database</td>
+<td style="text-align:left">Connection Pool</td>
+<td style="text-align:left">💾 Data persistence</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Level 3</strong></td>
+<td style="text-align:left">Business Logic</td>
+<td style="text-align:left">Auth + Database</td>
+<td style="text-align:left">🧮 Core application logic</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Level 4</strong></td>
+<td style="text-align:left">Notifications</td>
+<td style="text-align:left">Email Service</td>
+<td style="text-align:left">📧 User communications</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Level 5</strong></td>
+<td style="text-align:left">Analytics</td>
+<td style="text-align:left">All above</td>
+<td style="text-align:left">📊 Data insights and tracking</td>
+</tr>
+</tbody>
+</table>
+<h2 id="%F0%9F%8C%90-section-4-global-dependencies">🌐 Section 4: Global Dependencies</h2>
+<h3 id="%F0%9F%8F%97%EF%B8%8F-global-dependencies-architecture">🏗️ Global Dependencies Architecture</h3>
+<pre class="hljs"><code><div>📱 FastAPI Application
+    ├── 🌐 App-Level Global Dependencies
+    │   ├── 🔒 Global Authentication
+    │   ├── 📝 Request Logging
+    │   ├── 🚦 Rate Limiting
+    │   └── 🛡️ Security Headers
+    │
+    ├── 🎯 Router-Level Dependencies
+    │   ├── 📊 Admin Router → 👑 Admin Auth
+    │   ├── 🛒 API Router → 🔐 API Key Auth
+    │   └── 🎨 Public Router → 📝 Basic Logging
+    │
+    └── 🔗 Endpoint-Specific Dependencies
+        ├── 💾 Database connections
+        ├── 📧 Email services
+        └── 🔍 Specific validations
+</div></code></pre>
+<h3 id="%F0%9F%9B%A0%EF%B8%8F-global-dependencies-implementation">🛠️ Global Dependencies Implementation</h3>
+<h4 id="%F0%9F%94%92-global-security-and-monitoring">🔒 Global Security and Monitoring</h4>
+<pre class="hljs"><code><div><span class="hljs-keyword">import</span> time
+<span class="hljs-keyword">from</span> starlette.middleware.base <span class="hljs-keyword">import</span> BaseHTTPMiddleware
+<span class="hljs-keyword">from</span> typing <span class="hljs-keyword">import</span> Callable
+
+<span class="hljs-comment"># 🌐 Global dependency functions</span>
+
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">global_request_logger</span><span class="hljs-params">(request: Request)</span> -&gt; Dict[str, Any]:</span>
+    <span class="hljs-string">"""
+    📝 Global request logging for all endpoints
+    
+    Applied to: ALL endpoints in the application
+    Use Cases:
+    📊 Request analytics
+    🔍 Debugging and troubleshooting
+    📈 Performance monitoring
+    🚨 Security auditing
+    """</span>
+    
+    start_time = time.time()
+    request_id = str(uuid.uuid4())
+    
+    <span class="hljs-comment"># 📋 Extract request information</span>
+    request_info = {
+        <span class="hljs-string">"request_id"</span>: request_id,
+        <span class="hljs-string">"method"</span>: request.method,
+        <span class="hljs-string">"url"</span>: str(request.url),
+        <span class="hljs-string">"client_ip"</span>: request.client.host <span class="hljs-keyword">if</span> request.client <span class="hljs-keyword">else</span> <span class="hljs-string">"unknown"</span>,
+        <span class="hljs-string">"user_agent"</span>: request.headers.get(<span class="hljs-string">"user-agent"</span>, <span class="hljs-string">"unknown"</span>),
+        <span class="hljs-string">"start_time"</span>: start_time,
+        <span class="hljs-string">"timestamp"</span>: datetime.utcnow().isoformat()
+    }
+    
+    <span class="hljs-comment"># 🗂️ Store in request state for access in endpoints</span>
+    request.state.request_info = request_info
+    request.state.request_id = request_id
+    request.state.start_time = start_time
+    
+    logger.info(<span class="hljs-string">f"📝 Request started: <span class="hljs-subst">{request.method}</span> <span class="hljs-subst">{request.url.path}</span> (ID: <span class="hljs-subst">{request_id}</span>)"</span>)
+    
+    <span class="hljs-keyword">return</span> request_info
+
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">global_rate_limiter</span><span class="hljs-params">(request: Request)</span> -&gt; bool:</span>
+    <span class="hljs-string">"""
+    🚦 Global rate limiting for all endpoints
+    
+    Applied to: ALL endpoints in the application
+    Use Cases:
+    🛡️ DDoS protection
+    🚫 API abuse prevention
+    📊 Resource management
+    ⚡ Performance optimization
+    """</span>
+    
+    client_ip = request.client.host <span class="hljs-keyword">if</span> request.client <span class="hljs-keyword">else</span> <span class="hljs-string">"unknown"</span>
+    
+    <span class="hljs-comment"># 🔑 Create rate limit key</span>
+    rate_limit_key = <span class="hljs-string">f"rate_limit:<span class="hljs-subst">{client_ip}</span>"</span>
+    
+    <span class="hljs-comment"># 📊 Check current request count (using Redis or in-memory cache)</span>
+    <span class="hljs-keyword">try</span>:
+        <span class="hljs-comment"># Using Redis for distributed rate limiting</span>
+        <span class="hljs-keyword">import</span> redis
+        redis_client = redis.Redis(host=<span class="hljs-string">"localhost"</span>, port=<span class="hljs-number">6379</span>, db=<span class="hljs-number">1</span>)
+        
+        current_requests = redis_client.get(rate_limit_key)
+        <span class="hljs-keyword">if</span> current_requests <span class="hljs-keyword">is</span> <span class="hljs-literal">None</span>:
+            <span class="hljs-comment"># 🆕 First request from this IP</span>
+            redis_client.setex(rate_limit_key, <span class="hljs-number">60</span>, <span class="hljs-number">1</span>)  <span class="hljs-comment"># 1 request in 60 seconds window</span>
+            <span class="hljs-keyword">return</span> <span class="hljs-literal">True</span>
+        
+        current_count = int(current_requests)
+        max_requests = <span class="hljs-number">100</span>  <span class="hljs-comment"># 100 requests per minute</span>
+        
+        <span class="hljs-keyword">if</span> current_count &gt;= max_requests:
+            logger.warning(<span class="hljs-string">f"🚦 Rate limit exceeded for IP: <span class="hljs-subst">{client_ip}</span>"</span>)
+            <span class="hljs-keyword">raise</span> HTTPException(
+                status_code=<span class="hljs-number">429</span>,
+                detail=<span class="hljs-string">"🚦 Too many requests. Please try again later."</span>,
+                headers={<span class="hljs-string">"Retry-After"</span>: <span class="hljs-string">"60"</span>}
+            )
+        
+        <span class="hljs-comment"># 📈 Increment request count</span>
+        redis_client.incr(rate_limit_key)
+        
+        logger.debug(<span class="hljs-string">f"🚦 Rate limit check passed: <span class="hljs-subst">{client_ip}</span> (<span class="hljs-subst">{current_count + <span class="hljs-number">1</span>}</span>/<span class="hljs-subst">{max_requests}</span>)"</span>)
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">True</span>
+        
+    <span class="hljs-keyword">except</span> redis.RedisError:
+        <span class="hljs-comment"># 🚨 If Redis is down, allow requests but log warning</span>
+        logger.warning(<span class="hljs-string">"🚨 Rate limiting service unavailable - allowing request"</span>)
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">True</span>
+
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">global_security_validator</span><span class="hljs-params">(request: Request)</span> -&gt; Dict[str, Any]:</span>
+    <span class="hljs-string">"""
+    🛡️ Global security validation for all requests
+    
+    Applied to: ALL endpoints in the application
+    Use Cases:
+    🚫 Malicious request detection
+    🔒 Input sanitization
+    🛡️ Header validation
+    📊 Security analytics
+    """</span>
+    
+    security_info = {
+        <span class="hljs-string">"is_secure"</span>: <span class="hljs-literal">True</span>,
+        <span class="hljs-string">"warnings"</span>: [],
+        <span class="hljs-string">"blocked"</span>: <span class="hljs-literal">False</span>
+    }
+    
+    <span class="hljs-comment"># 🔍 Check for suspicious patterns in URL</span>
+    suspicious_patterns = [
+        <span class="hljs-string">"../"</span>, <span class="hljs-string">"..\\"</span>,  <span class="hljs-comment"># Directory traversal</span>
+        <span class="hljs-string">"&lt;script"</span>, <span class="hljs-string">"&lt;/script&gt;"</span>,  <span class="hljs-comment"># XSS attempts</span>
+        <span class="hljs-string">"union select"</span>, <span class="hljs-string">"drop table"</span>,  <span class="hljs-comment"># SQL injection</span>
+        <span class="hljs-string">"eval("</span>, <span class="hljs-string">"exec("</span>,  <span class="hljs-comment"># Code injection</span>
+    ]
+    
+    url_path = str(request.url.path).lower()
+    query_string = str(request.url.query).lower()
+    
+    <span class="hljs-keyword">for</span> pattern <span class="hljs-keyword">in</span> suspicious_patterns:
+        <span class="hljs-keyword">if</span> pattern <span class="hljs-keyword">in</span> url_path <span class="hljs-keyword">or</span> pattern <span class="hljs-keyword">in</span> query_string:
+            security_info[<span class="hljs-string">"warnings"</span>].append(<span class="hljs-string">f"Suspicious pattern detected: <span class="hljs-subst">{pattern}</span>"</span>)
+            security_info[<span class="hljs-string">"is_secure"</span>] = <span class="hljs-literal">False</span>
+            
+            logger.warning(<span class="hljs-string">f"🚫 Suspicious request from <span class="hljs-subst">{request.client.host}</span>: <span class="hljs-subst">{pattern}</span>"</span>)
+    
+    <span class="hljs-comment"># 🔍 Validate headers</span>
+    user_agent = request.headers.get(<span class="hljs-string">"user-agent"</span>, <span class="hljs-string">""</span>)
+    <span class="hljs-keyword">if</span> len(user_agent) &gt; <span class="hljs-number">1000</span>:  <span class="hljs-comment"># Unusually long user agent</span>
+        security_info[<span class="hljs-string">"warnings"</span>].append(<span class="hljs-string">"Unusually long User-Agent header"</span>)
+    
+    <span class="hljs-comment"># 🚫 Block severely suspicious requests</span>
+    <span class="hljs-keyword">if</span> len(security_info[<span class="hljs-string">"warnings"</span>]) &gt;= <span class="hljs-number">3</span>:
+        security_info[<span class="hljs-string">"blocked"</span>] = <span class="hljs-literal">True</span>
+        <span class="hljs-keyword">raise</span> HTTPException(
+            status_code=<span class="hljs-number">400</span>,
+            detail=<span class="hljs-string">"🚫 Request blocked due to security concerns"</span>
+        )
+    
+    <span class="hljs-comment"># 🗂️ Store security info in request state</span>
+    request.state.security_info = security_info
+    
+    <span class="hljs-keyword">return</span> security_info
+
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">global_performance_tracker</span><span class="hljs-params">(request: Request)</span> -&gt; Dict[str, Any]:</span>
+    <span class="hljs-string">"""
+    ⚡ Global performance tracking for all endpoints
+    
+    Applied to: ALL endpoints in the application
+    Use Cases:
+    📊 Performance monitoring
+    🐌 Slow endpoint detection
+    📈 Response time analytics
+    🎯 Optimization insights
+    """</span>
+    
+    <span class="hljs-comment"># 📊 Get memory usage before request</span>
+    <span class="hljs-keyword">import</span> psutil
+    process = psutil.Process()
+    memory_before = process.memory_info().rss / <span class="hljs-number">1024</span> / <span class="hljs-number">1024</span>  <span class="hljs-comment"># MB</span>
+    
+    performance_info = {
+        <span class="hljs-string">"endpoint"</span>: <span class="hljs-string">f"<span class="hljs-subst">{request.method}</span> <span class="hljs-subst">{request.url.path}</span>"</span>,
+        <span class="hljs-string">"memory_before"</span>: memory_before,
+        <span class="hljs-string">"cpu_before"</span>: process.cpu_percent(),
+        <span class="hljs-string">"start_time"</span>: time.time()
+    }
+    
+    <span class="hljs-comment"># 🗂️ Store in request state</span>
+    request.state.performance_info = performance_info
+    
+    <span class="hljs-keyword">return</span> performance_info
+
+<span class="hljs-comment"># 🌐 Apply global dependencies to the entire app</span>
+app = FastAPI(
+    title=<span class="hljs-string">"🌐 Global Dependencies Demo"</span>,
+    version=<span class="hljs-string">"1.0.0"</span>,
+    dependencies=[
+        Depends(global_request_logger),
+        Depends(global_rate_limiter), 
+        Depends(global_security_validator),
+        Depends(global_performance_tracker)
+    ]
+)
+</div></code></pre>
+<h4 id="%F0%9F%8E%AF-router-level-dependencies">🎯 Router-Level Dependencies</h4>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> fastapi <span class="hljs-keyword">import</span> APIRouter
+
+<span class="hljs-comment"># 👑 Admin router with admin-only dependencies</span>
+admin_router = APIRouter(
+    prefix=<span class="hljs-string">"/admin"</span>,
+    tags=[<span class="hljs-string">"admin"</span>],
+    dependencies=[
+        Depends(get_admin_user),  <span class="hljs-comment"># Require admin authentication</span>
+        Depends(admin_audit_logger),  <span class="hljs-comment"># Special logging for admin actions</span>
+        Depends(admin_rate_limiter)   <span class="hljs-comment"># Different rate limits for admins</span>
+    ]
+)
+
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">admin_audit_logger</span><span class="hljs-params">(
+    request: Request,
+    admin_user: User = Depends<span class="hljs-params">(get_admin_user)</span>
+)</span> -&gt; Dict[str, Any]:</span>
+    <span class="hljs-string">"""
+    📋 Special audit logging for admin actions
+    
+    Applied to: All admin endpoints
+    Use Cases:
+    🔍 Admin action tracking
+    📊 Compliance and auditing
+    🚨 Security monitoring
+    📈 Admin usage analytics
+    """</span>
+    
+    audit_info = {
+        <span class="hljs-string">"admin_user_id"</span>: admin_user.id,
+        <span class="hljs-string">"admin_username"</span>: admin_user.username,
+        <span class="hljs-string">"action"</span>: <span class="hljs-string">f"<span class="hljs-subst">{request.method}</span> <span class="hljs-subst">{request.url.path}</span>"</span>,
+        <span class="hljs-string">"timestamp"</span>: datetime.utcnow().isoformat(),
+        <span class="hljs-string">"ip_address"</span>: request.client.host <span class="hljs-keyword">if</span> request.client <span class="hljs-keyword">else</span> <span class="hljs-string">"unknown"</span>
+    }
+    
+    <span class="hljs-comment"># 📝 Log admin action</span>
+    logger.info(<span class="hljs-string">f"👑 Admin action: <span class="hljs-subst">{admin_user.username}</span> performed <span class="hljs-subst">{audit_info[<span class="hljs-string">'action'</span>]}</span>"</span>)
+    
+    <span class="hljs-comment"># 💾 Store in database for audit trail</span>
+    <span class="hljs-comment"># await audit_db.log_admin_action(audit_info)</span>
+    
+    request.state.audit_info = audit_info
+    <span class="hljs-keyword">return</span> audit_info
+
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">admin_rate_limiter</span><span class="hljs-params">(
+    request: Request,
+    admin_user: User = Depends<span class="hljs-params">(get_admin_user)</span>
+)</span> -&gt; bool:</span>
+    <span class="hljs-string">"""
+    🚦 Special rate limiting for admin users
+    
+    Applied to: All admin endpoints
+    Different limits: Higher limits for admin users
+    """</span>
+    
+    <span class="hljs-comment"># 📊 Admins get higher rate limits</span>
+    rate_limit_key = <span class="hljs-string">f"admin_rate_limit:<span class="hljs-subst">{admin_user.id}</span>"</span>
+    max_requests = <span class="hljs-number">500</span>  <span class="hljs-comment"># 500 requests per minute for admins</span>
+    
+    <span class="hljs-comment"># Implementation similar to global rate limiter but with higher limits</span>
+    logger.debug(<span class="hljs-string">f"🚦 Admin rate limit check for <span class="hljs-subst">{admin_user.username}</span>"</span>)
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">True</span>
+
+<span class="hljs-comment"># 🛒 API router with API key authentication</span>
+api_router = APIRouter(
+    prefix=<span class="hljs-string">"/api/v1"</span>,
+    tags=[<span class="hljs-string">"api"</span>],
+    dependencies=[
+        Depends(validate_api_key),      <span class="hljs-comment"># Require valid API key</span>
+        Depends(api_usage_tracker),     <span class="hljs-comment"># Track API usage</span>
+        Depends(api_rate_limiter)       <span class="hljs-comment"># API-specific rate limiting</span>
+    ]
+)
+
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">validate_api_key</span><span class="hljs-params">(api_key: str = Header<span class="hljs-params">(None, alias=<span class="hljs-string">"X-API-Key"</span>)</span>)</span> -&gt; Dict[str, Any]:</span>
+    <span class="hljs-string">"""
+    🔑 Validate API key for API router
+    
+    Applied to: All /api/v1 endpoints
+    Use Cases:
+    🔐 Third-party integration authentication
+    📊 API usage tracking
+    💰 Billing and quota management
+    🚫 Access control
+    """</span>
+    
+    <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> api_key:
+        <span class="hljs-keyword">raise</span> HTTPException(
+            status_code=<span class="hljs-number">401</span>,
+            detail=<span class="hljs-string">"🔑 API key required"</span>,
+            headers={<span class="hljs-string">"WWW-Authenticate"</span>: <span class="hljs-string">"ApiKey"</span>}
+        )
+    
+    <span class="hljs-comment"># 🔍 Validate API key (check against database)</span>
+    <span class="hljs-comment"># api_key_info = await db.get_api_key(api_key)</span>
+    
+    <span class="hljs-comment"># 🎭 Mock validation for demo</span>
+    valid_api_keys = {
+        <span class="hljs-string">"demo-key-123"</span>: {
+            <span class="hljs-string">"client_id"</span>: <span class="hljs-string">"demo-client"</span>,
+            <span class="hljs-string">"client_name"</span>: <span class="hljs-string">"Demo Client"</span>,
+            <span class="hljs-string">"quota_limit"</span>: <span class="hljs-number">1000</span>,
+            <span class="hljs-string">"quota_used"</span>: <span class="hljs-number">45</span>
+        }
+    }
+    
+    api_key_info = valid_api_keys.get(api_key)
+    <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> api_key_info:
+        logger.warning(<span class="hljs-string">f"🚫 Invalid API key attempted: <span class="hljs-subst">{api_key[:<span class="hljs-number">10</span>]}</span>..."</span>)
+        <span class="hljs-keyword">raise</span> HTTPException(
+            status_code=<span class="hljs-number">401</span>,
+            detail=<span class="hljs-string">"🚫 Invalid API key"</span>
+        )
+    
+    <span class="hljs-comment"># 📊 Check quota</span>
+    <span class="hljs-keyword">if</span> api_key_info[<span class="hljs-string">"quota_used"</span>] &gt;= api_key_info[<span class="hljs-string">"quota_limit"</span>]:
+        <span class="hljs-keyword">raise</span> HTTPException(
+            status_code=<span class="hljs-number">429</span>,
+            detail=<span class="hljs-string">"📊 API quota exceeded"</span>
+        )
+    
+    logger.info(<span class="hljs-string">f"🔑 Valid API key: <span class="hljs-subst">{api_key_info[<span class="hljs-string">'client_name'</span>]}</span>"</span>)
+    
+    <span class="hljs-keyword">return</span> api_key_info
+
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">api_usage_tracker</span><span class="hljs-params">(
+    request: Request,
+    api_key_info: Dict[str, Any] = Depends<span class="hljs-params">(validate_api_key)</span>
+)</span> -&gt; Dict[str, Any]:</span>
+    <span class="hljs-string">"""
+    📊 Track API usage for billing and analytics
+    
+    Applied to: All /api/v1 endpoints
+    Use Cases:
+    💰 Billing calculations
+    📈 Usage analytics
+    📊 Quota management
+    🎯 Performance insights
+    """</span>
+    
+    usage_info = {
+        <span class="hljs-string">"client_id"</span>: api_key_info[<span class="hljs-string">"client_id"</span>],
+        <span class="hljs-string">"client_name"</span>: api_key_info[<span class="hljs-string">"client_name"</span>],
+        <span class="hljs-string">"endpoint"</span>: <span class="hljs-string">f"<span class="hljs-subst">{request.method}</span> <span class="hljs-subst">{request.url.path}</span>"</span>,
+        <span class="hljs-string">"timestamp"</span>: datetime.utcnow().isoformat(),
+        <span class="hljs-string">"quota_used"</span>: api_key_info[<span class="hljs-string">"quota_used"</span>] + <span class="hljs-number">1</span>,
+        <span class="hljs-string">"quota_limit"</span>: api_key_info[<span class="hljs-string">"quota_limit"</span>]
+    }
+    
+    <span class="hljs-comment"># 📊 Update usage in database</span>
+    <span class="hljs-comment"># await db.update_api_usage(api_key_info["client_id"])</span>
+    
+    logger.info(<span class="hljs-string">f"📊 API usage: <span class="hljs-subst">{usage_info[<span class="hljs-string">'client_name'</span>]}</span> - <span class="hljs-subst">{usage_info[<span class="hljs-string">'endpoint'</span>]}</span>"</span>)
+    
+    request.state.api_usage_info = usage_info
+    <span class="hljs-keyword">return</span> usage_info
+
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">api_rate_limiter</span><span class="hljs-params">(
+    api_key_info: Dict[str, Any] = Depends<span class="hljs-params">(validate_api_key)</span>
+)</span> -&gt; bool:</span>
+    <span class="hljs-string">"""
+    🚦 API-specific rate limiting
+    
+    Applied to: All /api/v1 endpoints
+    Different limits based on API plan
+    """</span>
+    
+    <span class="hljs-comment"># 📊 Different rate limits based on client tier</span>
+    client_tier = <span class="hljs-string">"premium"</span>  <span class="hljs-comment"># This would come from API key info</span>
+    
+    rate_limits = {
+        <span class="hljs-string">"basic"</span>: <span class="hljs-number">60</span>,      <span class="hljs-comment"># 60 requests per minute</span>
+        <span class="hljs-string">"premium"</span>: <span class="hljs-number">300</span>,   <span class="hljs-comment"># 300 requests per minute</span>
+        <span class="hljs-string">"enterprise"</span>: <span class="hljs-number">1000</span> <span class="hljs-comment"># 1000 requests per minute</span>
+    }
+    
+    max_requests = rate_limits.get(client_tier, <span class="hljs-number">60</span>)
+    
+    logger.debug(<span class="hljs-string">f"🚦 API rate limit: <span class="hljs-subst">{api_key_info[<span class="hljs-string">'client_name'</span>]}</span> (<span class="hljs-subst">{client_tier}</span>: <span class="hljs-subst">{max_requests}</span>/min)"</span>)
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">True</span>
+
+<span class="hljs-comment"># 🎨 Public router with minimal dependencies</span>
+public_router = APIRouter(
+    prefix=<span class="hljs-string">"/public"</span>,
+    tags=[<span class="hljs-string">"public"</span>],
+    dependencies=[
+        Depends(public_access_logger)  <span class="hljs-comment"># Basic logging only</span>
+    ]
+)
+
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">public_access_logger</span><span class="hljs-params">(request: Request)</span> -&gt; Dict[str, Any]:</span>
+    <span class="hljs-string">"""
+    📝 Basic logging for public endpoints
+    
+    Applied to: All /public endpoints
+    Use Cases:
+    📊 Public API analytics
+    🔍 Basic monitoring
+    📈 Traffic analysis
+    """</span>
+    
+    access_info = {
+        <span class="hljs-string">"endpoint"</span>: <span class="hljs-string">f"<span class="hljs-subst">{request.method}</span> <span class="hljs-subst">{request.url.path}</span>"</span>,
+        <span class="hljs-string">"timestamp"</span>: datetime.utcnow().isoformat(),
+        <span class="hljs-string">"ip"</span>: request.client.host <span class="hljs-keyword">if</span> request.client <span class="hljs-keyword">else</span> <span class="hljs-string">"unknown"</span>,
+        <span class="hljs-string">"access_type"</span>: <span class="hljs-string">"public"</span>
+    }
+    
+    logger.info(<span class="hljs-string">f"🌐 Public access: <span class="hljs-subst">{access_info[<span class="hljs-string">'endpoint'</span>]}</span>"</span>)
+    
+    request.state.public_access_info = access_info
+    <span class="hljs-keyword">return</span> access_info
+
+<span class="hljs-comment"># 🔗 Add routers to main app</span>
+app.include_router(admin_router)
+app.include_router(api_router)
+app.include_router(public_router)
+</div></code></pre>
+<h4 id="%F0%9F%8E%AF-global-dependencies-usage-examples">🎯 Global Dependencies Usage Examples</h4>
+<pre class="hljs"><code><div><span class="hljs-comment"># 👑 Admin endpoints (inherits admin dependencies)</span>
+<span class="hljs-meta">@admin_router.get("/users")</span>
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">admin_get_all_users</span><span class="hljs-params">(
+    pagination: Dict[str, int] = Depends<span class="hljs-params">(get_pagination_params)</span>,
+    db: DatabaseService = Depends<span class="hljs-params">(database_service)</span>
+)</span>:</span>
+    <span class="hljs-string">"""
+    👑 Admin endpoint to get all users
+    
+    Global Dependencies Applied:
+    📝 Global request logging
+    🚦 Global rate limiting
+    🛡️ Global security validation
+    ⚡ Global performance tracking
+    
+    Router Dependencies Applied:
+    👑 Admin authentication
+    📋 Admin audit logging
+    🚦 Admin rate limiting
+    """</span>
+    
+    <span class="hljs-comment"># 📊 Get all users with pagination</span>
+    users = <span class="hljs-keyword">await</span> db.get_users_paginated(
+        offset=pagination[<span class="hljs-string">"offset"</span>],
+        limit=pagination[<span class="hljs-string">"limit"</span>]
+    )
+    
+    <span class="hljs-keyword">return</span> {
+        <span class="hljs-string">"users"</span>: users,
+        <span class="hljs-string">"pagination"</span>: pagination,
+        <span class="hljs-string">"total_count"</span>: len(users)
+    }
+
+<span class="hljs-meta">@admin_router.post("/users/{user_id}/disable")</span>
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">admin_disable_user</span><span class="hljs-params">(
+    user_id: int,
+    db: DatabaseService = Depends<span class="hljs-params">(database_service)</span>
+)</span>:</span>
+    <span class="hljs-string">"""
+    🚫 Admin endpoint to disable user
+    
+    All admin dependencies automatically applied
+    """</span>
+    
+    <span class="hljs-comment"># 🔄 Update user status</span>
+    <span class="hljs-keyword">await</span> db.execute_query(
+        <span class="hljs-string">"UPDATE users SET is_active = false WHERE id = $1"</span>,
+        user_id
+    )
+    
+    <span class="hljs-keyword">return</span> {<span class="hljs-string">"message"</span>: <span class="hljs-string">f"✅ User <span class="hljs-subst">{user_id}</span> disabled successfully"</span>}
+
+<span class="hljs-comment"># 🔑 API endpoints (inherits API dependencies)</span>
+<span class="hljs-meta">@api_router.get("/users")</span>
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">api_get_users</span><span class="hljs-params">(
+    pagination: Dict[str, int] = Depends<span class="hljs-params">(get_pagination_params)</span>,
+    db: DatabaseService = Depends<span class="hljs-params">(database_service)</span>
+)</span>:</span>
+    <span class="hljs-string">"""
+    🔑 API endpoint to get users
+    
+    Global Dependencies Applied:
+    📝 Request logging, 🚦 Rate limiting, 🛡️ Security validation, ⚡ Performance tracking
+    
+    Router Dependencies Applied:
+    🔑 API key validation, 📊 Usage tracking, 🚦 API rate limiting
+    """</span>
+    
+    users = <span class="hljs-keyword">await</span> db.get_users_paginated(
+        offset=pagination[<span class="hljs-string">"offset"</span>],
+        limit=pagination[<span class="hljs-string">"limit"</span>]
+    )
+    
+    <span class="hljs-keyword">return</span> {
+        <span class="hljs-string">"data"</span>: users,
+        <span class="hljs-string">"pagination"</span>: pagination
+    }
+
+<span class="hljs-meta">@api_router.post("/users")</span>
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">api_create_user</span><span class="hljs-params">(
+    user_data: dict,
+    db: DatabaseService = Depends<span class="hljs-params">(database_service)</span>
+)</span>:</span>
+    <span class="hljs-string">"""
+    👤 API endpoint to create user
+    
+    All API dependencies automatically applied
+    """</span>
+    
+    <span class="hljs-comment"># 👤 Create user</span>
+    new_user = <span class="hljs-keyword">await</span> db.create_user(user_data)
+    
+    <span class="hljs-keyword">return</span> {
+        <span class="hljs-string">"message"</span>: <span class="hljs-string">"✅ User created successfully"</span>,
+        <span class="hljs-string">"user"</span>: new_user
+    }
+
+<span class="hljs-comment"># 🌐 Public endpoints (minimal dependencies)</span>
+<span class="hljs-meta">@public_router.get("/health")</span>
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">public_health_check</span><span class="hljs-params">()</span>:</span>
+    <span class="hljs-string">"""
+    🏥 Public health check endpoint
+    
+    Global Dependencies Applied:
+    📝 Request logging, 🚦 Rate limiting, 🛡️ Security validation, ⚡ Performance tracking
+    
+    Router Dependencies Applied:
+    📝 Public access logging
+    """</span>
+    
+    <span class="hljs-keyword">return</span> {
+        <span class="hljs-string">"status"</span>: <span class="hljs-string">"🟢 healthy"</span>,
+        <span class="hljs-string">"timestamp"</span>: datetime.utcnow().isoformat(),
+        <span class="hljs-string">"version"</span>: <span class="hljs-string">"1.0.0"</span>
+    }
+
+<span class="hljs-meta">@public_router.get("/status")</span>
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">public_system_status</span><span class="hljs-params">()</span>:</span>
+    <span class="hljs-string">"""
+    📊 Public system status endpoint
+    
+    Only public dependencies applied
+    """</span>
+    
+    <span class="hljs-keyword">return</span> {
+        <span class="hljs-string">"system"</span>: <span class="hljs-string">"🟢 operational"</span>,
+        <span class="hljs-string">"database"</span>: <span class="hljs-string">"🟢 connected"</span>,
+        <span class="hljs-string">"cache"</span>: <span class="hljs-string">"🟢 available"</span>,
+        <span class="hljs-string">"last_updated"</span>: datetime.utcnow().isoformat()
+    }
+
+<span class="hljs-comment"># 🎯 Endpoint showing all dependency info</span>
+<span class="hljs-meta">@app.get("/debug/dependencies")</span>
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">debug_dependencies_info</span><span class="hljs-params">(
+    request: Request,
+    current_user: User = Depends<span class="hljs-params">(get_current_active_user)</span>
+)</span>:</span>
+    <span class="hljs-string">"""
+    🔍 Debug endpoint showing all applied dependencies
+    
+    Shows information from all global and router dependencies
+    """</span>
+    
+    <span class="hljs-comment"># 📊 Collect dependency information from request state</span>
+    dependency_info = {
+        <span class="hljs-string">"global_dependencies"</span>: {
+            <span class="hljs-string">"request_info"</span>: getattr(request.state, <span class="hljs-string">"request_info"</span>, <span class="hljs-literal">None</span>),
+            <span class="hljs-string">"security_info"</span>: getattr(request.state, <span class="hljs-string">"security_info"</span>, <span class="hljs-literal">None</span>),
+            <span class="hljs-string">"performance_info"</span>: getattr(request.state, <span class="hljs-string">"performance_info"</span>, <span class="hljs-literal">None</span>)
+        },
+        <span class="hljs-string">"authentication"</span>: {
+            <span class="hljs-string">"user_id"</span>: current_user.id,
+            <span class="hljs-string">"username"</span>: current_user.username,
+            <span class="hljs-string">"is_admin"</span>: current_user.is_admin
+        },
+        <span class="hljs-string">"endpoint_specific"</span>: {
+            <span class="hljs-string">"endpoint"</span>: <span class="hljs-string">f"<span class="hljs-subst">{request.method}</span> <span class="hljs-subst">{request.url.path}</span>"</span>,
+            <span class="hljs-string">"authenticated"</span>: <span class="hljs-literal">True</span>
+        }
+    }
+    
+    <span class="hljs-comment"># 📋 Add router-specific dependency info if available</span>
+    <span class="hljs-keyword">if</span> hasattr(request.state, <span class="hljs-string">"audit_info"</span>):
+        dependency_info[<span class="hljs-string">"admin_dependencies"</span>] = request.state.audit_info
+    
+    <span class="hljs-keyword">if</span> hasattr(request.state, <span class="hljs-string">"api_usage_info"</span>):
+        dependency_info[<span class="hljs-string">"api_dependencies"</span>] = request.state.api_usage_info
+    
+    <span class="hljs-keyword">if</span> hasattr(request.state, <span class="hljs-string">"public_access_info"</span>):
+        dependency_info[<span class="hljs-string">"public_dependencies"</span>] = request.state.public_access_info
+    
+    <span class="hljs-keyword">return</span> dependency_info
+</div></code></pre>
+<h3 id="%F0%9F%93%8A-global-dependencies-summary--best-practices">📊 Global Dependencies Summary &amp; Best Practices</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Dependency Level</th>
+<th style="text-align:left">🎯 Scope</th>
+<th style="text-align:left">📝 Configuration</th>
+<th style="text-align:left">🛠️ Use Cases</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>🌐 Application</strong></td>
+<td style="text-align:left">All endpoints</td>
+<td style="text-align:left"><code>FastAPI(dependencies=[...])</code></td>
+<td style="text-align:left">📝 Logging, 🚦 Rate limiting, 🛡️ Security</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>🎯 Router</strong></td>
+<td style="text-align:left">Router endpoints</td>
+<td style="text-align:left"><code>APIRouter(dependencies=[...])</code></td>
+<td style="text-align:left">🔐 Auth types, 📊 Analytics, 🎯 Access control</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>🔗 Endpoint</strong></td>
+<td style="text-align:left">Single endpoint</td>
+<td style="text-align:left">Function parameters</td>
+<td style="text-align:left">💾 Data access, 📧 Services, 🔍 Validation</td>
+</tr>
+</tbody>
+</table>
+<h2 id="%F0%9F%8E%AF-section-5-best-practices--production-guidelines">🎯 Section 5: Best Practices &amp; Production Guidelines</h2>
+<h3 id="%F0%9F%93%8B-dependency-best-practices-checklist">📋 Dependency Best Practices Checklist</h3>
+<h4 id="%E2%9C%85-design-principles">✅ Design Principles</h4>
+<pre class="hljs"><code><div><span class="hljs-comment"># ✅ DO: Keep dependencies focused and single-purpose</span>
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_database_connection</span><span class="hljs-params">()</span> -&gt; DatabaseConnection:</span>
+    <span class="hljs-string">"""💾 Single responsibility: provide database connection"""</span>
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">await</span> create_connection()
+
+<span class="hljs-comment"># ❌ DON'T: Mix multiple concerns in one dependency</span>
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_everything</span><span class="hljs-params">()</span>:</span>
+    <span class="hljs-string">"""❌ Violates single responsibility principle"""</span>
+    db = <span class="hljs-keyword">await</span> create_connection()
+    user = <span class="hljs-keyword">await</span> authenticate_user()
+    email = <span class="hljs-keyword">await</span> setup_email()
+    <span class="hljs-keyword">return</span> {<span class="hljs-string">"db"</span>: db, <span class="hljs-string">"user"</span>: user, <span class="hljs-string">"email"</span>: email}
+
+<span class="hljs-comment"># ✅ DO: Use type hints for better IDE support and documentation</span>
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_user_service</span><span class="hljs-params">(
+    db: DatabaseService = Depends<span class="hljs-params">(get_database)</span>
+)</span> -&gt; UserService:</span>
+    <span class="hljs-string">"""👤 Type-annotated dependency for better tooling support"""</span>
+    <span class="hljs-keyword">return</span> UserService(db)
+
+<span class="hljs-comment"># ✅ DO: Handle errors gracefully in dependencies</span>
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_redis_cache</span><span class="hljs-params">()</span> -&gt; Optional[RedisCache]:</span>
+    <span class="hljs-string">"""💾 Graceful error handling for optional services"""</span>
+    <span class="hljs-keyword">try</span>:
+        cache = RedisCache()
+        <span class="hljs-keyword">await</span> cache.ping()
+        <span class="hljs-keyword">return</span> cache
+    <span class="hljs-keyword">except</span> Exception <span class="hljs-keyword">as</span> e:
+        logger.warning(<span class="hljs-string">f"💾 Redis unavailable: <span class="hljs-subst">{e}</span>"</span>)
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">None</span>  <span class="hljs-comment"># Fallback to no caching</span>
+
+<span class="hljs-comment"># ✅ DO: Use configuration-based dependencies</span>
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">AppConfig</span>:</span>
+    <span class="hljs-string">"""⚙️ Configuration class for dependency injection"""</span>
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__init__</span><span class="hljs-params">(self)</span>:</span>
+        self.database_url = os.getenv(<span class="hljs-string">"DATABASE_URL"</span>)
+        self.redis_url = os.getenv(<span class="hljs-string">"REDIS_URL"</span>)
+        self.email_backend = os.getenv(<span class="hljs-string">"EMAIL_BACKEND"</span>, <span class="hljs-string">"smtp"</span>)
+
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_config</span><span class="hljs-params">()</span> -&gt; AppConfig:</span>
+    <span class="hljs-string">"""⚙️ Configuration dependency"""</span>
+    <span class="hljs-keyword">return</span> AppConfig()
+
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_database_with_config</span><span class="hljs-params">(
+    config: AppConfig = Depends<span class="hljs-params">(get_config)</span>
+)</span> -&gt; DatabaseService:</span>
+    <span class="hljs-string">"""💾 Database service with configuration dependency"""</span>
+    <span class="hljs-keyword">return</span> DatabaseService(config.database_url)
+</div></code></pre>
+<h4 id="%F0%9F%A7%AA-testing-dependencies">🧪 Testing Dependencies</h4>
+<pre class="hljs"><code><div><span class="hljs-keyword">import</span> pytest
+<span class="hljs-keyword">from</span> fastapi.testclient <span class="hljs-keyword">import</span> TestClient
+<span class="hljs-keyword">from</span> unittest.mock <span class="hljs-keyword">import</span> AsyncMock, MagicMock
+
+<span class="hljs-comment"># 🧪 Test database dependency override</span>
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_test_database</span><span class="hljs-params">()</span>:</span>
+    <span class="hljs-string">"""💾 Test database dependency override"""</span>
+    <span class="hljs-keyword">return</span> MockDatabaseService()
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MockDatabaseService</span>:</span>
+    <span class="hljs-string">"""🎭 Mock database for testing"""</span>
+    
+    <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_user_by_id</span><span class="hljs-params">(self, user_id: int)</span>:</span>
+        <span class="hljs-keyword">return</span> {
+            <span class="hljs-string">"id"</span>: user_id,
+            <span class="hljs-string">"username"</span>: <span class="hljs-string">f"test_user_<span class="hljs-subst">{user_id}</span>"</span>,
+            <span class="hljs-string">"email"</span>: <span class="hljs-string">f"test<span class="hljs-subst">{user_id}</span>@example.com"</span>
+        }
+    
+    <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">create_user</span><span class="hljs-params">(self, user_data: dict)</span>:</span>
+        <span class="hljs-keyword">return</span> {
+            <span class="hljs-string">"id"</span>: <span class="hljs-number">999</span>,
+            **user_data,
+            <span class="hljs-string">"created_at"</span>: <span class="hljs-string">"2024-01-01T00:00:00"</span>
+        }
+
+<span class="hljs-comment"># 🧪 Test authentication dependency override</span>
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_test_user</span><span class="hljs-params">()</span>:</span>
+    <span class="hljs-string">"""👤 Test user dependency override"""</span>
+    <span class="hljs-keyword">return</span> User(
+        id=<span class="hljs-number">1</span>,
+        username=<span class="hljs-string">"test_user"</span>,
+        email=<span class="hljs-string">"test@example.com"</span>,
+        is_active=<span class="hljs-literal">True</span>,
+        is_admin=<span class="hljs-literal">False</span>,
+        created_at=datetime.utcnow()
+    )
+
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_test_admin_user</span><span class="hljs-params">()</span>:</span>
+    <span class="hljs-string">"""👑 Test admin user dependency override"""</span>
+    <span class="hljs-keyword">return</span> User(
+        id=<span class="hljs-number">1</span>,
+        username=<span class="hljs-string">"test_admin"</span>,
+        email=<span class="hljs-string">"admin@example.com"</span>,
+        is_active=<span class="hljs-literal">True</span>,
+        is_admin=<span class="hljs-literal">True</span>,
+        created_at=datetime.utcnow()
+    )
+
+<span class="hljs-comment"># 🧪 Test setup with dependency overrides</span>
+<span class="hljs-meta">@pytest.fixture</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">test_client</span><span class="hljs-params">()</span>:</span>
+    <span class="hljs-string">"""🧪 Test client with dependency overrides"""</span>
+    
+    <span class="hljs-comment"># Override dependencies for testing</span>
+    app.dependency_overrides[database_service] = get_test_database
+    app.dependency_overrides[get_current_active_user] = get_test_user
+    
+    client = TestClient(app)
+    <span class="hljs-keyword">yield</span> client
+    
+    <span class="hljs-comment"># Clean up overrides</span>
+    app.dependency_overrides.clear()
+
+<span class="hljs-meta">@pytest.fixture</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">admin_test_client</span><span class="hljs-params">()</span>:</span>
+    <span class="hljs-string">"""👑 Test client with admin user"""</span>
+    
+    app.dependency_overrides[database_service] = get_test_database
+    app.dependency_overrides[get_current_active_user] = get_test_admin_user
+    
+    client = TestClient(app)
+    <span class="hljs-keyword">yield</span> client
+    
+    app.dependency_overrides.clear()
+
+<span class="hljs-comment"># 🧪 Example test cases</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">test_create_user_endpoint</span><span class="hljs-params">(test_client)</span>:</span>
+    <span class="hljs-string">"""🧪 Test user creation with mocked dependencies"""</span>
+    
+    user_data = {
+        <span class="hljs-string">"username"</span>: <span class="hljs-string">"new_user"</span>,
+        <span class="hljs-string">"email"</span>: <span class="hljs-string">"new@example.com"</span>,
+        <span class="hljs-string">"password"</span>: <span class="hljs-string">"password123"</span>
+    }
+    
+    response = test_client.post(<span class="hljs-string">"/users"</span>, json=user_data)
+    
+    <span class="hljs-keyword">assert</span> response.status_code == <span class="hljs-number">200</span>
+    data = response.json()
+    <span class="hljs-keyword">assert</span> data[<span class="hljs-string">"user"</span>][<span class="hljs-string">"username"</span>] == <span class="hljs-string">"new_user"</span>
+    <span class="hljs-keyword">assert</span> <span class="hljs-string">"password"</span> <span class="hljs-keyword">not</span> <span class="hljs-keyword">in</span> data[<span class="hljs-string">"user"</span>]  <span class="hljs-comment"># Ensure password not returned</span>
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">test_admin_endpoint_access</span><span class="hljs-params">(admin_test_client)</span>:</span>
+    <span class="hljs-string">"""👑 Test admin endpoint with admin user"""</span>
+    
+    response = admin_test_client.get(<span class="hljs-string">"/admin/users"</span>)
+    
+    <span class="hljs-keyword">assert</span> response.status_code == <span class="hljs-number">200</span>
+    data = response.json()
+    <span class="hljs-keyword">assert</span> <span class="hljs-string">"users"</span> <span class="hljs-keyword">in</span> data
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">test_admin_endpoint_forbidden</span><span class="hljs-params">(test_client)</span>:</span>
+    <span class="hljs-string">"""🚫 Test admin endpoint with regular user"""</span>
+    
+    response = test_client.get(<span class="hljs-string">"/admin/users"</span>)
+    
+    <span class="hljs-keyword">assert</span> response.status_code == <span class="hljs-number">403</span>
+    <span class="hljs-keyword">assert</span> <span class="hljs-string">"Insufficient permissions"</span> <span class="hljs-keyword">in</span> response.json()[<span class="hljs-string">"detail"</span>]
+</div></code></pre>
+<h4 id="%F0%9F%9A%80-performance-optimization">🚀 Performance Optimization</h4>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> functools <span class="hljs-keyword">import</span> lru_cache
+<span class="hljs-keyword">import</span> asyncio
+<span class="hljs-keyword">from</span> typing <span class="hljs-keyword">import</span> Dict, Any
+
+<span class="hljs-comment"># 🚀 Cached dependencies for expensive operations</span>
+<span class="hljs-meta">@lru_cache(maxsize=1)</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_app_settings</span><span class="hljs-params">()</span> -&gt; Dict[str, Any]:</span>
+    <span class="hljs-string">"""⚙️ Cached application settings (computed once)"""</span>
+    
+    <span class="hljs-comment"># Expensive configuration loading</span>
+    settings = {
+        <span class="hljs-string">"database_pool_size"</span>: int(os.getenv(<span class="hljs-string">"DB_POOL_SIZE"</span>, <span class="hljs-number">10</span>)),
+        <span class="hljs-string">"cache_ttl"</span>: int(os.getenv(<span class="hljs-string">"CACHE_TTL"</span>, <span class="hljs-number">3600</span>)),
+        <span class="hljs-string">"feature_flags"</span>: load_feature_flags(),  <span class="hljs-comment"># Expensive operation</span>
+        <span class="hljs-string">"external_api_config"</span>: load_api_configs()  <span class="hljs-comment"># Network calls</span>
+    }
+    
+    logger.info(<span class="hljs-string">"⚙️ Application settings loaded and cached"</span>)
+    <span class="hljs-keyword">return</span> settings
+
+<span class="hljs-comment"># 🔄 Connection pooling for database dependencies</span>
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">DatabaseConnectionPool</span>:</span>
+    <span class="hljs-string">"""💾 Database connection pool for performance"""</span>
+    
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__init__</span><span class="hljs-params">(self)</span>:</span>
+        self._pool = <span class="hljs-literal">None</span>
+        self._lock = asyncio.Lock()
+    
+    <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_pool</span><span class="hljs-params">(self)</span>:</span>
+        <span class="hljs-string">"""🔗 Get or create connection pool"""</span>
+        <span class="hljs-keyword">if</span> self._pool <span class="hljs-keyword">is</span> <span class="hljs-literal">None</span>:
+            <span class="hljs-keyword">async</span> <span class="hljs-keyword">with</span> self._lock:
+                <span class="hljs-keyword">if</span> self._pool <span class="hljs-keyword">is</span> <span class="hljs-literal">None</span>:  <span class="hljs-comment"># Double-check locking</span>
+                    self._pool = <span class="hljs-keyword">await</span> asyncpg.create_pool(
+                        dsn=os.getenv(<span class="hljs-string">"DATABASE_URL"</span>),
+                        min_size=<span class="hljs-number">5</span>,
+                        max_size=<span class="hljs-number">20</span>,
+                        command_timeout=<span class="hljs-number">30</span>
+                    )
+                    logger.info(<span class="hljs-string">"💾 Database pool created"</span>)
+        
+        <span class="hljs-keyword">return</span> self._pool
+
+<span class="hljs-comment"># 🌐 Global connection pool instance</span>
+db_pool = DatabaseConnectionPool()
+
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_database_connection</span><span class="hljs-params">()</span>:</span>
+    <span class="hljs-string">"""💾 Get database connection from pool"""</span>
+    pool = <span class="hljs-keyword">await</span> db_pool.get_pool()
+    <span class="hljs-keyword">async</span> <span class="hljs-keyword">with</span> pool.acquire() <span class="hljs-keyword">as</span> connection:
+        <span class="hljs-keyword">yield</span> connection
+
+<span class="hljs-comment"># ⚡ Async dependency with connection reuse</span>
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">OptimizedUserService</span>:</span>
+    <span class="hljs-string">"""👤 Optimized user service with connection reuse"""</span>
+    
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__init__</span><span class="hljs-params">(self, db_connection)</span>:</span>
+        self.db = db_connection
+        self._user```
+
+</div></code></pre>
+
+</body>
+</html>
