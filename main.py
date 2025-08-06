@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from routers import blog_post, blog_get, user, file as file_router, templates as templates_router
+from routers import blog_post, blog_get, user, file as file_router, templates as templates_router, middleware_demo
 from db.database import engine
 from db import models
 from fastapi import Request
@@ -9,15 +9,19 @@ import os
 from fastapi.staticfiles import StaticFiles
 from auth.oauth import get_current_user
 from fastapi.templating import Jinja2Templates
+from middleware import setup_middleware
 
 app = FastAPI(
     title="FastAPI Blog API",
-    description="A sample blog backend using FastAPI Routers",
+    description="A sample blog backend using FastAPI Routers with comprehensive middleware",
     version="1.0.0"
 )
 
 # Initialize templates
 templates = Jinja2Templates(directory="templates")
+
+# Setup all middleware
+setup_middleware(app)
 
 # 👾 Define a custom exception
 class StoryException(Exception):
@@ -57,9 +61,19 @@ app.include_router(file_router.router)
 app.include_router(blog_post.router, prefix="/blog", tags=["Blog - Post"])
 app.include_router(blog_get.router, prefix="/blog", tags=["Blog - Get"])
 app.include_router(templates_router.router)
+app.include_router(middleware_demo.router)
 
 @app.get("/", response_class=HTMLResponse, tags=["Root"])
 def root(request: Request):
     return templates.TemplateResponse("home.html", {"request": request})
+
+# Health check endpoint
+@app.get("/health", tags=["Health"])
+async def health_check():
+    return {
+        "status": "healthy",
+        "message": "FastAPI application is running with middleware",
+        "version": "1.0.0"
+    }
 
 models.Base.metadata.create_all(engine)
