@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from routers import blog_post, blog_get, user, file as file_router, templates
+from routers import blog_post, blog_get, user, file as file_router, templates as templates_router
 from db.database import engine
 from db import models
 from fastapi import Request
@@ -8,12 +8,16 @@ from fastapi import UploadFile, File, HTTPException, Depends
 import os
 from fastapi.staticfiles import StaticFiles
 from auth.oauth import get_current_user
+from fastapi.templating import Jinja2Templates
 
 app = FastAPI(
     title="FastAPI Blog API",
     description="A sample blog backend using FastAPI Routers",
     version="1.0.0"
 )
+
+# Initialize templates
+templates = Jinja2Templates(directory="templates")
 
 # 👾 Define a custom exception
 class StoryException(Exception):
@@ -52,10 +56,10 @@ app.include_router(user.router)
 app.include_router(file_router.router)
 app.include_router(blog_post.router, prefix="/blog", tags=["Blog - Post"])
 app.include_router(blog_get.router, prefix="/blog", tags=["Blog - Get"])
-app.include_router(templates.router)
+app.include_router(templates_router.router)
 
-@app.get("/", tags=["Root"])
-def root():
-    return {"message": "Welcome to the FastAPI Blog API!"}
+@app.get("/", response_class=HTMLResponse, tags=["Root"])
+def root(request: Request):
+    return templates.TemplateResponse("home.html", {"request": request})
 
 models.Base.metadata.create_all(engine)

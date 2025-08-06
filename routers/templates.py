@@ -10,6 +10,10 @@ router = APIRouter(
 
 templates = Jinja2Templates(directory="templates")
 
+@router.get("/", response_class=HTMLResponse)
+def get_home(request: Request):
+    return templates.TemplateResponse("home.html", {"request": request})
+
 @router.get("/products/{product_id}", response_class=HTMLResponse)
 def get_product(product_id: str, request: Request):
     # Sample product data - in a real app, this would come from a database
