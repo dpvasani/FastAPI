@@ -1,0 +1,1396 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>2. Operation Description.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h1 id="%F0%9F%8C%9F-fastapi-metadata">🌟 FastAPI Metadata</h1>
+<h2 id="%F0%9F%8E%AF-overview">🎯 Overview</h2>
+<p>FastAPI provides powerful built-in documentation features that automatically generate interactive API documentation. This comprehensive guide covers how to enhance your API documentation with metadata, custom descriptions, status codes, tags, and advanced features that make your API professional and developer-friendly.</p>
+<h2 id="%F0%9F%93%9A-part-1-understanding-fastapi-documentation-system">📚 <strong>Part 1: Understanding FastAPI Documentation System</strong></h2>
+<h3 id="%F0%9F%94%A7-how-fastapi-documentation-works">🔧 <strong>How FastAPI Documentation Works</strong></h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> fastapi <span class="hljs-keyword">import</span> FastAPI, status, HTTPException, Query, Path, Body
+<span class="hljs-keyword">from</span> fastapi.responses <span class="hljs-keyword">import</span> JSONResponse
+<span class="hljs-keyword">from</span> typing <span class="hljs-keyword">import</span> Optional, List, Dict, Any
+<span class="hljs-keyword">from</span> pydantic <span class="hljs-keyword">import</span> BaseModel, Field
+<span class="hljs-keyword">from</span> enum <span class="hljs-keyword">import</span> Enum
+<span class="hljs-keyword">import</span> uvicorn
+
+<span class="hljs-comment"># 🎨 Create FastAPI app with comprehensive metadata</span>
+app = FastAPI(
+    title=<span class="hljs-string">"🚀 Advanced API Documentation Demo"</span>,
+    description=<span class="hljs-string">"""
+    ## 🌟 Welcome to Advanced FastAPI Documentation!
+    
+    This API demonstrates comprehensive documentation features including:
+    
+    * 📝 **Rich Descriptions**: Markdown-formatted endpoint descriptions
+    * 🏷️ **Organized Tags**: Grouped endpoints for better navigation
+    * ✅ **Status Codes**: Proper HTTP status code handling
+    * 📊 **Response Models**: Structured response documentation
+    * 🛡️ **Error Handling**: Comprehensive error response documentation
+    
+    ### 🔗 Quick Links
+    - 📚 [API Documentation](/docs)
+    - 📋 [ReDoc Documentation](/redoc) 
+    - 🔧 [OpenAPI Schema](/openapi.json)
+    """</span>,
+    version=<span class="hljs-string">"2.0.0"</span>,
+    terms_of_service=<span class="hljs-string">"https://example.com/terms/"</span>,
+    contact={
+        <span class="hljs-string">"name"</span>: <span class="hljs-string">"API Support Team"</span>,
+        <span class="hljs-string">"url"</span>: <span class="hljs-string">"https://example.com/contact/"</span>,
+        <span class="hljs-string">"email"</span>: <span class="hljs-string">"support@example.com"</span>,
+    },
+    license_info={
+        <span class="hljs-string">"name"</span>: <span class="hljs-string">"MIT License"</span>,
+        <span class="hljs-string">"url"</span>: <span class="hljs-string">"https://opensource.org/licenses/MIT"</span>,
+    },
+    <span class="hljs-comment"># 🏷️ Global tag definitions for better organization</span>
+    openapi_tags=[
+        {
+            <span class="hljs-string">"name"</span>: <span class="hljs-string">"👤 Users"</span>,
+            <span class="hljs-string">"description"</span>: <span class="hljs-string">"**User management operations**. Handle user creation, authentication, and profile management."</span>,
+            <span class="hljs-string">"externalDocs"</span>: {
+                <span class="hljs-string">"description"</span>: <span class="hljs-string">"User Management Guide"</span>,
+                <span class="hljs-string">"url"</span>: <span class="hljs-string">"https://example.com/docs/users/"</span>,
+            },
+        },
+        {
+            <span class="hljs-string">"name"</span>: <span class="hljs-string">"📦 Products"</span>, 
+            <span class="hljs-string">"description"</span>: <span class="hljs-string">"**Product catalog operations**. Manage products, categories, and inventory."</span>,
+        },
+        {
+            <span class="hljs-string">"name"</span>: <span class="hljs-string">"🛒 Orders"</span>,
+            <span class="hljs-string">"description"</span>: <span class="hljs-string">"**Order processing**. Handle order creation, payment, and fulfillment."</span>,
+        },
+        {
+            <span class="hljs-string">"name"</span>: <span class="hljs-string">"🔧 System"</span>,
+            <span class="hljs-string">"description"</span>: <span class="hljs-string">"**System utilities**. Health checks, monitoring, and administrative functions."</span>,
+        },
+    ]
+)
+</div></code></pre>
+<h2 id="%F0%9F%93%9D-part-2-operation-descriptions--metadata">📝 <strong>Part 2: Operation Descriptions &amp; Metadata</strong></h2>
+<h3 id="%F0%9F%8E%AF-basic-metadata-enhancement">🎯 <strong>Basic Metadata Enhancement</strong></h3>
+<pre class="hljs"><code><div><span class="hljs-comment"># 📦 Pydantic models for structured responses</span>
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">User</span><span class="hljs-params">(BaseModel)</span>:</span>
+    <span class="hljs-string">"""👤 User model with comprehensive validation"""</span>
+    id: int = Field(..., description=<span class="hljs-string">"🆔 Unique user identifier"</span>, example=<span class="hljs-number">123</span>)
+    username: str = Field(..., min_length=<span class="hljs-number">3</span>, max_length=<span class="hljs-number">50</span>, description=<span class="hljs-string">"👤 Unique username"</span>, example=<span class="hljs-string">"john_doe"</span>)
+    email: str = Field(..., description=<span class="hljs-string">"📧 User email address"</span>, example=<span class="hljs-string">"john@example.com"</span>)
+    full_name: Optional[str] = Field(<span class="hljs-literal">None</span>, description=<span class="hljs-string">"👨‍💼 User's full name"</span>, example=<span class="hljs-string">"John Doe"</span>)
+    is_active: bool = Field(<span class="hljs-literal">True</span>, description=<span class="hljs-string">"✅ Whether the user account is active"</span>)
+    created_at: str = Field(..., description=<span class="hljs-string">"📅 Account creation timestamp"</span>, example=<span class="hljs-string">"2024-01-01T00:00:00Z"</span>)
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">UserCreate</span><span class="hljs-params">(BaseModel)</span>:</span>
+    <span class="hljs-string">"""📝 User creation model"""</span>
+    username: str = Field(..., min_length=<span class="hljs-number">3</span>, max_length=<span class="hljs-number">50</span>, example=<span class="hljs-string">"new_user"</span>)
+    email: str = Field(..., example=<span class="hljs-string">"newuser@example.com"</span>)
+    password: str = Field(..., min_length=<span class="hljs-number">8</span>, example=<span class="hljs-string">"secure_password123"</span>)
+    full_name: Optional[str] = Field(<span class="hljs-literal">None</span>, example=<span class="hljs-string">"New User"</span>)
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">APIResponse</span><span class="hljs-params">(BaseModel)</span>:</span>
+    <span class="hljs-string">"""📊 Standardized API response wrapper"""</span>
+    status: str = Field(..., description=<span class="hljs-string">"🔄 Response status"</span>, example=<span class="hljs-string">"success"</span>)
+    message: str = Field(..., description=<span class="hljs-string">"📝 Human-readable message"</span>, example=<span class="hljs-string">"Operation completed successfully"</span>)
+    data: Optional[Any] = Field(<span class="hljs-literal">None</span>, description=<span class="hljs-string">"📊 Response data"</span>)
+    meta: Optional[Dict[str, Any]] = Field(<span class="hljs-literal">None</span>, description=<span class="hljs-string">"🔍 Additional metadata"</span>)
+
+<span class="hljs-comment"># ✅ Basic endpoint with enhanced documentation</span>
+<span class="hljs-meta">@app.get(</span>
+    <span class="hljs-string">"/users/{user_id}"</span>,
+    summary=<span class="hljs-string">"🔍 Retrieve User by ID"</span>,
+    description=<span class="hljs-string">"""
+    ## 📖 Get User Information
+    
+    Retrieves detailed information about a specific user by their unique identifier.
+    
+    ### 🎯 Use Cases:
+    - 👤 **Profile Display**: Show user profile information
+    - 🔍 **User Lookup**: Administrative user search
+    - 📊 **Data Validation**: Verify user existence
+    
+    ### ⚡ Performance Notes:
+    - Response time: ~50ms
+    - Cached for 5 minutes
+    - Rate limit: 100 requests/minute
+    
+    ### 🛡️ Security:
+    - Requires valid authentication token
+    - Users can only access their own data (unless admin)
+    - Sensitive fields are automatically filtered
+    """</span>,
+    response_description=<span class="hljs-string">"✅ User information retrieved successfully"</span>,
+    response_model=APIResponse,
+    tags=[<span class="hljs-string">"👤 Users"</span>]
+)
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_user</span><span class="hljs-params">(
+    user_id: int = Path<span class="hljs-params">(
+        ..., 
+        ge=<span class="hljs-number">1</span>, 
+        le=<span class="hljs-number">999999</span>,
+        title=<span class="hljs-string">"User ID"</span>,
+        description=<span class="hljs-string">"🆔 Unique identifier for the user (1-999999)"</span>,
+        example=<span class="hljs-number">123</span>
+    )</span>
+)</span>:</span>
+    <span class="hljs-string">"""
+    🔍 Retrieve user by ID with comprehensive error handling
+    
+    Args:
+        user_id (int): User identifier within valid range
+        
+    Returns:
+        APIResponse: Standardized response with user data
+        
+    Raises:
+        HTTPException: 404 if user not found, 403 if unauthorized
+    """</span>
+    
+    <span class="hljs-comment"># 🎲 Mock user data (replace with database query)</span>
+    <span class="hljs-keyword">if</span> user_id == <span class="hljs-number">404</span>:  <span class="hljs-comment"># Simulate not found</span>
+        <span class="hljs-keyword">raise</span> HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=<span class="hljs-string">"👤 User not found. Please check the user ID and try again."</span>
+        )
+    
+    mock_user = User(
+        id=user_id,
+        username=<span class="hljs-string">f"user_<span class="hljs-subst">{user_id}</span>"</span>,
+        email=<span class="hljs-string">f"user<span class="hljs-subst">{user_id}</span>@example.com"</span>, 
+        full_name=<span class="hljs-string">f"User <span class="hljs-subst">{user_id}</span>"</span>,
+        is_active=<span class="hljs-literal">True</span>,
+        created_at=<span class="hljs-string">"2024-01-01T00:00:00Z"</span>
+    )
+    
+    <span class="hljs-keyword">return</span> APIResponse(
+        status=<span class="hljs-string">"success"</span>,
+        message=<span class="hljs-string">"User information retrieved successfully"</span>,
+        data=mock_user.dict(),
+        meta={
+            <span class="hljs-string">"request_id"</span>: <span class="hljs-string">f"req_<span class="hljs-subst">{user_id}</span>"</span>,
+            <span class="hljs-string">"api_version"</span>: <span class="hljs-string">"2.0.0"</span>,
+            <span class="hljs-string">"cached"</span>: <span class="hljs-literal">True</span>,
+            <span class="hljs-string">"cache_expires"</span>: <span class="hljs-string">"2024-01-01T00:05:00Z"</span>
+        }
+    )
+</div></code></pre>
+<h3 id="%F0%9F%8E%A8-advanced-description-with-markdown">🎨 <strong>Advanced Description with Markdown</strong></h3>
+<pre class="hljs"><code><div><span class="hljs-meta">@app.post(</span>
+    <span class="hljs-string">"/users/"</span>,
+    summary=<span class="hljs-string">"👤 Create New User Account"</span>, 
+    description=<span class="hljs-string">"""
+    ## 🚀 User Registration Endpoint
+    
+    Creates a new user account with comprehensive validation and security features.
+    
+    ### 📋 Required Information:
+    | Field | Type | Validation | Description |
+    |-------|------|------------|-------------|
+    | `username` | string | 3-50 chars, alphanumeric | 👤 Unique username |
+    | `email` | string | Valid email format | 📧 User email address |
+    | `password` | string | Min 8 chars, mixed case | 🔒 Secure password |
+    | `full_name` | string | Optional | 👨‍💼 Display name |
+    
+    ### ✅ Validation Rules:
+    - **Username**: Must be unique, alphanumeric with underscores
+    - **Email**: Must be valid format and not already registered  
+    - **Password**: Minimum 8 characters with mixed case and numbers
+    - **Rate Limiting**: Max 3 registration attempts per IP per hour
+    
+    ### 🔄 Process Flow:
+    1. **Validate Input** → Check all required fields and formats
+    2. **Check Uniqueness** → Verify username/email not already taken
+    3. **Hash Password** → Secure password storage with bcrypt
+    4. **Create Account** → Insert user record into database
+    5. **Send Welcome Email** → Automated welcome message
+    6. **Return Response** → User data with generated ID
+    
+    ### 🛡️ Security Features:
+    - 🔒 Password hashing with salt
+    - 📧 Email verification required
+    - 🚫 Automatic spam detection
+    - 📊 Account creation monitoring
+    
+    ### 📈 Success Response:
+    Returns the created user object with a unique ID and account status.
+    
+    ### ⚠️ Possible Errors:
+    - `400`: Invalid input data or validation errors
+    - `409`: Username or email already exists
+    - `429`: Too many registration attempts
+    - `500`: Server error during account creation
+    """</span>,
+    response_description=<span class="hljs-string">"🎉 User account created successfully with generated ID and welcome email sent"</span>,
+    status_code=status.HTTP_201_CREATED,
+    response_model=APIResponse,
+    tags=[<span class="hljs-string">"👤 Users"</span>],
+    <span class="hljs-comment"># 📊 Additional response documentation</span>
+    responses={
+        <span class="hljs-number">201</span>: {
+            <span class="hljs-string">"description"</span>: <span class="hljs-string">"✅ User created successfully"</span>,
+            <span class="hljs-string">"content"</span>: {
+                <span class="hljs-string">"application/json"</span>: {
+                    <span class="hljs-string">"example"</span>: {
+                        <span class="hljs-string">"status"</span>: <span class="hljs-string">"success"</span>,
+                        <span class="hljs-string">"message"</span>: <span class="hljs-string">"User account created successfully"</span>,
+                        <span class="hljs-string">"data"</span>: {
+                            <span class="hljs-string">"id"</span>: <span class="hljs-number">123</span>,
+                            <span class="hljs-string">"username"</span>: <span class="hljs-string">"new_user"</span>,
+                            <span class="hljs-string">"email"</span>: <span class="hljs-string">"newuser@example.com"</span>,
+                            <span class="hljs-string">"full_name"</span>: <span class="hljs-string">"New User"</span>,
+                            <span class="hljs-string">"is_active"</span>: <span class="hljs-literal">True</span>,
+                            <span class="hljs-string">"created_at"</span>: <span class="hljs-string">"2024-01-01T00:00:00Z"</span>
+                        },
+                        <span class="hljs-string">"meta"</span>: {
+                            <span class="hljs-string">"welcome_email_sent"</span>: <span class="hljs-literal">True</span>,
+                            <span class="hljs-string">"verification_required"</span>: <span class="hljs-literal">True</span>
+                        }
+                    }
+                }
+            }
+        },
+        <span class="hljs-number">400</span>: {
+            <span class="hljs-string">"description"</span>: <span class="hljs-string">"❌ Validation error"</span>,
+            <span class="hljs-string">"content"</span>: {
+                <span class="hljs-string">"application/json"</span>: {
+                    <span class="hljs-string">"example"</span>: {
+                        <span class="hljs-string">"detail"</span>: [
+                            {
+                                <span class="hljs-string">"loc"</span>: [<span class="hljs-string">"body"</span>, <span class="hljs-string">"email"</span>],
+                                <span class="hljs-string">"msg"</span>: <span class="hljs-string">"Invalid email format"</span>, 
+                                <span class="hljs-string">"type"</span>: <span class="hljs-string">"value_error.email"</span>
+                            }
+                        ]
+                    }
+                }
+            }
+        },
+        <span class="hljs-number">409</span>: {
+            <span class="hljs-string">"description"</span>: <span class="hljs-string">"⚠️ Conflict - Username or email already exists"</span>,
+            <span class="hljs-string">"content"</span>: {
+                <span class="hljs-string">"application/json"</span>: {
+                    <span class="hljs-string">"example"</span>: {
+                        <span class="hljs-string">"status"</span>: <span class="hljs-string">"error"</span>,
+                        <span class="hljs-string">"message"</span>: <span class="hljs-string">"Username 'john_doe' is already taken"</span>,
+                        <span class="hljs-string">"error_code"</span>: <span class="hljs-string">"USERNAME_EXISTS"</span>
+                    }
+                }
+            }
+        }
+    }
+)
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">create_user</span><span class="hljs-params">(user_data: UserCreate = Body<span class="hljs-params">(..., example={
+    <span class="hljs-string">"username"</span>: <span class="hljs-string">"awesome_user"</span>,
+    <span class="hljs-string">"email"</span>: <span class="hljs-string">"awesome@example.com"</span>, 
+    <span class="hljs-string">"password"</span>: <span class="hljs-string">"SecurePass123!"</span>,
+    <span class="hljs-string">"full_name"</span>: <span class="hljs-string">"Awesome User"</span>
+})</span>)</span>:</span>
+    <span class="hljs-string">"""
+    👤 Create new user with comprehensive validation
+    
+    Args:
+        user_data (UserCreate): User registration information
+        
+    Returns:
+        APIResponse: Created user data with metadata
+        
+    Raises:
+        HTTPException: Various errors based on validation and conflicts
+    """</span>
+    
+    <span class="hljs-comment"># 🛡️ Simulate validation checks</span>
+    <span class="hljs-keyword">if</span> user_data.username == <span class="hljs-string">"admin"</span>:
+        <span class="hljs-keyword">raise</span> HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail=<span class="hljs-string">"⚠️ Username 'admin' is reserved and cannot be used"</span>
+        )
+    
+    <span class="hljs-keyword">if</span> <span class="hljs-string">"@test.com"</span> <span class="hljs-keyword">in</span> user_data.email:
+        <span class="hljs-keyword">raise</span> HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=<span class="hljs-string">"❌ Test email domains are not allowed for registration"</span>
+        )
+    
+    <span class="hljs-comment"># 🎲 Create mock user (replace with database operation)</span>
+    new_user = User(
+        id=<span class="hljs-number">12345</span>,  <span class="hljs-comment"># Generated ID</span>
+        username=user_data.username,
+        email=user_data.email,
+        full_name=user_data.full_name,
+        is_active=<span class="hljs-literal">True</span>,
+        created_at=<span class="hljs-string">"2024-01-01T00:00:00Z"</span>
+    )
+    
+    <span class="hljs-keyword">return</span> APIResponse(
+        status=<span class="hljs-string">"success"</span>,
+        message=<span class="hljs-string">"🎉 User account created successfully! Welcome email has been sent."</span>,
+        data=new_user.dict(),
+        meta={
+            <span class="hljs-string">"welcome_email_sent"</span>: <span class="hljs-literal">True</span>,
+            <span class="hljs-string">"verification_required"</span>: <span class="hljs-literal">True</span>,
+            <span class="hljs-string">"account_type"</span>: <span class="hljs-string">"standard"</span>,
+            <span class="hljs-string">"creation_ip"</span>: <span class="hljs-string">"127.0.0.1"</span>
+        }
+    )
+</div></code></pre>
+<h2 id="%F0%9F%94%A2-part-3-status-codes--error-handling">🔢 <strong>Part 3: Status Codes &amp; Error Handling</strong></h2>
+<h3 id="%E2%9C%85-comprehensive-status-code-implementation">✅ <strong>Comprehensive Status Code Implementation</strong></h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> fastapi <span class="hljs-keyword">import</span> status
+
+<span class="hljs-comment"># 📊 Product models</span>
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Product</span><span class="hljs-params">(BaseModel)</span>:</span>
+    <span class="hljs-string">"""📦 Product model"""</span>
+    id: int = Field(..., description=<span class="hljs-string">"🆔 Product ID"</span>, example=<span class="hljs-number">1</span>)
+    name: str = Field(..., description=<span class="hljs-string">"📦 Product name"</span>, example=<span class="hljs-string">"Wireless Headphones"</span>)
+    description: str = Field(..., description=<span class="hljs-string">"📝 Product description"</span>, example=<span class="hljs-string">"High-quality wireless headphones"</span>)
+    price: float = Field(..., ge=<span class="hljs-number">0</span>, description=<span class="hljs-string">"💰 Product price"</span>, example=<span class="hljs-number">99.99</span>)
+    category: str = Field(..., description=<span class="hljs-string">"🏷️ Product category"</span>, example=<span class="hljs-string">"Electronics"</span>)
+    in_stock: bool = Field(..., description=<span class="hljs-string">"📦 Stock availability"</span>, example=<span class="hljs-literal">True</span>)
+    stock_quantity: int = Field(..., ge=<span class="hljs-number">0</span>, description=<span class="hljs-string">"📊 Available quantity"</span>, example=<span class="hljs-number">50</span>)
+
+<span class="hljs-comment"># ✅ GET with 200 OK (default)</span>
+<span class="hljs-meta">@app.get(</span>
+    <span class="hljs-string">"/products/"</span>,
+    summary=<span class="hljs-string">"📦 List All Products"</span>,
+    description=<span class="hljs-string">"""
+    ## 🛍️ Product Catalog
+    
+    Retrieves a paginated list of all available products with filtering options.
+    
+    ### 🔍 Features:
+    - 📄 **Pagination**: Control page size and offset
+    - 🔍 **Search**: Text search across product names and descriptions  
+    - 🏷️ **Category Filter**: Filter by product category
+    - 💰 **Price Range**: Filter by minimum and maximum price
+    - 📦 **Stock Filter**: Show only in-stock items
+    
+    ### 📊 Response Format:
+    Returns a standardized response with product array and pagination metadata.
+    """</span>,
+    response_description=<span class="hljs-string">"📦 Product list retrieved successfully with pagination info"</span>,
+    response_model=APIResponse,
+    tags=[<span class="hljs-string">"📦 Products"</span>]
+)
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">list_products</span><span class="hljs-params">(
+    skip: int = Query<span class="hljs-params">(<span class="hljs-number">0</span>, ge=<span class="hljs-number">0</span>, description=<span class="hljs-string">"📄 Number of products to skip"</span>)</span>,
+    limit: int = Query<span class="hljs-params">(<span class="hljs-number">10</span>, ge=<span class="hljs-number">1</span>, le=<span class="hljs-number">100</span>, description=<span class="hljs-string">"🔢 Maximum products to return"</span>)</span>,
+    search: Optional[str] = Query<span class="hljs-params">(None, min_length=<span class="hljs-number">2</span>, description=<span class="hljs-string">"🔍 Search term"</span>)</span>,
+    category: Optional[str] = Query<span class="hljs-params">(None, description=<span class="hljs-string">"🏷️ Filter by category"</span>)</span>
+)</span>:</span>
+    <span class="hljs-comment"># Mock products data</span>
+    mock_products = [
+        Product(id=<span class="hljs-number">1</span>, name=<span class="hljs-string">"📱 iPhone 15"</span>, description=<span class="hljs-string">"Latest smartphone"</span>, price=<span class="hljs-number">999.99</span>, category=<span class="hljs-string">"Electronics"</span>, in_stock=<span class="hljs-literal">True</span>, stock_quantity=<span class="hljs-number">25</span>),
+        Product(id=<span class="hljs-number">2</span>, name=<span class="hljs-string">"👕 Cotton T-Shirt"</span>, description=<span class="hljs-string">"Comfortable cotton tee"</span>, price=<span class="hljs-number">29.99</span>, category=<span class="hljs-string">"Clothing"</span>, in_stock=<span class="hljs-literal">True</span>, stock_quantity=<span class="hljs-number">100</span>),
+    ]
+    
+    <span class="hljs-keyword">return</span> APIResponse(
+        status=<span class="hljs-string">"success"</span>,
+        message=<span class="hljs-string">f"Retrieved <span class="hljs-subst">{len(mock_products)}</span> products"</span>,
+        data={
+            <span class="hljs-string">"products"</span>: [p.dict() <span class="hljs-keyword">for</span> p <span class="hljs-keyword">in</span> mock_products],
+            <span class="hljs-string">"pagination"</span>: {
+                <span class="hljs-string">"skip"</span>: skip,
+                <span class="hljs-string">"limit"</span>: limit, 
+                <span class="hljs-string">"total"</span>: len(mock_products),
+                <span class="hljs-string">"has_more"</span>: <span class="hljs-literal">False</span>
+            }
+        }
+    )
+
+<span class="hljs-comment"># ✅ POST with 201 CREATED</span>
+<span class="hljs-meta">@app.post(</span>
+    <span class="hljs-string">"/products/"</span>,
+    summary=<span class="hljs-string">"➕ Create New Product"</span>,
+    description=<span class="hljs-string">"""
+    ## 🆕 Add Product to Catalog
+    
+    Creates a new product in the catalog with full validation and inventory tracking.
+    
+    ### 📋 Validation Rules:
+    - Product name must be unique
+    - Price must be positive
+    - Category must be from predefined list
+    - Stock quantity cannot be negative
+    """</span>,
+    response_description=<span class="hljs-string">"🆕 Product created successfully and added to catalog"</span>,
+    status_code=status.HTTP_201_CREATED,
+    response_model=APIResponse,
+    tags=[<span class="hljs-string">"📦 Products"</span>]
+)
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">create_product</span><span class="hljs-params">(product: Product)</span>:</span>
+    <span class="hljs-string">"""➕ Create new product with validation"""</span>
+    
+    <span class="hljs-comment"># Simulate product creation</span>
+    <span class="hljs-keyword">return</span> APIResponse(
+        status=<span class="hljs-string">"success"</span>,
+        message=<span class="hljs-string">"🆕 Product created successfully!"</span>,
+        data=product.dict(),
+        meta={
+            <span class="hljs-string">"created_at"</span>: <span class="hljs-string">"2024-01-01T00:00:00Z"</span>,
+            <span class="hljs-string">"created_by"</span>: <span class="hljs-string">"admin"</span>,
+            <span class="hljs-string">"inventory_updated"</span>: <span class="hljs-literal">True</span>
+        }
+    )
+
+<span class="hljs-comment"># ✅ PUT with 200 OK  </span>
+<span class="hljs-meta">@app.put(</span>
+    <span class="hljs-string">"/products/{product_id}"</span>,
+    summary=<span class="hljs-string">"✏️ Update Product"</span>,
+    description=<span class="hljs-string">"""
+    ## 🔄 Update Existing Product
+    
+    Updates an existing product with new information. All fields are optional - only provided fields will be updated.
+    
+    ### 🎯 Update Capabilities:
+    - 📝 **Product Details**: Name, description, category
+    - 💰 **Pricing**: Update product price
+    - 📦 **Inventory**: Modify stock quantities
+    - 🔄 **Status**: Enable/disable product availability
+    """</span>,
+    response_description=<span class="hljs-string">"✅ Product updated successfully"</span>,
+    response_model=APIResponse,
+    tags=[<span class="hljs-string">"📦 Products"</span>]
+)
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">update_product</span><span class="hljs-params">(
+    product_id: int = Path<span class="hljs-params">(..., ge=<span class="hljs-number">1</span>, description=<span class="hljs-string">"🆔 Product ID to update"</span>)</span>,
+    product: Product = Body<span class="hljs-params">(..., description=<span class="hljs-string">"📝 Updated product information"</span>)</span>
+)</span>:</span>
+    <span class="hljs-string">"""✏️ Update existing product"""</span>
+    
+    <span class="hljs-keyword">if</span> product_id == <span class="hljs-number">999</span>:  <span class="hljs-comment"># Simulate not found</span>
+        <span class="hljs-keyword">raise</span> HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=<span class="hljs-string">f"📦 Product with ID <span class="hljs-subst">{product_id}</span> not found"</span>
+        )
+    
+    <span class="hljs-keyword">return</span> APIResponse(
+        status=<span class="hljs-string">"success"</span>, 
+        message=<span class="hljs-string">"✅ Product updated successfully"</span>,
+        data=product.dict(),
+        meta={
+            <span class="hljs-string">"updated_at"</span>: <span class="hljs-string">"2024-01-01T00:00:00Z"</span>,
+            <span class="hljs-string">"version"</span>: <span class="hljs-number">2</span>
+        }
+    )
+
+<span class="hljs-comment"># ✅ DELETE with 204 NO CONTENT</span>
+<span class="hljs-meta">@app.delete(</span>
+    <span class="hljs-string">"/products/{product_id}"</span>,
+    summary=<span class="hljs-string">"🗑️ Delete Product"</span>,
+    description=<span class="hljs-string">"""
+    ## 🗑️ Remove Product from Catalog
+    
+    Permanently removes a product from the catalog. This action cannot be undone.
+    
+    ### ⚠️ Important Notes:
+    - Product must exist in the catalog
+    - Cannot delete products with pending orders
+    - Inventory will be automatically adjusted
+    - All product reviews will be archived
+    
+    ### 🔄 Soft Delete Option:
+    Consider using PUT to set `is_active: false` instead of permanent deletion.
+    """</span>,
+    response_description=<span class="hljs-string">"🗑️ Product deleted successfully from catalog"</span>,
+    status_code=status.HTTP_204_NO_CONTENT,
+    tags=[<span class="hljs-string">"📦 Products"</span>]
+)
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">delete_product</span><span class="hljs-params">(
+    product_id: int = Path<span class="hljs-params">(..., ge=<span class="hljs-number">1</span>, description=<span class="hljs-string">"🆔 Product ID to delete"</span>)</span>
+)</span>:</span>
+    <span class="hljs-string">"""🗑️ Delete product from catalog"""</span>
+    
+    <span class="hljs-keyword">if</span> product_id == <span class="hljs-number">999</span>:  <span class="hljs-comment"># Simulate not found</span>
+        <span class="hljs-keyword">raise</span> HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=<span class="hljs-string">f"📦 Product with ID <span class="hljs-subst">{product_id}</span> not found"</span>
+        )
+    
+    <span class="hljs-comment"># Return None for 204 status</span>
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">None</span>
+</div></code></pre>
+<h3 id="%F0%9F%93%8A-status-code-reference-table">📊 <strong>Status Code Reference Table</strong></h3>
+<pre class="hljs"><code><div><span class="hljs-comment"># 📋 Create comprehensive status code examples</span>
+<span class="hljs-meta">@app.get("/status-codes/examples", include_in_schema=False)  # Hidden endpoint for reference</span>
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">status_code_examples</span><span class="hljs-params">()</span>:</span>
+    <span class="hljs-string">"""📚 Comprehensive status code reference"""</span>
+    <span class="hljs-keyword">return</span> {
+        <span class="hljs-string">"success_codes"</span>: {
+            <span class="hljs-string">"200"</span>: <span class="hljs-string">"✅ OK - Standard successful response"</span>,
+            <span class="hljs-string">"201"</span>: <span class="hljs-string">"🆕 Created - Resource successfully created"</span>, 
+            <span class="hljs-string">"204"</span>: <span class="hljs-string">"🗑️ No Content - Successful deletion/update with no response body"</span>
+        },
+        <span class="hljs-string">"client_error_codes"</span>: {
+            <span class="hljs-string">"400"</span>: <span class="hljs-string">"❌ Bad Request - Invalid input or malformed request"</span>,
+            <span class="hljs-string">"401"</span>: <span class="hljs-string">"🔐 Unauthorized - Authentication required or invalid"</span>,
+            <span class="hljs-string">"403"</span>: <span class="hljs-string">"🚫 Forbidden - Valid auth but insufficient permissions"</span>,
+            <span class="hljs-string">"404"</span>: <span class="hljs-string">"🔍 Not Found - Requested resource does not exist"</span>,
+            <span class="hljs-string">"409"</span>: <span class="hljs-string">"⚠️ Conflict - Resource conflict (duplicate, etc.)"</span>,
+            <span class="hljs-string">"422"</span>: <span class="hljs-string">"📝 Unprocessable Entity - Validation errors"</span>,
+            <span class="hljs-string">"429"</span>: <span class="hljs-string">"⏱️ Too Many Requests - Rate limit exceeded"</span>
+        },
+        <span class="hljs-string">"server_error_codes"</span>: {
+            <span class="hljs-string">"500"</span>: <span class="hljs-string">"💥 Internal Server Error - Unexpected server issue"</span>,
+            <span class="hljs-string">"502"</span>: <span class="hljs-string">"🌐 Bad Gateway - Upstream server error"</span>,
+            <span class="hljs-string">"503"</span>: <span class="hljs-string">"🛠️ Service Unavailable - Server temporarily unavailable"</span>
+        }
+    }
+</div></code></pre>
+<h2 id="%F0%9F%8F%B7%EF%B8%8F-part-4-tags--organization">🏷️ <strong>Part 4: Tags &amp; Organization</strong></h2>
+<h3 id="%F0%9F%93%82-advanced-tag-management">📂 <strong>Advanced Tag Management</strong></h3>
+<pre class="hljs"><code><div><span class="hljs-comment"># 🎨 Define comprehensive tag system</span>
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">TagCategories</span>:</span>
+    <span class="hljs-string">"""🏷️ Centralized tag definitions for API organization"""</span>
+    
+    <span class="hljs-comment"># 👤 User Management</span>
+    USERS = <span class="hljs-string">"👤 Users"</span>
+    AUTHENTICATION = <span class="hljs-string">"🔐 Authentication"</span> 
+    PROFILES = <span class="hljs-string">"👨‍💼 User Profiles"</span>
+    
+    <span class="hljs-comment"># 📦 Product Management</span>
+    PRODUCTS = <span class="hljs-string">"📦 Products"</span>
+    CATEGORIES = <span class="hljs-string">"🏷️ Categories"</span>
+    INVENTORY = <span class="hljs-string">"📊 Inventory"</span>
+    
+    <span class="hljs-comment"># 🛒 Order Processing</span>
+    ORDERS = <span class="hljs-string">"🛒 Orders"</span>
+    PAYMENTS = <span class="hljs-string">"💳 Payments"</span>
+    SHIPPING = <span class="hljs-string">"📦 Shipping"</span>
+    
+    <span class="hljs-comment"># 🔧 System &amp; Admin</span>
+    SYSTEM = <span class="hljs-string">"🔧 System"</span>
+    ADMIN = <span class="hljs-string">"👑 Admin"</span>
+    MONITORING = <span class="hljs-string">"📊 Monitoring"</span>
+
+<span class="hljs-comment"># 🛒 Order-related endpoints with consistent tagging</span>
+<span class="hljs-meta">@app.get(</span>
+    <span class="hljs-string">"/orders/"</span>,
+    summary=<span class="hljs-string">"📋 List User Orders"</span>,
+    description=<span class="hljs-string">"""
+    ## 🛒 Order History
+    
+    Retrieves a paginated list of orders for the authenticated user.
+    Includes comprehensive order information and status tracking.
+    """</span>,
+    response_description=<span class="hljs-string">"📋 Order list retrieved successfully"</span>,
+    tags=[TagCategories.ORDERS]
+)
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">list_orders</span><span class="hljs-params">()</span>:</span>
+    <span class="hljs-keyword">return</span> APIResponse(
+        status=<span class="hljs-string">"success"</span>,
+        message=<span class="hljs-string">"Orders retrieved successfully"</span>,
+        data={<span class="hljs-string">"orders"</span>: [], <span class="hljs-string">"total"</span>: <span class="hljs-number">0</span>}
+    )
+
+<span class="hljs-meta">@app.post(</span>
+    <span class="hljs-string">"/orders/"</span>,
+    summary=<span class="hljs-string">"🛒 Create New Order"</span>,
+    description=<span class="hljs-string">"""
+    ## 🆕 Place New Order
+    
+    Creates a new order with selected products and shipping information.
+    Handles inventory validation and payment processing.
+    """</span>,
+    response_description=<span class="hljs-string">"🛒 Order created and payment initiated"</span>,
+    status_code=status.HTTP_201_CREATED,
+    tags=[TagCategories.ORDERS, TagCategories.PAYMENTS]
+)
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">create_order</span><span class="hljs-params">()</span>:</span>
+    <span class="hljs-keyword">return</span> APIResponse(
+        status=<span class="hljs-string">"success"</span>,
+        message=<span class="hljs-string">"Order created successfully"</span>
+    )
+
+<span class="hljs-comment"># 💳 Payment processing with multiple tags</span>
+<span class="hljs-meta">@app.post(</span>
+    <span class="hljs-string">"/payments/process/"</span>,
+    summary=<span class="hljs-string">"💳 Process Payment"</span>,
+    description=<span class="hljs-string">"""
+    ## 💰 Payment Processing
+    
+    Handles secure payment processing for orders using various payment methods.
+    Supports credit cards, digital wallets, and bank transfers.
+    """</span>,
+    response_description=<span class="hljs-string">"💳 Payment processed successfully"</span>,
+    tags=[TagCategories.PAYMENTS, TagCategories.ORDERS]
+)
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">process_payment</span><span class="hljs-params">()</span>:</span>
+    <span class="hljs-keyword">return</span> APIResponse(
+        status=<span class="hljs-string">"success"</span>, 
+        message=<span class="hljs-string">"Payment processed successfully"</span>
+    )
+
+<span class="hljs-comment"># 🔧 System monitoring endpoints</span>
+<span class="hljs-meta">@app.get(</span>
+    <span class="hljs-string">"/health/"</span>,
+    summary=<span class="hljs-string">"🏥 Health Check"</span>,
+    description=<span class="hljs-string">"""
+    ## 🏥 System Health Status
+    
+    Provides comprehensive system health information including:
+    - Database connectivity
+    - External service status  
+    - System resource usage
+    - Cache status
+    """</span>,
+    response_description=<span class="hljs-string">"🏥 System health status retrieved"</span>,
+    tags=[TagCategories.SYSTEM, TagCategories.MONITORING]
+)
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">health_check</span><span class="hljs-params">()</span>:</span>
+    <span class="hljs-keyword">return</span> {
+        <span class="hljs-string">"status"</span>: <span class="hljs-string">"✅ healthy"</span>,
+        <span class="hljs-string">"timestamp"</span>: <span class="hljs-string">"2024-01-01T00:00:00Z"</span>,
+        <span class="hljs-string">"services"</span>: {
+            <span class="hljs-string">"database"</span>: <span class="hljs-string">"✅ connected"</span>,
+            <span class="hljs-string">"cache"</span>: <span class="hljs-string">"✅ operational"</span>, 
+            <span class="hljs-string">"external_api"</span>: <span class="hljs-string">"✅ responsive"</span>
+        }
+    }
+</div></code></pre>
+<h2 id="%F0%9F%94%84-part-5-response-models--documentation-flow">🔄 <strong>Part 5: Response Models &amp; Documentation Flow</strong></h2>
+<h3 id="%F0%9F%93%8A-advanced-response-documentation">📊 <strong>Advanced Response Documentation</strong></h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> typing <span class="hljs-keyword">import</span> Union
+
+<span class="hljs-comment"># 📊 Advanced response models with examples</span>
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ErrorResponse</span><span class="hljs-params">(BaseModel)</span>:</span>
+    <span class="hljs-string">"""❌ Error response model"""</span>
+    status: str = Field(<span class="hljs-string">"error"</span>, description=<span class="hljs-string">"🔄 Response status"</span>)
+    message: str = Field(..., description=<span class="hljs-string">"📝 Error message"</span>)
+    error_code: Optional[str] = Field(<span class="hljs-literal">None</span>, description=<span class="hljs-string">"🔍 Machine-readable error code"</span>)
+    details: Optional[Dict[str, Any]] = Field(<span class="hljs-literal">None</span>, description=<span class="hljs-string">"📋 Additional error details"</span>)
+    timestamp: str = Field(..., description=<span class="hljs-string">"⏰ Error timestamp"</span>)
+    request_id: str = Field(..., description=<span class="hljs-string">"🆔 Unique request identifier"</span>)
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">PaginationMeta</span><span class="hljs-params">(BaseModel)</span>:</span>
+    <span class="hljs-string">"""📄 Pagination metadata"""</span>
+    page: int = Field(..., description=<span class="hljs-string">"📄 Current page number"</span>, example=<span class="hljs-number">1</span>)
+    per_page: int = Field(..., description=<span class="hljs-string">"🔢 Items per page"</span>, example=<span class="hljs-number">10</span>)
+    total_items: int = Field(..., description=<span class="hljs-string">"📊 Total available items"</span>, example=<span class="hljs-number">250</span>)
+    total_pages: int = Field(..., description=<span class="hljs-string">"📄 Total number of pages"</span>, example=<span class="hljs-number">25</span>)
+    has_next: bool = Field(..., description=<span class="hljs-string">"➡️ Whether next page exists"</span>, example=<span class="hljs-literal">True</span>)
+    has_previous: bool = Field(..., description=<span class="hljs-string">"⬅️ Whether previous page exists"</span>, example=<span class="hljs-literal">False</span>)
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ProductListResponse</span><span class="hljs-params">(BaseModel)</span>:</span>
+    <span class="hljs-string">"""📦 Product list response with pagination"""</span>
+    status: str = Field(<span class="hljs-string">"success"</span>, description=<span class="hljs-string">"✅ Response status"</span>)
+    message: str = Field(..., description=<span class="hljs-string">"📝 Response message"</span>)
+    data: Dict[str, Any] = Field(..., description=<span class="hljs-string">"📊 Response data"</span>)
+    pagination: PaginationMeta = Field(..., description=<span class="hljs-string">"📄 Pagination information"</span>)
+
+<span class="hljs-comment"># 🎯 Comprehensive endpoint with multiple response models</span>
+<span class="hljs-meta">@app.get(</span>
+    <span class="hljs-string">"/products/search/"</span>,
+    summary=<span class="hljs-string">"🔍 Advanced Product Search"</span>,
+    description=<span class="hljs-string">"""
+    ## 🔍 Intelligent Product Search
+    
+    Advanced product search with multiple filters, sorting options, and intelligent ranking.
+    
+    ### 🚀 Search Features:
+    
+    #### 🔍 **Search Capabilities**:
+    - **Full-text search** across product names and descriptions
+    - **Fuzzy matching** for typo tolerance
+    - **Synonym support** for better results
+    - **Auto-complete suggestions** for search terms
+    
+    #### 🏷️ **Filtering Options**:
+    | Filter | Type | Description |
+    |--------|------|-------------|
+    | `category` | string | 🏷️ Product category filter |
+    | `min_price` | number | 💰 Minimum price threshold |  
+    | `max_price` | number | 💰 Maximum price threshold |
+    | `in_stock` | boolean | 📦 Stock availability filter |
+    | `brand` | string | 🏢 Brand name filter |
+    | `rating` | number | ⭐ Minimum rating filter |
+    
+    #### 📊 **Sorting Options**:
+    - `relevance` - 🎯 Search relevance (default)
+    - `price_asc` - 💰 Price low to high
+    - `price_desc` - 💰 Price high to low  
+    - `rating` - ⭐ Customer rating
+    - `newest` - 🆕 Recently added
+    - `popular` - 🔥 Most popular
+    
+    ### 📈 **Performance Metrics**:
+    - Average response time: ~120ms
+    - Search index updated every 5 minutes
+    - Results cached for 1 minute
+    - Maximum 1000 results per query
+    
+    ### 🔄 **Response Format**:
+    Returns paginated results with comprehensive product information and search metadata.
+    """</span>,
+    response_description=<span class="hljs-string">"🔍 Search results with products and metadata"</span>,
+    response_model=Union[ProductListResponse, ErrorResponse],
+    responses={
+        <span class="hljs-number">200</span>: {
+            <span class="hljs-string">"description"</span>: <span class="hljs-string">"✅ Search completed successfully"</span>,
+            <span class="hljs-string">"model"</span>: ProductListResponse,
+            <span class="hljs-string">"content"</span>: {
+                <span class="hljs-string">"application/json"</span>: {
+                    <span class="hljs-string">"example"</span>: {
+                        <span class="hljs-string">"status"</span>: <span class="hljs-string">"success"</span>,
+                        <span class="hljs-string">"message"</span>: <span class="hljs-string">"Found 25 products matching your search"</span>,
+                        <span class="hljs-string">"data"</span>: {
+                            <span class="hljs-string">"products"</span>: [
+                                {
+                                    <span class="hljs-string">"id"</span>: <span class="hljs-number">1</span>,
+                                    <span class="hljs-string">"name"</span>: <span class="hljs-string">"📱 iPhone 15 Pro"</span>,
+                                    <span class="hljs-string">"description"</span>: <span class="hljs-string">"Latest flagship smartphone"</span>,
+                                    <span class="hljs-string">"price"</span>: <span class="hljs-number">999.99</span>,
+                                    <span class="hljs-string">"category"</span>: <span class="hljs-string">"Electronics"</span>,
+                                    <span class="hljs-string">"rating"</span>: <span class="hljs-number">4.8</span>,
+                                    <span class="hljs-string">"reviews_count"</span>: <span class="hljs-number">2847</span>,
+                                    <span class="hljs-string">"in_stock"</span>: <span class="hljs-literal">True</span>,
+                                    <span class="hljs-string">"stock_quantity"</span>: <span class="hljs-number">15</span>
+                                }
+                            ],
+                            <span class="hljs-string">"search_metadata"</span>: {
+                                <span class="hljs-string">"query"</span>: <span class="hljs-string">"iphone"</span>,
+                                <span class="hljs-string">"results_count"</span>: <span class="hljs-number">25</span>,
+                                <span class="hljs-string">"search_time_ms"</span>: <span class="hljs-number">87</span>,
+                                <span class="hljs-string">"suggestions"</span>: [<span class="hljs-string">"iphone case"</span>, <span class="hljs-string">"iphone charger"</span>]
+                            }
+                        },
+                        <span class="hljs-string">"pagination"</span>: {
+                            <span class="hljs-string">"page"</span>: <span class="hljs-number">1</span>,
+                            <span class="hljs-string">"per_page"</span>: <span class="hljs-number">10</span>,
+                            <span class="hljs-string">"total_items"</span>: <span class="hljs-number">25</span>,
+                            <span class="hljs-string">"total_pages"</span>: <span class="hljs-number">3</span>,
+                            <span class="hljs-string">"has_next"</span>: <span class="hljs-literal">True</span>,
+                            <span class="hljs-string">"has_previous"</span>: <span class="hljs-literal">False</span>
+                        }
+                    }
+                }
+            }
+        },
+        <span class="hljs-number">400</span>: {
+            <span class="hljs-string">"description"</span>: <span class="hljs-string">"❌ Invalid search parameters"</span>,
+            <span class="hljs-string">"model"</span>: ErrorResponse,
+            <span class="hljs-string">"content"</span>: {
+                <span class="hljs-string">"application/json"</span>: {
+                    <span class="hljs-string">"example"</span>: {
+                        <span class="hljs-string">"status"</span>: <span class="hljs-string">"error"</span>,
+                        <span class="hljs-string">"message"</span>: <span class="hljs-string">"Invalid search parameters provided"</span>,
+                        <span class="hljs-string">"error_code"</span>: <span class="hljs-string">"INVALID_SEARCH_PARAMS"</span>,
+                        <span class="hljs-string">"details"</span>: {
+                            <span class="hljs-string">"min_price"</span>: <span class="hljs-string">"Must be greater than 0"</span>,
+                            <span class="hljs-string">"max_price"</span>: <span class="hljs-string">"Must be greater than min_price"</span>
+                        },
+                        <span class="hljs-string">"timestamp"</span>: <span class="hljs-string">"2024-01-01T00:00:00Z"</span>,
+                        <span class="hljs-string">"request_id"</span>: <span class="hljs-string">"req_12345"</span>
+                    }
+                }
+            }
+        },
+        <span class="hljs-number">429</span>: {
+            <span class="hljs-string">"description"</span>: <span class="hljs-string">"⏱️ Too many search requests"</span>,
+            <span class="hljs-string">"model"</span>: ErrorResponse
+        }
+    },
+    tags=[TagCategories.PRODUCTS, <span class="hljs-string">"🔍 Search"</span>]
+)
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">advanced_product_search</span><span class="hljs-params">(
+    q: str = Query<span class="hljs-params">(..., min_length=<span class="hljs-number">2</span>, description=<span class="hljs-string">"🔍 Search query"</span>, example=<span class="hljs-string">"wireless headphones"</span>)</span>,
+    category: Optional[str] = Query<span class="hljs-params">(None, description=<span class="hljs-string">"🏷️ Category filter"</span>, example=<span class="hljs-string">"Electronics"</span>)</span>,
+    min_price: Optional[float] = Query<span class="hljs-params">(None, ge=<span class="hljs-number">0</span>, description=<span class="hljs-string">"💰 Minimum price"</span>, example=<span class="hljs-number">50.0</span>)</span>,
+    max_price: Optional[float] = Query<span class="hljs-params">(None, ge=<span class="hljs-number">0</span>, description=<span class="hljs-string">"💰 Maximum price"</span>, example=<span class="hljs-number">500.0</span>)</span>,
+    sort_by: str = Query<span class="hljs-params">(<span class="hljs-string">"relevance"</span>, description=<span class="hljs-string">"📊 Sort order"</span>, example=<span class="hljs-string">"price_asc"</span>)</span>,
+    page: int = Query<span class="hljs-params">(<span class="hljs-number">1</span>, ge=<span class="hljs-number">1</span>, description=<span class="hljs-string">"📄 Page number"</span>, example=<span class="hljs-number">1</span>)</span>,
+    per_page: int = Query<span class="hljs-params">(<span class="hljs-number">10</span>, ge=<span class="hljs-number">1</span>, le=<span class="hljs-number">50</span>, description=<span class="hljs-string">"🔢 Items per page"</span>, example=<span class="hljs-number">10</span>)</span>
+)</span>:</span>
+    <span class="hljs-string">"""🔍 Execute advanced product search with comprehensive filtering"""</span>
+    
+    <span class="hljs-comment"># Validate price range</span>
+    <span class="hljs-keyword">if</span> min_price <span class="hljs-keyword">and</span> max_price <span class="hljs-keyword">and</span> min_price &gt; max_price:
+        <span class="hljs-keyword">raise</span> HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=<span class="hljs-string">"❌ Minimum price cannot be greater than maximum price"</span>
+        )
+    
+    <span class="hljs-comment"># Mock search results</span>
+    <span class="hljs-keyword">return</span> ProductListResponse(
+        status=<span class="hljs-string">"success"</span>,
+        message=<span class="hljs-string">f"🔍 Found products matching '<span class="hljs-subst">{q}</span>'"</span>,
+        data={
+            <span class="hljs-string">"products"</span>: [
+                {
+                    <span class="hljs-string">"id"</span>: <span class="hljs-number">1</span>,
+                    <span class="hljs-string">"name"</span>: <span class="hljs-string">"🎧 Wireless Headphones Pro"</span>, 
+                    <span class="hljs-string">"description"</span>: <span class="hljs-string">"Premium noise-canceling headphones"</span>,
+                    <span class="hljs-string">"price"</span>: <span class="hljs-number">299.99</span>,
+                    <span class="hljs-string">"category"</span>: <span class="hljs-string">"Electronics"</span>,
+                    <span class="hljs-string">"rating"</span>: <span class="hljs-number">4.7</span>,
+                    <span class="hljs-string">"in_stock"</span>: <span class="hljs-literal">True</span>
+                }
+            ],
+            <span class="hljs-string">"search_metadata"</span>: {
+                <span class="hljs-string">"query"</span>: q,
+                <span class="hljs-string">"results_count"</span>: <span class="hljs-number">1</span>,
+                <span class="hljs-string">"search_time_ms"</span>: <span class="hljs-number">95</span>,
+                <span class="hljs-string">"filters_applied"</span>: {
+                    <span class="hljs-string">"category"</span>: category,
+                    <span class="hljs-string">"price_range"</span>: <span class="hljs-string">f"<span class="hljs-subst">{min_price}</span>-<span class="hljs-subst">{max_price}</span>"</span> <span class="hljs-keyword">if</span> min_price <span class="hljs-keyword">or</span> max_price <span class="hljs-keyword">else</span> <span class="hljs-literal">None</span>
+                }
+            }
+        },
+        pagination=PaginationMeta(
+            page=page,
+            per_page=per_page,
+            total_items=<span class="hljs-number">1</span>,
+            total_pages=<span class="hljs-number">1</span>,
+            has_next=<span class="hljs-literal">False</span>,
+            has_previous=<span class="hljs-literal">False</span>
+        )
+    )
+</div></code></pre>
+<h2 id="%F0%9F%8E%AF-part-6-testing-documentation-features">🎯 <strong>Part 6: Testing Documentation Features</strong></h2>
+<h3 id="%F0%9F%A7%AA-interactive-documentation-testing">🧪 <strong>Interactive Documentation Testing</strong></h3>
+<pre class="hljs"><code><div><span class="hljs-comment"># 🧪 Test endpoint specifically for documentation features</span>
+<span class="hljs-meta">@app.get(</span>
+    <span class="hljs-string">"/docs-demo/"</span>,
+    summary=<span class="hljs-string">"📚 Documentation Feature Demo"</span>,
+    description=<span class="hljs-string">"""
+    ## 🎯 Documentation Features Showcase
+    
+    This endpoint demonstrates all FastAPI documentation features in action:
+    
+    ### 📝 **Supported Features**:
+    
+    #### ✅ **Basic Features**:
+    - [x] Custom summary and description
+    - [x] Response descriptions
+    - [x] Status code documentation
+    - [x] Tag organization
+    - [x] Parameter validation
+    
+    #### 🚀 **Advanced Features**:
+    - [x] Multiple response models
+    - [x] Custom examples
+    - [x] Markdown formatting
+    - [x] External documentation links
+    - [x] Deprecation warnings
+    
+    ### 🔗 **External Resources**:
+    - [FastAPI Documentation](https://fastapi.tiangolo.com/)
+    - [OpenAPI Specification](https://swagger.io/specification/)
+    - [JSON Schema](https://json-schema.org/)
+    
+    ### ⚠️ **Important Notes**:
+    &gt; This is a demo endpoint showing documentation capabilities.
+    &gt; In production, ensure all endpoints have proper documentation.
+    
+    ### 📊 **Code Example**:
+    ```
+    @app.get("/example", summary="Example", description="Demo endpoint")
+    async def example():
+        return {"message": "Hello World"}
+    ```
+    """</span>,
+    response_description=<span class="hljs-string">"📚 Documentation demo response with examples"</span>,
+    response_model=APIResponse,
+    tags=[<span class="hljs-string">"📚 Documentation"</span>, TagCategories.SYSTEM],
+    <span class="hljs-comment"># 🔗 External documentation</span>
+    openapi_extra={
+        <span class="hljs-string">"externalDocs"</span>: {
+            <span class="hljs-string">"description"</span>: <span class="hljs-string">"FastAPI Documentation Guide"</span>,
+            <span class="hljs-string">"url"</span>: <span class="hljs-string">"https://fastapi.tiangolo.com/tutorial/metadata/"</span>
+        }
+    }
+)
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">documentation_demo</span><span class="hljs-params">(
+    demo_param: str = Query<span class="hljs-params">(<span class="hljs-string">"example"</span>, description=<span class="hljs-string">"📝 Demo parameter with example"</span>, example=<span class="hljs-string">"demo_value"</span>)</span>,
+    optional_param: Optional[int] = Query<span class="hljs-params">(None, ge=<span class="hljs-number">1</span>, le=<span class="hljs-number">100</span>, description=<span class="hljs-string">"🔢 Optional number parameter"</span>)</span>
+)</span>:</span>
+    <span class="hljs-string">"""📚 Demonstrate documentation features"""</span>
+    
+    <span class="hljs-keyword">return</span> APIResponse(
+        status=<span class="hljs-string">"success"</span>,
+        message=<span class="hljs-string">"📚 Documentation demo executed successfully"</span>,
+        data={
+            <span class="hljs-string">"demo_param"</span>: demo_param,
+            <span class="hljs-string">"optional_param"</span>: optional_param,
+            <span class="hljs-string">"features_demonstrated"</span>: [
+                <span class="hljs-string">"✅ Rich markdown descriptions"</span>,
+                <span class="hljs-string">"🏷️ Tag organization"</span>, 
+                <span class="hljs-string">"📊 Response models"</span>,
+                <span class="hljs-string">"🔍 Parameter validation"</span>,
+                <span class="hljs-string">"📝 Custom examples"</span>,
+                <span class="hljs-string">"🔗 External documentation links"</span>
+            ]
+        },
+        meta={
+            <span class="hljs-string">"documentation_version"</span>: <span class="hljs-string">"2.0.0"</span>,
+            <span class="hljs-string">"openapi_version"</span>: <span class="hljs-string">"3.0.2"</span>
+        }
+    )
+
+<span class="hljs-comment"># 🚀 Run the application</span>
+<span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">"__main__"</span>:
+    uvicorn.run(
+        <span class="hljs-string">"main:app"</span>,
+        host=<span class="hljs-string">"0.0.0.0"</span>, 
+        port=<span class="hljs-number">8000</span>,
+        reload=<span class="hljs-literal">True</span>,
+        log_level=<span class="hljs-string">"info"</span>
+    )
+</div></code></pre>
+<h2 id="%F0%9F%93%8A-complete-features-summary">📊 <strong>Complete Features Summary</strong></h2>
+<h3 id="%F0%9F%8E%AF-documentation-enhancement-checklist">🎯 <strong>Documentation Enhancement Checklist</strong></h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Feature</th>
+<th style="text-align:left">Usage</th>
+<th style="text-align:left">Benefits</th>
+<th style="text-align:left">Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>📝 Summary</strong></td>
+<td style="text-align:left"><code>summary=&quot;Brief title&quot;</code></td>
+<td style="text-align:left">Concise endpoint titles</td>
+<td style="text-align:left">&quot;Create User Account&quot;</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>📖 Description</strong></td>
+<td style="text-align:left"><code>description=&quot;&quot;&quot;Markdown text&quot;&quot;&quot;</code></td>
+<td style="text-align:left">Detailed explanations</td>
+<td style="text-align:left">Rich formatted docs</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>✅ Response Description</strong></td>
+<td style="text-align:left"><code>response_description=&quot;Success message&quot;</code></td>
+<td style="text-align:left">Clear success outcomes</td>
+<td style="text-align:left">&quot;User created successfully&quot;</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>🔢 Status Codes</strong></td>
+<td style="text-align:left"><code>status_code=status.HTTP_201_CREATED</code></td>
+<td style="text-align:left">Proper HTTP semantics</td>
+<td style="text-align:left">201 for creation</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>🏷️ Tags</strong></td>
+<td style="text-align:left"><code>tags=[&quot;Users&quot;, &quot;Admin&quot;]</code></td>
+<td style="text-align:left">API organization</td>
+<td style="text-align:left">Grouped endpoints</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>📊 Response Models</strong></td>
+<td style="text-align:left"><code>response_model=UserResponse</code></td>
+<td style="text-align:left">Structured responses</td>
+<td style="text-align:left">Type safety</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>🔍 Examples</strong></td>
+<td style="text-align:left"><code>example={&quot;key&quot;: &quot;value&quot;}</code></td>
+<td style="text-align:left">Clear usage patterns</td>
+<td style="text-align:left">Interactive docs</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>⚠️ Error Responses</strong></td>
+<td style="text-align:left"><code>responses={400: {...}}</code></td>
+<td style="text-align:left">Error documentation</td>
+<td style="text-align:left">Comprehensive error info</td>
+</tr>
+</tbody>
+</table>
+<h3 id="%F0%9F%9A%80-best-practices-quick-reference">🚀 <strong>Best Practices Quick Reference</strong></h3>
+<pre class="hljs"><code><div><span class="hljs-comment"># ✅ GOOD: Comprehensive documentation</span>
+<span class="hljs-meta">@app.post(</span>
+    <span class="hljs-string">"/users/"</span>,
+    summary=<span class="hljs-string">"👤 Create User"</span>,  <span class="hljs-comment"># Clear, concise title</span>
+    description=<span class="hljs-string">"""
+    ## 🚀 User Registration
+    
+    Creates a new user account with validation.
+    
+    ### Requirements:
+    - Unique username
+    - Valid email format
+    - Strong password (8+ chars)
+    """</span>,  <span class="hljs-comment"># Rich markdown description</span>
+    response_description=<span class="hljs-string">"✅ User created with ID"</span>,  <span class="hljs-comment"># Clear success message</span>
+    status_code=status.HTTP_201_CREATED,  <span class="hljs-comment"># Appropriate status</span>
+    response_model=APIResponse,  <span class="hljs-comment"># Structured response</span>
+    tags=[<span class="hljs-string">"👤 Users"</span>]  <span class="hljs-comment"># Logical grouping</span>
+)
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">create_user</span><span class="hljs-params">(user: UserCreate)</span>:</span>
+    <span class="hljs-string">"""Docstring for IDE support"""</span>
+    <span class="hljs-keyword">pass</span>
+
+<span class="hljs-comment"># ❌ BAD: Minimal documentation</span>
+<span class="hljs-meta">@app.post("/users/")</span>
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">create_user</span><span class="hljs-params">(user: UserCreate)</span>:</span>
+    <span class="hljs-keyword">pass</span>
+</div></code></pre>
+<p>This comprehensive guide provides everything you need to create professional, well-documented FastAPI applications that are developer-friendly and easy to understand! 🎉</p>
+
+</body>
+</html>
