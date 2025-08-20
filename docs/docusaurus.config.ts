@@ -117,11 +117,11 @@ const config: Config = {
           items: [
             {
               label: 'Getting Started',
-              to: '/docs/get-methods',
+              to: '/docs',
             },
             {
               label: 'API Reference',
-              to: '/docs/routing',
+              to: '/docs',
             },
           ],
         },
