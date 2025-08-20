@@ -40,7 +40,7 @@ export default function About(): JSX.Element {
             <ul>
               <li>📧 Email: your.email@example.com</li>
               <li>🐙 GitHub: <a href="https://github.com/dpvasani">dpvasani</a></li>
-              <li>💼 LinkedIn: <a href="https://linkedin.com/in/dpvasani">dpvasani</a></li>
+              <li>💼 LinkedIn: <a href="https://www.linkedin.com/in/dpvasani56/">dpvasani</a></li>
               <li>🐦 Twitter: <a href="https://twitter.com/vasanidarshan56">@vasanidarshan56</a></li>
             </ul>
           </div>
