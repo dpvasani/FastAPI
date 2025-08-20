@@ -1,0 +1,27 @@
+{
+  "id": "get-methods",
+  "title": "GET Methods",
+  "description": "Complete FastAPI Setup & GET Methods Guide",
+  "source": "@site/docs/get-methods.md",
+  "sourceDirName": ".",
+  "slug": "/get-methods",
+  "permalink": "/docs/get-methods",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/your-username/fastapi-docs/tree/main/docs/get-methods.md",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": "Author",
+  "lastUpdatedAt": 1539502055000,
+  "sidebarPosition": 1,
+  "frontMatter": {
+    "sidebar_position": 1,
+    "title": "GET Methods",
+    "description": "Complete FastAPI Setup & GET Methods Guide"
+  },
+  "sidebar": "tutorialSidebar",
+  "next": {
+    "title": "Operation Description",
+    "permalink": "/docs/operation-description"
+  }
+}

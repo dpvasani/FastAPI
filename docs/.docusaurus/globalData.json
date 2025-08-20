@@ -1,0 +1,98 @@
+{
+  "docusaurus-plugin-content-docs": {
+    "default": {
+      "path": "/docs",
+      "versions": [
+        {
+          "name": "current",
+          "label": "Next",
+          "isLast": true,
+          "path": "/docs",
+          "mainDocId": "GET Methods",
+          "docs": [
+            {
+              "id": "Complete FastAPI Models Guide",
+              "path": "/docs/Complete FastAPI Models Guide",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "Complete FastAPI Production Guide Deployment, Debugging, Testing And Logging",
+              "path": "/docs/Complete FastAPI Production Guide Deployment, Debugging, Testing And Logging",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "Concepts",
+              "path": "/docs/Concepts",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "Database",
+              "path": "/docs/Database",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "Error Handling",
+              "path": "/docs/Error Handling",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "FastAPI Dependencies",
+              "path": "/docs/FastAPI Dependencies",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "FastAPI Project Structure",
+              "path": "/docs/FastAPI Project Structure",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "GET Methods",
+              "path": "/docs/GET Methods",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "OAuth",
+              "path": "/docs/OAuth",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "Parameters",
+              "path": "/docs/Parameters",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "Routing",
+              "path": "/docs/Routing",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "Some More Concepts",
+              "path": "/docs/Some More Concepts",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "UserFlow",
+              "path": "/docs/UserFlow",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "Working With File",
+              "path": "/docs/Working With File",
+              "sidebar": "tutorialSidebar"
+            }
+          ],
+          "draftIds": [],
+          "sidebars": {
+            "tutorialSidebar": {
+              "link": {
+                "path": "/docs/GET Methods",
+                "label": "1. GET Methods"
+              }
+            }
+          }
+        }
+      ],
+      "breadcrumbs": true
+    }
+  }
+}

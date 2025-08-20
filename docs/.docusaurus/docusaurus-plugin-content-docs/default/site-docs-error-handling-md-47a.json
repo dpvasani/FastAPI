@@ -1,0 +1,31 @@
+{
+  "id": "error-handling",
+  "title": "Error Handling",
+  "description": "FastAPI Error Handling Implementation",
+  "source": "@site/docs/error-handling.md",
+  "sourceDirName": ".",
+  "slug": "/error-handling",
+  "permalink": "/docs/error-handling",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/your-username/fastapi-docs/tree/main/docs/error-handling.md",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": "Author",
+  "lastUpdatedAt": 1539502055000,
+  "sidebarPosition": 8,
+  "frontMatter": {
+    "sidebar_position": 8,
+    "title": "Error Handling",
+    "description": "FastAPI Error Handling Implementation"
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Concepts",
+    "permalink": "/docs/concepts"
+  },
+  "next": {
+    "title": "OAuth",
+    "permalink": "/docs/oauth"
+  }
+}

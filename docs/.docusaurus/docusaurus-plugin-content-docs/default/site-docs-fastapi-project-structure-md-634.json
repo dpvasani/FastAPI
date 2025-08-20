@@ -1,0 +1,31 @@
+{
+  "id": "fastapi-project-structure",
+  "title": "FastAPI Project Structure",
+  "description": "Enhanced FastAPI Project Structure",
+  "source": "@site/docs/fastapi-project-structure.md",
+  "sourceDirName": ".",
+  "slug": "/fastapi-project-structure",
+  "permalink": "/docs/fastapi-project-structure",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/your-username/fastapi-docs/tree/main/docs/fastapi-project-structure.md",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": "Author",
+  "lastUpdatedAt": 1539502055000,
+  "sidebarPosition": 11,
+  "frontMatter": {
+    "sidebar_position": 11,
+    "title": "FastAPI Project Structure",
+    "description": "Enhanced FastAPI Project Structure"
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Working With Files",
+    "permalink": "/docs/working-with-file"
+  },
+  "next": {
+    "title": "Complete FastAPI Models Guide",
+    "permalink": "/docs/complete-fastapi-models-guide"
+  }
+}

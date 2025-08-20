@@ -1,0 +1,31 @@
+{
+  "id": "concepts",
+  "title": "Concepts",
+  "description": "FastAPI Other Concepts Overview",
+  "source": "@site/docs/concepts.md",
+  "sourceDirName": ".",
+  "slug": "/concepts",
+  "permalink": "/docs/concepts",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/your-username/fastapi-docs/tree/main/docs/concepts.md",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": "Author",
+  "lastUpdatedAt": 1539502055000,
+  "sidebarPosition": 7,
+  "frontMatter": {
+    "sidebar_position": 7,
+    "title": "Concepts",
+    "description": "FastAPI Other Concepts Overview"
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "User Flow",
+    "permalink": "/docs/userflow"
+  },
+  "next": {
+    "title": "Error Handling",
+    "permalink": "/docs/error-handling"
+  }
+}

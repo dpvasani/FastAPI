@@ -1,0 +1,31 @@
+{
+  "id": "oauth",
+  "title": "OAuth",
+  "description": "OAuth2 Authentication in FastAPI",
+  "source": "@site/docs/oauth.md",
+  "sourceDirName": ".",
+  "slug": "/oauth",
+  "permalink": "/docs/oauth",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/your-username/fastapi-docs/tree/main/docs/oauth.md",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": "Author",
+  "lastUpdatedAt": 1539502055000,
+  "sidebarPosition": 9,
+  "frontMatter": {
+    "sidebar_position": 9,
+    "title": "OAuth",
+    "description": "OAuth2 Authentication in FastAPI"
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Error Handling",
+    "permalink": "/docs/error-handling"
+  },
+  "next": {
+    "title": "Working With Files",
+    "permalink": "/docs/working-with-file"
+  }
+}

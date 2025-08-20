@@ -1,0 +1,31 @@
+{
+  "id": "working-with-file",
+  "title": "Working With Files",
+  "description": "FastAPI File Handling",
+  "source": "@site/docs/working-with-file.md",
+  "sourceDirName": ".",
+  "slug": "/working-with-file",
+  "permalink": "/docs/working-with-file",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/your-username/fastapi-docs/tree/main/docs/working-with-file.md",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": "Author",
+  "lastUpdatedAt": 1539502055000,
+  "sidebarPosition": 10,
+  "frontMatter": {
+    "sidebar_position": 10,
+    "title": "Working With Files",
+    "description": "FastAPI File Handling"
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "OAuth",
+    "permalink": "/docs/oauth"
+  },
+  "next": {
+    "title": "FastAPI Project Structure",
+    "permalink": "/docs/fastapi-project-structure"
+  }
+}

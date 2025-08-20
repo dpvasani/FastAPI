@@ -11,7 +11,7 @@ type FeatureItem = {
 const FeatureList: FeatureItem[] = [
   {
     title: '🚀 High Performance',
-    Svg: require('@site/static/img/undraw_docusaurus_mountain.svg').default,
+    Svg: require('@site/static/img/logo.svg').default,
     description: (
       <>
         FastAPI is built on top of Starlette and Pydantic, providing exceptional
@@ -21,7 +21,7 @@ const FeatureList: FeatureItem[] = [
   },
   {
     title: '📚 Comprehensive Documentation',
-    Svg: require('@site/static/img/undraw_docusaurus_tree.svg').default,
+    Svg: require('@site/static/img/logo.svg').default,
     description: (
       <>
         Complete guides covering everything from basic setup to production deployment,
@@ -31,7 +31,7 @@ const FeatureList: FeatureItem[] = [
   },
   {
     title: '🛡️ Production Ready',
-    Svg: require('@site/static/img/undraw_docusaurus_react.svg').default,
+    Svg: require('@site/static/img/logo.svg').default,
     description: (
       <>
         Learn how to build, test, deploy, and monitor FastAPI applications in

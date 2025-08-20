@@ -1,11 +1,12 @@
 import {themes as prismThemes} from 'prism-react-renderer';
+import path from 'path';
 import type {Config} from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 
 const config: Config = {
   title: 'FastAPI Documentation',
   tagline: 'Complete FastAPI Guide & Best Practices',
-  favicon: 'img/favicon.ico',
+  favicon: 'img/logo.svg',
 
   // Set the production url of your site here
   url: 'https://your-username.github.io',
@@ -32,10 +33,38 @@ const config: Config = {
       'classic',
       {
         docs: {
+          path: '../Blogs',
           sidebarPath: './sidebars.ts',
           editUrl: 'https://github.com/your-username/fastapi-docs/tree/main/',
           showLastUpdateTime: true,
           showLastUpdateAuthor: true,
+          routeBasePath: 'docs',
+          include: ['**/*.md', '**/*.mdx'],
+          exclude: ['2. Operation Description.md']
+          ,
+          // Display labels using the actual file names (keep numeric prefixes like "1. ")
+          sidebarItemsGenerator: async function sidebarItemsGenerator({defaultSidebarItemsGenerator, ...args}) {
+            const sidebarItems = await defaultSidebarItemsGenerator(args);
+            const docById = Object.fromEntries(
+              args.docs.map((d) => [d.id, d])
+            );
+
+            function mapItems(items: any[]): any[] {
+              return items.map((item) => {
+                if (item.type === 'category' && Array.isArray(item.items)) {
+                  return { ...item, items: mapItems(item.items) };
+                }
+                if (item.type === 'doc' && docById[item.id]?.source) {
+                  const sourcePath = docById[item.id].source as string;
+                  const base = path.basename(sourcePath).replace(/\.(md|mdx)$/i, '');
+                  return { ...item, label: base };
+                }
+                return item;
+              });
+            }
+
+            return mapItems(sidebarItems);
+          }
         },
         blog: {
           showReadingTime: true,
@@ -49,6 +78,9 @@ const config: Config = {
   ],
 
   themeConfig: {
+    mermaid: {
+      theme: { light: 'neutral', dark: 'dark' }
+    },
     // Replace with your project's social card
     image: 'img/docusaurus-social-card.jpg',
     navbar: {
@@ -158,6 +190,10 @@ const config: Config = {
       searchPagePath: 'search',
     },
   } satisfies Preset.ThemeConfig,
+  themes: ['@docusaurus/theme-mermaid'],
+  markdown: {
+    mermaid: true
+  },
 };
 
 export default config;
