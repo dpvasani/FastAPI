@@ -134,11 +134,11 @@ const config: Config = {
             },
             {
               label: 'LinkedIn',
-              href: 'https://linkedin.com/in/your-username',
+              href: 'https://www.linkedin.com/in/dpvasani56/',
             },
             {
               label: 'Twitter',
-              href: 'https://twitter.com/your-username',
+              href: 'https://twitter.com/vasanidarshan56',
             },
           ],
         },
