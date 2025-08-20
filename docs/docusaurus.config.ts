@@ -39,8 +39,7 @@ const config: Config = {
           showLastUpdateTime: true,
           showLastUpdateAuthor: true,
           routeBasePath: 'docs',
-          include: ['**/*.md', '**/*.mdx'],
-          exclude: ['2. Operation Description.md']
+          include: ['**/*.md', '**/*.mdx']
           ,
           // Display labels using the actual file names (keep numeric prefixes like "1. ")
           sidebarItemsGenerator: async function sidebarItemsGenerator({defaultSidebarItemsGenerator, ...args}) {
@@ -169,31 +168,25 @@ const config: Config = {
       disableSwitch: false,
       respectPrefersColorScheme: true,
     },
-    algolia: {
-      // The application ID provided by Algolia
-      appId: 'YOUR_APP_ID',
-      // Public API key: it is safe to commit it
-      apiKey: 'YOUR_SEARCH_API_KEY',
-      indexName: 'YOUR_INDEX_NAME',
-      // Optional: see doc section below
-      contextualSearch: true,
-      // Optional: Specify domains where the navigation should occur through window.location instead on history.push
-      externalUrlRegex: 'external\\.com|domain\\.com',
-      // Optional: Replace parts of the item URLs from Algolia. Useful when using the same search index for multiple deployments using a different baseUrl.
-      replaceSearchResultPathname: {
-        from: '/docs/', // or as RegExp: /\/docs\//
-        to: '/',
-      },
-      // Optional: Algolia search parameters
-      searchParameters: {},
-      // Optional: path for search page that enabled by default (`false` to disable it)
-      searchPagePath: 'search',
-    },
+    // Algolia disabled; using local search plugin instead
   } satisfies Preset.ThemeConfig,
   themes: ['@docusaurus/theme-mermaid'],
   markdown: {
     mermaid: true
   },
+  plugins: [
+    [
+      require.resolve('@easyops-cn/docusaurus-search-local'),
+      {
+        hashed: true,
+        indexDocs: true,
+        indexBlog: true,
+        docsRouteBasePath: '/docs',
+        blogRouteBasePath: '/blog',
+        language: ['en']
+      }
+    ]
+  ],
 };
 
 export default config;

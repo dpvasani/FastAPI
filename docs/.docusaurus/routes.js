@@ -84,20 +84,20 @@ export default [
   },
   {
     path: '/search',
-    component: ComponentCreator('/search', '5de'),
+    component: ComponentCreator('/search', '822'),
     exact: true
   },
   {
     path: '/docs',
-    component: ComponentCreator('/docs', '8dc'),
+    component: ComponentCreator('/docs', '9b9'),
     routes: [
       {
         path: '/docs',
-        component: ComponentCreator('/docs', 'fc3'),
+        component: ComponentCreator('/docs', '3c5'),
         routes: [
           {
             path: '/docs',
-            component: ComponentCreator('/docs', 'c23'),
+            component: ComponentCreator('/docs', '52c'),
             routes: [
               {
                 path: '/docs/Complete FastAPI Models Guide',
@@ -150,6 +150,12 @@ export default [
               {
                 path: '/docs/OAuth',
                 component: ComponentCreator('/docs/OAuth', 'dbc'),
+                exact: true,
+                sidebar: "tutorialSidebar"
+              },
+              {
+                path: '/docs/Operation Description',
+                component: ComponentCreator('/docs/Operation Description', '54d'),
                 exact: true,
                 sidebar: "tutorialSidebar"
               },

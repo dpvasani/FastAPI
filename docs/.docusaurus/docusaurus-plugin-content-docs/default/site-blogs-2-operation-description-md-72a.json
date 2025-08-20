@@ -17,11 +17,11 @@
   "frontMatter": {},
   "sidebar": "tutorialSidebar",
   "previous": {
-    "title": "🚀 Complete FastAPI Setup & GET Methods Guide",
+    "title": "1. GET Methods",
     "permalink": "/docs/GET Methods"
   },
   "next": {
-    "title": "🚀 FastAPI Project Refactoring with Routers",
+    "title": "3. Routing",
     "permalink": "/docs/Routing"
   }
 }

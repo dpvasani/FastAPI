@@ -56,6 +56,11 @@
               "sidebar": "tutorialSidebar"
             },
             {
+              "id": "Operation Description",
+              "path": "/docs/Operation Description",
+              "sidebar": "tutorialSidebar"
+            },
+            {
               "id": "Parameters",
               "path": "/docs/Parameters",
               "sidebar": "tutorialSidebar"

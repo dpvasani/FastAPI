@@ -35,9 +35,6 @@ export default {
           "include": [
             "**/*.md",
             "**/*.mdx"
-          ],
-          "exclude": [
-            "2. Operation Description.md"
           ]
         },
         "blog": {
@@ -353,19 +350,6 @@ export default {
       "disableSwitch": false,
       "respectPrefersColorScheme": true
     },
-    "algolia": {
-      "appId": "YOUR_APP_ID",
-      "apiKey": "YOUR_SEARCH_API_KEY",
-      "indexName": "YOUR_INDEX_NAME",
-      "contextualSearch": true,
-      "externalUrlRegex": "external\\.com|domain\\.com",
-      "replaceSearchResultPathname": {
-        "from": "/docs/",
-        "to": "/"
-      },
-      "searchParameters": {},
-      "searchPagePath": "search"
-    },
     "docs": {
       "versionPersistence": "localStorage",
       "sidebar": {
@@ -399,6 +383,21 @@ export default {
       "maintainCase": false
     }
   },
+  "plugins": [
+    [
+      "C:\\Users\\DarshanVasani\\Downloads\\New folder\\FastAPI\\docs\\node_modules\\@easyops-cn\\docusaurus-search-local\\dist\\server\\server\\index.js",
+      {
+        "hashed": true,
+        "indexDocs": true,
+        "indexBlog": true,
+        "docsRouteBasePath": "/docs",
+        "blogRouteBasePath": "/blog",
+        "language": [
+          "en"
+        ]
+      }
+    ]
+  ],
   "baseUrlIssueBanner": true,
   "future": {
     "v4": {
@@ -427,7 +426,6 @@ export default {
     "static"
   ],
   "customFields": {},
-  "plugins": [],
   "scripts": [],
   "headTags": [],
   "stylesheets": [],

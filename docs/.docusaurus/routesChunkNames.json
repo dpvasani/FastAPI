@@ -138,23 +138,23 @@
     "sidebar": "sidebar---blog-814-8ac",
     "content": "content---blog-welcomee-01-2e0"
   },
-  "/search-5de": {
+  "/search-822": {
     "__comp": "__comp---theme-search-page-1-a-4-d6f",
     "__context": {
-      "plugin": "plugin---searchc-14-0ea"
+      "plugin": "plugin---search-138-688"
     }
   },
-  "/docs-8dc": {
+  "/docs-9b9": {
     "__comp": "__comp---theme-docs-root-5-e-9-0b6",
     "__context": {
       "plugin": "plugin---docsaba-d7c"
     }
   },
-  "/docs-fc3": {
+  "/docs-3c5": {
     "__comp": "__comp---theme-doc-version-roota-7-b-5de",
     "__props": "__props---docs-005-788"
   },
-  "/docs-c23": {
+  "/docs-52c": {
     "__comp": "__comp---theme-doc-roota-94-67a"
   },
   "/docs/Complete FastAPI Models Guide-239": {
@@ -192,6 +192,10 @@
   "/docs/OAuth-dbc": {
     "__comp": "__comp---theme-doc-item-178-a40",
     "content": "content---docs-o-auth-8-e-9-acc"
+  },
+  "/docs/Operation Description-54d": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-operation-description-72-a-42f"
   },
   "/docs/Parameters-97a": {
     "__comp": "__comp---theme-doc-item-178-a40",
