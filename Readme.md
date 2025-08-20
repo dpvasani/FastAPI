@@ -103,7 +103,7 @@ A comprehensive, production-ready FastAPI application featuring modern web devel
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/fastapi-complete-app.git
+    git clone https://github.com/dpvasani/FastAPI.git
    cd fastapi-complete-app
    ```
 
@@ -424,8 +424,8 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 
 ## 📞 Support
 
-- 🐛 **Issues**: [GitHub Issues](https://github.com/yourusername/fastapi-complete-app/issues)
-- 💬 **Discussions**: [GitHub Discussions](https://github.com/yourusername/fastapi-complete-app/discussions)
+- 🐛 **Issues**: [GitHub Issues](https://github.com/dpvasani/FastAPI/issues)
+- 💬 **Discussions**: [GitHub Discussions](https://github.com/dpvasani/FastAPI/discussions)
 - 📧 **Email**: your.email@example.com
 
 ---

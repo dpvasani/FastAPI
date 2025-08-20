@@ -35,7 +35,7 @@ const config: Config = {
         docs: {
           path: '../Blogs',
           sidebarPath: './sidebars.ts',
-          editUrl: 'https://github.com/your-username/fastapi-docs/tree/main/',
+          editUrl: 'https://github.com/dpvasani/FastAPI/tree/main/',
           showLastUpdateTime: true,
           showLastUpdateAuthor: true,
           routeBasePath: 'docs',
@@ -67,7 +67,7 @@ const config: Config = {
         },
         blog: {
           showReadingTime: true,
-          editUrl: 'https://github.com/your-username/fastapi-docs/tree/main/',
+          editUrl: 'https://github.com/dpvasani/FastAPI/tree/main/',
         },
         theme: {
           customCss: './src/css/custom.css',
@@ -98,7 +98,7 @@ const config: Config = {
         },
         {to: '/blog', label: 'Blog', position: 'left'},
         {
-          href: 'https://github.com/your-username/fastapi-docs',
+          href: 'https://github.com/dpvasani/FastAPI',
           label: 'GitHub',
           position: 'right',
         },
@@ -130,7 +130,7 @@ const config: Config = {
           items: [
             {
               label: 'GitHub',
-              href: 'https://github.com/your-username',
+              href: 'https://github.com/dpvasani',
             },
             {
               label: 'LinkedIn',
